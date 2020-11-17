@@ -19,6 +19,8 @@ public class Application {
     public static void main(String args[]) {
         Application app = new Application();
         app.oracleLogin();
+//        // TODO: test
+//        System.out.println("success!");
         app.start();
     }
 
@@ -37,6 +39,9 @@ public class Application {
         boolean connect = dbConnection.login();
 
         if (connect) {
+            // drop tables
+            dbConnection.dropTables();
+
             // set up database
             dbConnection.databaseSetUp();
 
@@ -64,13 +69,7 @@ public class Application {
             new ErrorMessage("This user ID has been used.");
         } else {
             TimeZone timezone = dbConnection.getTimeZoneByCity(city);
-
-            System.out.println(timezone.getCity() + timezone.getZoneCode());
-
             User user = new User(userid, password, name, timezone, email);
-
-            System.out.println(user.getTimezone().getCity() + user.getTimezone().getZoneCode());
-
             dbConnection.insertUser(user);
             new SuccessMessage("You registered an account successfully!");
             ui.switchPanel("Login");

@@ -1,5 +1,19 @@
 package model;
 
+
+/*CREATE TABLE Group_Member
+    (nickname CHAR(10),
+    u_id CHAR(10),
+    PRIMARY KEY (u_id),
+    FOREIGN KEY (u_id) REFERENCES User_info);
+
+CREATE TABLE Group_administrator
+    (nickname CHAR(10),
+    u_id CHAR(10),
+    PRIMARY KEY (u_id),
+    FOREIGN KEY (u_id) REFERENCES User_info);*/
+
+
 public class GroupMemberAdministrator {
      private String uid;
      private String nickname;

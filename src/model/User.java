@@ -1,5 +1,15 @@
 package model;
 
+
+/*CREATE TABLE User_info
+        (u_id CHAR(10),
+        password CHAR(20),
+        u_name CHAR(20),
+        city CHAR(20),
+        email CHAR(20) UNIQUE,
+        PRIMARY KEY (u_id),
+        FOREIGN KEY (city) REFERENCES Time_Zone);*/
+
 public class User {
     private String userid;
     private String password;

@@ -1,31 +1,45 @@
 package model;
 
+import oracle.sql.DATE;
+import oracle.sql.TIMESTAMP;
+
+
+/*CREATE TABLE Share_Post
+        (postid CHAR(10),
+        post_time TIMESTAMP,
+        content CHAR(1000),
+        u_id CHAR(10) NOT NULL,
+        PRIMARY KEY (postid),
+        FOREIGN KEY (u_id) REFERENCES User_info);*/
+
 public class SharePost {
     private String postid;
-    private String mediaid;
-    private SharePost sharepost;
-    private Media media;
+    private TIMESTAMP posttime;
+    private String content;
+    private String uid;
 
-    public SharePost(String postid, String mediaid, SharePost sharepost, Media media) {
+
+
+    public SharePost(String postid, TIMESTAMP posttime, String content, String uid) {
         this.postid = postid;
-        this.mediaid = mediaid;
-        this.sharepost = sharepost;
-        this.media = media;
-        }
+        this.posttime = posttime;
+        this.content = content;
+        this.uid = uid;
+    }
 
-        public String getPostid() {
-            return postid;
-        }
+    public String getContent() {
+        return content;
+    }
 
-        public String getMediaid() {
-            return mediaid;
-        }
+    public String getPostid() {
+        return postid;
+    }
 
-        public SharePost getSharepost() {
-            return sharepost;
-        }
+    public String getUid() {
+        return uid;
+    }
 
-        public Media getMedia() {
-            return media;
-        }
+    public TIMESTAMP getPosttime() {
+        return posttime;
+    }
 }

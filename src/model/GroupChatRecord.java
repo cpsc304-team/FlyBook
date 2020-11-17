@@ -1,15 +1,16 @@
 package model;
 
 import oracle.sql.DATE;
+import oracle.sql.TIMESTAMP;
 
 public class GroupChatRecord {
-    private DATE time;
+    private TIMESTAMP time;
     private String sender;
     private String content;
     private String gid;
     private GroupRecord groupRecord;
 
-    public GroupChatRecord(DATE time, String sender, String content, String gid, GroupRecord groupRecord) {
+    public GroupChatRecord(TIMESTAMP time, String sender, String content, String gid, GroupRecord groupRecord) {
         this.time = time;
         this.sender = sender;
         this.content = content;
@@ -17,7 +18,7 @@ public class GroupChatRecord {
         this.groupRecord = groupRecord;
     }
 
-    public DATE getTime() {
+    public TIMESTAMP getTime() {
         return time;
     }
 

@@ -1,15 +1,23 @@
 package model;
 
-import oracle.sql.DATE;
+import oracle.sql.TIMESTAMP;
+
+/*CREATE TABLE Group_Joins
+    (join_time TIMESTAMP,
+    u_id CHAR(10),
+    gid CHAR(10),
+    PRIMARY KEY (u_id,gid),
+    FOREIGN KEY (u_id) REFERENCES User_info,
+    FOREIGN KEY (gid) REFERENCES Group_Record);*/
 
 public class GroupJoins {
-    private DATE jointime;
+    private TIMESTAMP jointime;
     private String uid;
     private String gid;
     private User user;
     private GroupRecord groupRecord;
 
-    public GroupJoins(DATE jointime, String uid, String gid, User user, GroupRecord groupRecord) {
+    public GroupJoins(TIMESTAMP jointime, String uid, String gid, User user, GroupRecord groupRecord) {
         this.jointime = jointime;
         this.uid = uid;
         this.gid = gid;
@@ -17,7 +25,7 @@ public class GroupJoins {
         this.groupRecord = groupRecord;
     }
 
-    public DATE getJoinTime() {
+    public TIMESTAMP getJoinTime() {
         return jointime;
     }
 

@@ -1,5 +1,13 @@
 package model;
 
+
+/*CREATE TABLE Post_Contains
+    (postid CHAR(10),
+    mediaid CHAR(10),
+    PRIMARY KEY (postid,mediaid),
+    FOREIGN KEY (postid) REFERENCES Share_Post,
+    FOREIGN KEY (mediaid) REFERENCES Media);*/
+
 public class PostContains {
     private String postid;
     private String mediaid;

@@ -1,6 +1,12 @@
 package model;
 
 import oracle.sql.DATE;
+/*CREATE TABLE Contain_Task
+    (tname CHAR(10),
+    Priority_val INTEGER,
+    sid CHAR(10),
+    PRIMARY KEY (sid, tname),
+    FOREIGN KEY (sid) REFERENCES Schedule_Record ON DELETE CASCADE);*/
 
 public class ContainTask {
     private String tname;

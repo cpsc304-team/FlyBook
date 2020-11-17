@@ -1,5 +1,12 @@
 package model;
 
+
+/*CREATE TABLE Mini_Program
+    (pid CHAR(10),
+    pname CHAR(20),
+    type CHAR(10),
+    PRIMARY KEY (pid));*/
+
 public class MiniProgram {
     private String pid;
     private String pname;

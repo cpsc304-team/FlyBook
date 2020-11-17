@@ -1,17 +1,17 @@
 package model;
 
-import oracle.sql.DATE;
+import oracle.sql.TIMESTAMP;
 
 public class TaskStatus {
-    private DATE stime;
+    private TIMESTAMP stime;
     private int passed;
 
-    public TaskStatus(DATE stime, int passed) {
+    public TaskStatus(TIMESTAMP stime, int passed) {
         this.stime = stime;
         this.passed = passed;
     }
 
-    public DATE getStime() {
+    public TIMESTAMP getStime() {
         return stime;
     }
 

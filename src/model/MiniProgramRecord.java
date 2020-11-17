@@ -1,15 +1,23 @@
 package model;
 
-import oracle.sql.DATE;
+import oracle.sql.TIMESTAMP;
+
+/*CREATE TABLE MiniProgram_Record
+    (u_id CHAR(10),
+    pid CHAR(10),
+    time TIMESTAMP,
+    PRIMARY KEY (u_id, pid, time),
+    FOREIGN KEY (u_id) REFERENCES User_info,
+    FOREIGN KEY (pid) REFERENCES Mini_Program);*/
 
 public class MiniProgramRecord {
     private String uid;
     private String pid;
-    private DATE time;
+    private TIMESTAMP time;
     private User user;
     private MiniProgram miniProgram;
 
-    public MiniProgramRecord(String uid, String pid, DATE time, User user, MiniProgram miniProgram) {
+    public MiniProgramRecord(String uid, String pid, TIMESTAMP time, User user, MiniProgram miniProgram) {
         this.uid = uid;
         this.pid = pid;
         this.time = time;
@@ -25,7 +33,7 @@ public class MiniProgramRecord {
         return pid;
     }
 
-    public DATE getTime() {
+    public TIMESTAMP getTime() {
         return time;
     }
 

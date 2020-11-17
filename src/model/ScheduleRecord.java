@@ -1,16 +1,26 @@
 package model;
 
 import oracle.sql.DATE;
+import oracle.sql.TIMESTAMP;
+
+/*CREATE TABLE Schedule_Record
+    (sid CHAR(10),
+    stime TIMESTAMP,
+    event CHAR(20),
+    u_id CHAR(10) NOT NULL,
+    PRIMARY KEY (sid),
+    FOREIGN KEY (u_id) REFERENCES User_info,
+    FOREIGN KEY (stime) REFERENCES Task_Status);*/
 
 public class ScheduleRecord {
     private String sid;
-    private DATE stime;
+    private TIMESTAMP stime;
     private String event;
     private String uid;
     private User user;
     private TaskStatus taskStatus;
 
-    public ScheduleRecord(String sid, DATE stime, String event, String uid, User user, TaskStatus taskStatus) {
+    public ScheduleRecord(String sid, TIMESTAMP stime, String event, String uid, User user, TaskStatus taskStatus) {
         this.sid = sid;
         this.stime = stime;
         this.event = event;
@@ -23,7 +33,7 @@ public class ScheduleRecord {
         return uid;
     }
 
-    public DATE getStime() {
+    public TIMESTAMP getStime() {
         return stime;
     }
 

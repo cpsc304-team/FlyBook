@@ -7,11 +7,11 @@ package model;
 
 public class TimeZone {
     private String city;
-    private String zonecode;
+    private String zoneCode;
 
-    public TimeZone(String city, String zonecode) {
+    public TimeZone(String city, String zoneCode) {
         this.city = city;
-        this.zonecode = zonecode;
+        this.zoneCode = zoneCode;
     }
 
     public String getCity() {
@@ -19,6 +19,6 @@ public class TimeZone {
     }
 
     public String getZoneCode() {
-        return zonecode;
+        return zoneCode;
     }
 }

@@ -87,10 +87,11 @@ public class RegisterPanel extends JPanel implements ActionListener {
         textPanel.add(city);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel timezone = generateText("TimeZone");
-        city.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        textPanel.add(timezone);
-        textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
+        // time zone will be generated automatically so no need for user to enter
+//        JLabel timezone = generateText("TimeZone");
+//        city.setAlignmentX(Component.RIGHT_ALIGNMENT);
+//        textPanel.add(timezone);
+//        textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
         JLabel email = generateText("E-mail");
         email.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -127,8 +128,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
         entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
         entryPanel.add(emailField);
 
-        entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
-        entryPanel.add(timezoneField);
+//        entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
+//        entryPanel.add(timezoneField);
 
         return entryPanel;
     }
@@ -136,8 +137,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
     private JComboBox city() {
         Application application = ui.getApplication();
         String[] cities = application.getCities();
-        JComboBox list = new JComboBox(cities);
-        return list;
+        return new JComboBox(cities);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
             String name = nameField.getText();
             String city = (String) Objects.requireNonNull(cityField.getSelectedItem());
             String email = emailField.getText();
-            String timezone = timezoneField.getText();
+//            String timezone = timezoneField.getText();
 
             if (userid.isEmpty()) {
                 new ErrorMessage("You must create a user ID.");
@@ -165,11 +165,14 @@ public class RegisterPanel extends JPanel implements ActionListener {
                 new ErrorMessage("You must select your city.");
             } else if (email.isEmpty()) {
                 new ErrorMessage("You must enter your email.");
-            } else if (timezone.isEmpty()) {
-                new ErrorMessage("time zone cannot be empty");
-            } else {
+            }
+//            else if (timezone.isEmpty()) {
+//                new ErrorMessage("time zone cannot be empty");
+//            }
+            else {
                 Application app = ui.getApplication();
-                app.userRegister(userid, password, name, city, timezone, email);
+                app.userRegister(userid, password, name, city, email);
+                System.out.println("Passed actionListener()");
             }
         } else {
             ui.switchPanel("Login");

@@ -1,7 +1,7 @@
 # FlyBook
 
 
-Welcome to our Database: $$FlyBook$$
+Welcome to our Database: $FlyBook$
 
 This project is based on the Java demo provides in CPSC 304 tutorial 6.
 

@@ -94,7 +94,7 @@ public class DatabaseConnection {
         insertUser(u3);
 
         // individual_chat
-        IndividualChat chat1 = new IndividualChat("0001", "0002", "0001", "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
+        IndividualChat chat1 = new IndividualChat("0001", "0002", "Gelila Zhang", "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
         insertIndividualChat(chat1);
     }
 
@@ -400,11 +400,26 @@ public class DatabaseConnection {
         return null;
     }
 
-    public void resetPassword(String currentUser, String password) {
+    public void resetPassword(String userid, String password) {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET password = ? WHERE user_id = ?");
             ps.setString(1, password);
-            ps.setString(2, currentUser);
+            ps.setString(2, userid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void deleteAccount(String userid) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM user_info WHERE user_id = ?");
+            ps.setString(1, userid);
 
             ps.executeUpdate();
             connection.commit();

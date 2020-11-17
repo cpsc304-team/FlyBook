@@ -88,4 +88,9 @@ public class Application {
         dbConnection.resetPassword(currentUser, password);
         new SuccessMessage("You reset your password successfully!");
     }
+
+    public void deleteAccount() {
+        dbConnection.deleteAccount(currentUser);
+        new SuccessMessage("The account is deleted. You will return back to the log in menu.");
+    }
 }

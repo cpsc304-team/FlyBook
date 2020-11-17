@@ -2,9 +2,9 @@
 
 -- SQL DDL and Loading Data
 -- CREATE TABLE: set up the database
-DROP TABLE User_info;
-DROP TABLE Time_Zone;
-DROP TABLE Individual_Chat;
+DROP TABLE user_info;
+DROP TABLE time_zone;
+DROP TABLE individual_chat;
 DROP TABLE Share_Post;
 DROP TABLE Media;
 DROP TABLE Post_Contains;
@@ -21,28 +21,29 @@ DROP TABLE Task_Status;
 DROP TABLE Contain_Task;
 
 
-CREATE TABLE User_info
+CREATE TABLE user_info
     (u_id CHAR(10),
     password CHAR(20),
     u_name CHAR(20),
     city CHAR(20),
     email CHAR(20) UNIQUE,
     PRIMARY KEY (u_id),
-    FOREIGN KEY (city) REFERENCES Time_Zone);
+    FOREIGN KEY (city) REFERENCES time_zone);
 
-CREATE TABLE Time_Zone
+CREATE TABLE time_zone
     (city CHAR(20),
     time_zone CHAR(5),
     PRIMARY KEY (city));
 
-CREATE TABLE Individual_Chat
+CREATE TABLE individual_chat
     (time TIMESTAMP,
-    sender CHAR(20), content CHAR(100),
+    sender CHAR(20),
+    content CHAR(100),
     u_id1 CHAR(10),
     u_id2 CHAR(10),
     PRIMARY KEY (u_id1, u_id2, time),
-    FOREIGN KEY (u_id1) REFERENCES User_info ON DELETE CASCADE,
-    FOREIGN KEY (u_id2) REFERENCES User_info ON DELETE CASCADE);
+    FOREIGN KEY (u_id1) REFERENCES user_info ON DELETE CASCADE,
+    FOREIGN KEY (u_id2) REFERENCES user_info ON DELETE CASCADE);
 
 
 CREATE TABLE Share_Post
@@ -192,7 +193,7 @@ INSERT INTO
 -- Queries
 -- DELETE Operation
 
--- UPTIMESTAMP Operation
+-- UPDATE Operation
 
 -- Selection
 SELECT *

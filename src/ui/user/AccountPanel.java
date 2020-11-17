@@ -1,5 +1,6 @@
 package ui.user;
 
+import main.Application;
 import model.User;
 import ui.UI;
 
@@ -30,6 +31,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         button.add(generateButton("Reset Password"));
         button.add(generateButton("Change Profile"));
         button.add(generateButton("Log Out"));
+        button.add(generateButton("Delete Account"));
 
         add(info);
         add(button);
@@ -120,8 +122,12 @@ public class AccountPanel extends JPanel implements ActionListener {
             ui.switchPanel("Reset Password");
         } else if (e.getActionCommand().equals("Change Profile")){
             ui.switchPanel("Change Profile");
-        } else {
+        } else if (e.getActionCommand().equals("Log Out")) {
             ui.switchPanel("Login");
+        } else {
+                Application application = ui.getApplication();
+                application.deleteAccount();
+                ui.switchPanel("Login");
         }
     }
 }

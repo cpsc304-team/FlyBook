@@ -4,7 +4,10 @@ import model.IndividualChat;
 import model.User;
 import model.TimeZone;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import oracle.sql.TIMESTAMP;
 
 public class DatabaseConnection {
     private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
@@ -91,7 +94,7 @@ public class DatabaseConnection {
         insertUser(u3);
 
         // individual_chat
-        IndividualChat chat1 = new IndividualChat("0001", "0002", "0001", "Hello!", Timestamp.valueOf("2020-11-17 00:00:00.01"));
+        IndividualChat chat1 = new IndividualChat("0001", "0002", "0001", "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
         insertIndividualChat(chat1);
     }
 
@@ -204,7 +207,10 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE individual_chat (" +
-                    "time varchar2(23), " +
+                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
+//                    "time TIMESTAMP, " +
+                    "time varchar2(25), " +
+
                     "sender varchar2(20), " +
                     "content varchar2(100), " +
                     "u_id1 varchar2(10), " +
@@ -226,6 +232,15 @@ public class DatabaseConnection {
     public void insertIndividualChat(IndividualChat chat) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO individual_chat VALUES (?,?,?,?,?)");
+
+            // TODO: Trying to generate TIMESTAMP with no success :(
+//            Timestamp time = chat.getTime();
+//            DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+//            String text = dateFormat.format(time);
+//            System.out.println(text);
+//            System.out.println("TO_TIMESTAMP(\'" + text + "\', \'YYYY-MM-DD HH24:MI:SS\')");
+//            ps.setString(1, "TO_TIMESTAMP(\'" + text + "\', \'yyyy-MM-DD HH24:MI:SS\')");
+
             ps.setString(1, chat.getTime().toString());
             ps.setString(2, chat.getSender());
             ps.setString(3, chat.getContent());
@@ -244,7 +259,7 @@ public class DatabaseConnection {
 
 
     /* Below are the methods used to generate queries or projections that
-    * the application needs */
+     * the application needs */
 
     //Return all cities listed in time_zone
     public String[] getTimeZoneCities() {

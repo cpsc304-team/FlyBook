@@ -78,7 +78,6 @@ CREATE TABLE MiniProgram_Record
     FOREIGN KEY (u_id) REFERENCES User_info,
     FOREIGN KEY (pid) REFERENCES Mini_Program);
 
-
 CREATE TABLE Group_Member
     (nickname CHAR(10),
     u_id CHAR(10),
@@ -88,8 +87,6 @@ CREATE TABLE Group_Member
 CREATE TABLE Group_administrator
     (nickname CHAR(10),
     u_id CHAR(10),
-    gid CHAR(10),
-    gname CHAR(20),
     PRIMARY KEY (u_id),
     FOREIGN KEY (u_id) REFERENCES User_info);
 

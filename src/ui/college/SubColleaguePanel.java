@@ -36,7 +36,7 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
 //        name.setFont(new Font("Serif", Font.PLAIN, 20));
         userInfo.add(name);
         userInfo.add(Box.createRigidArea(new Dimension(5, 0)));
-        JLabel city = new JLabel(user.getCity() + " | " + user.getTime_zone());
+        JLabel city = new JLabel(user.getTimezone().getCity() + " | " + user.getTimezone().getZoneCode());
 //        name.setFont(new Font("Serif", Font.PLAIN, 14));
         userInfo.add(city);
 

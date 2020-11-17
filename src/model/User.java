@@ -4,17 +4,14 @@ public class User {
     private String userid;
     private String password;
     private String name;
-    private String city;
-    private String time_zone;
     private TimeZone timezone;
     private String email;
 
-    public User(String userid, String password, String name, String city, String time_zone, String email) {
+    public User(String userid, String password, String name, TimeZone time_zone,String email) {
         this.userid = userid;
         this.password = password;
         this.name = name;
-        this.city = city;
-        this.time_zone = time_zone;
+        this.timezone = time_zone;
         this.email = email;
     }
 
@@ -30,11 +27,9 @@ public class User {
         return name;
     }
 
-    public String getCity() {
-        return city;
+    public TimeZone getTimezone() {
+        return timezone;
     }
-
-    public String getTime_zone() { return time_zone; }
 
     public String getEmail() { return email; }
 }

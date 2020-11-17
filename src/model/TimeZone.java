@@ -2,18 +2,18 @@ package model;
 
 public class TimeZone {
     private String city;
-    private String timeZone;
+    private String zonecode;
 
-    public TimeZone(String city, String timeZone) {
+    public TimeZone(String city, String zonecode) {
         this.city = city;
-        this.timeZone = timeZone;
+        this.zonecode = zonecode;
     }
 
     public String getCity() {
         return city;
     }
 
-    public String getTimeZone() {
-        return timeZone;
+    public String getZoneCode() {
+        return zonecode;
     }
 }

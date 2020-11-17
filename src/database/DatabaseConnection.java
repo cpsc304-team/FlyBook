@@ -63,7 +63,8 @@ public class DatabaseConnection {
         insertTimeZone(tz2);
 
         // user_info
-        User admin = new User("0000", "0000", "admin", "Vancouver", null, "admin@gmail.com");
+
+        User admin = new User("0000", "0000", "admin", tz1, "admin@gmail.com");
         insertUser(admin);
 
         //
@@ -115,7 +116,7 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO time_zone VALUES (?,?)");
             ps.setString(1, tz.getCity());
-            ps.setString(2, tz.getTimeZone());
+            ps.setString(2, tz.getZoneCode());
 
             ps.executeUpdate();
             connection.commit();
@@ -156,10 +157,10 @@ public class DatabaseConnection {
             ps.setString(1, user.getUserid());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getName());
-            if (user.getCity() == null) {
+            if (user.getTimezone().getCity() == null) {
                 ps.setNull(4, java.sql.Types.CHAR);
             } else {
-                ps.setString(4, user.getCity());
+                ps.setString(4, user.getTimezone().getCity());
             }
             if (user.getEmail() == null) {
                 ps.setNull(5, java.sql.Types.CHAR);
@@ -208,14 +209,15 @@ public class DatabaseConnection {
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, time_zone WHERE user_info.city = time_zone.city");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, " +
+                    "time_zone WHERE user_info.city = time_zone.city");
 
             while(rs.next()) {
+                TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));
                 User user = new User(rs.getString("user_id"),
                         rs.getString("password"),
                         rs.getString("name"),
-                        rs.getString("city"),
-                        rs.getString("time_zone"),
+                        timezone,
                         rs.getString("email"));
                 result.add(user);
             }
@@ -279,14 +281,15 @@ public class DatabaseConnection {
     public User getUserByID(String userid) {
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, time_zone WHERE user_id = " + userid + " AND user_info.city = time_zone.city");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, time_zone " +
+                    "WHERE user_id = " + userid + " AND user_info.city = time_zone.city");
 
             while(rs.next()) {
+                TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));
                 User user = new User(rs.getString("user_id"),
                         rs.getString("password"),
                         rs.getString("name"),
-                        rs.getString("city"),
-                        rs.getString("time_zone"),
+                        timezone,
                         rs.getString("email"));
                 return user;
             }

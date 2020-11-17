@@ -1,5 +1,6 @@
 package main;
 
+import model.TimeZone;
 import model.User;
 import database.DatabaseConnection;
 import ui.ErrorMessage;
@@ -58,11 +59,12 @@ public class Application {
         }
     }
 
-    public void userRegister(String userid, String password, String name, String city, String email) {
+    public void userRegister(String userid, String password, String name, String city, String zonecode, String email) {
         if (dbConnection.userExist(userid)) {
             new ErrorMessage("This user ID has been used.");
         } else {
-            User user = new User(userid, password, name, city, null, email);
+            TimeZone timezone = new TimeZone(city, zonecode);
+            User user = new User(userid, password, name,timezone,email);
             dbConnection.insertUser(user);
             new SuccessMessage("You registered an account successfully!");
             ui.switchPanel("Login");

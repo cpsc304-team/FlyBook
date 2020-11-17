@@ -172,7 +172,6 @@ public class RegisterPanel extends JPanel implements ActionListener {
             else {
                 Application app = ui.getApplication();
                 app.userRegister(userid, password, name, city, email);
-                System.out.println("Passed actionListener()");
             }
         } else {
             ui.switchPanel("Login");

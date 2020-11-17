@@ -399,4 +399,20 @@ public class DatabaseConnection {
         }
         return null;
     }
+
+    public void resetPassword(String currentUser, String password) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET password = ? WHERE user_id = ?");
+            ps.setString(1, password);
+            ps.setString(2, currentUser);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
 }

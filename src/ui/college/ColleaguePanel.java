@@ -4,13 +4,10 @@ import main.Application;
 import model.User;
 import ui.UI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 public class ColleaguePanel extends JPanel implements ActionListener {
     UI ui;
@@ -74,7 +71,7 @@ public class ColleaguePanel extends JPanel implements ActionListener {
 
         Application app = ui.getApplication();
         User[] users = app.getUserList();
-        String currentUser = app.getCurrentUser();
+        String currentUser = app.getCurrentUserID();
 
         for (int i = 0; i < users.length; i++) {
             JPanel user = new SubColleaguePanel(users[i], currentUser);

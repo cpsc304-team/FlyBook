@@ -23,7 +23,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
     JTextField nameField = new JTextField(10);
     JComboBox cityField;
     JTextField emailField = new JTextField(10);
-    JTextField timezoneField = new JTextField(10);
+//    JTextField timezoneField = new JTextField(10);
 
     public RegisterPanel(UI ui) {
         this.ui = ui;
@@ -72,7 +72,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         textPanel.add(password);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel reEnter = generateText("Re-enter password");
+        JLabel reEnter = generateText("Re-enter Password");
         reEnter.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textPanel.add(reEnter);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));

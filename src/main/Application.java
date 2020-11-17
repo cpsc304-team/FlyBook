@@ -24,7 +24,7 @@ public class Application {
         app.start();
     }
 
-    public String getCurrentUser() {
+    public String getCurrentUserID() {
         return currentUser;
     }
 
@@ -76,9 +76,16 @@ public class Application {
         }
     }
 
+    public User getCurrentUser() { return dbConnection.getUserByID(currentUser); }
+
     public User[] getUserList() {
         return dbConnection.getUser();
     }
 
     public String[] getCities() { return dbConnection.getTimeZoneCities(); }
+
+    public void resetPassword(String password) {
+        dbConnection.resetPassword(currentUser, password);
+        new SuccessMessage("You reset your password successfully!");
+    }
 }

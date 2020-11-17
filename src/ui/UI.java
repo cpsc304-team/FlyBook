@@ -2,7 +2,9 @@ package ui;
 
 import main.Application;
 import ui.college.ColleaguePanel;
+import ui.user.AccountPanel;
 import ui.user.LoginPanel;
+import ui.user.PasswordPanel;
 import ui.user.RegisterPanel;
 
 import javax.swing.*;
@@ -54,6 +56,10 @@ public class UI extends JFrame {
         } else if (s.equals("Schedule")) {
 
         } else if (s.equals("Account")) {
+            setContentPane(new AccountPanel(this, application.getCurrentUser()));
+        } else if (s.equals("Reset Password")) {
+            setContentPane(new PasswordPanel(this));
+        } else if (s.equals("Change Profile")) {
 
         }
         revalidate();

@@ -61,6 +61,14 @@ public class DatabaseConnection {
         insertTimeZone(tz1);
         TimeZone tz2 = new TimeZone("Toronto", "GMT-5");
         insertTimeZone(tz2);
+        TimeZone tz3 = new TimeZone("Edmonton", "GMT-7");
+        insertTimeZone(tz3);
+        TimeZone tz4 = new TimeZone("Winnipeg", "GMT-4");
+        insertTimeZone(tz4);
+        TimeZone tz5 = new TimeZone("Montreal", "GMT-5");
+        insertTimeZone(tz5);
+        TimeZone tz6 = new TimeZone("Ottawa", "GMT-5");
+        insertTimeZone(tz6);
 
         // user_info
 
@@ -282,7 +290,7 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, time_zone " +
-                    "WHERE user_id = " + userid + " AND user_info.city = time_zone.city");
+                    "WHERE user_id = \'" + userid + "\' AND user_info.city = time_zone.city");
 
             while(rs.next()) {
                 TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));
@@ -292,6 +300,25 @@ public class DatabaseConnection {
                         timezone,
                         rs.getString("email"));
                 return user;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    // return timezone given city name
+    public TimeZone getTimeZoneByCity(String city) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM time_zone WHERE city = \'" + city + "\'");
+
+            while(rs.next()) {
+                TimeZone timezone = new TimeZone(rs.getString("city"), rs.getString("time_zone"));
+                return timezone;
             }
 
             rs.close();

@@ -1,5 +1,6 @@
 package main;
 
+import model.IndividualChat;
 import model.TimeZone;
 import model.User;
 import database.DatabaseConnection;
@@ -78,6 +79,8 @@ public class Application {
 
     public User getCurrentUser() { return dbConnection.getUserByID(currentUser); }
 
+    public User getUserByID(String uid) { return dbConnection.getUserByID(uid); }
+
     public User[] getUserList() {
         return dbConnection.getUser();
     }
@@ -92,5 +95,13 @@ public class Application {
     public void deleteAccount() {
         dbConnection.deleteAccount(currentUser);
         new SuccessMessage("The account is deleted. You will return back to the log in menu.");
+    }
+
+    public IndividualChat[] getIndividualChatHistory(String uid1, String uid2) {
+        return dbConnection.getIndividualChatHistory(uid1, uid2);
+    }
+
+    public void addIndividualChar(IndividualChat record) {
+        dbConnection.insertIndividualChat(record);
     }
 }

@@ -192,8 +192,10 @@ INSERT INTO
 
 -- Queries
 -- DELETE Operation
+DELETE FROM user_info WHERE user_id = "0001";
 
 -- UPDATE Operation
+UPDATE user_info SET password = "1111" WHERE user_id = "0001";
 
 -- Selection
 SELECT *

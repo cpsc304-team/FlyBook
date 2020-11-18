@@ -1,7 +1,9 @@
 package ui;
 
 import main.Application;
-import ui.college.ColleaguePanel;
+import ui.colleague.ColleaguePanel;
+import ui.colleague.IndividualChatPanel;
+import ui.colleague.IndividualChatWindow;
 import ui.user.AccountPanel;
 import ui.user.LoginPanel;
 import ui.user.PasswordPanel;
@@ -27,6 +29,8 @@ public class UI extends JFrame {
 
         // Start with the login panel
         JPanel loginPane = new LoginPanel(this);
+
+        // TODO: delete
         setContentPane(loginPane);
 
         pack();

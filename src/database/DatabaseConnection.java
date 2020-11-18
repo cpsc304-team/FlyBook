@@ -4,10 +4,7 @@ import model.IndividualChat;
 import model.User;
 import model.TimeZone;
 import java.sql.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import oracle.sql.TIMESTAMP;
 
 public class DatabaseConnection {
     private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
@@ -94,8 +91,10 @@ public class DatabaseConnection {
         insertUser(u3);
 
         // individual_chat
-        IndividualChat chat1 = new IndividualChat("0001", "0002", "Gelila Zhang", "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
+        IndividualChat chat1 = new IndividualChat("0001", "0002", "0001", "Gelila Zhang", "Hello! I am Gelila", Timestamp.valueOf("2020-11-17 11:23:08"));
         insertIndividualChat(chat1);
+        IndividualChat chat2 = new IndividualChat("0002", "0001", "0002", "Kerry Yang", "Hello! I am Kerry", Timestamp.valueOf("2020-11-17 11:22:10"));
+        insertIndividualChat(chat2);
     }
 
     // Drop the table if it exists given a table name
@@ -208,10 +207,10 @@ public class DatabaseConnection {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE individual_chat (" +
                     // TODO: change to TIMESTAMP if it could be generated in SQL given a string
-//                    "time TIMESTAMP, " +
-                    "time varchar2(25), " +
+                    "time TIMESTAMP, " +
+//                    "time varchar2(25), " +
 
-                    "sender varchar2(20), " +
+                    "sender varchar2(10), " +
                     "content varchar2(100), " +
                     "u_id1 varchar2(10), " +
                     "u_id2 varchar2(10), " +
@@ -241,8 +240,9 @@ public class DatabaseConnection {
 //            System.out.println("TO_TIMESTAMP(\'" + text + "\', \'YYYY-MM-DD HH24:MI:SS\')");
 //            ps.setString(1, "TO_TIMESTAMP(\'" + text + "\', \'yyyy-MM-DD HH24:MI:SS\')");
 
-            ps.setString(1, chat.getTime().toString());
-            ps.setString(2, chat.getSender());
+//            ps.setString(1, chat.getTime().toString());
+            ps.setTimestamp(1, chat.getTime());
+            ps.setString(2, chat.getSenderID());
             ps.setString(3, chat.getContent());
             ps.setString(4, chat.getUid1());
             ps.setString(5, chat.getUid2());
@@ -429,5 +429,34 @@ public class DatabaseConnection {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
+    }
+
+    public IndividualChat[] getIndividualChatHistory(String uid1, String uid2) {
+        ArrayList<IndividualChat> result = new ArrayList<IndividualChat>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM individual_chat, user_info " +
+                    "WHERE ((u_id1 = \'" + uid1 + "\' AND u_id2 = \'" + uid2 + "\')" +
+                    "OR (u_id1 = \'" + uid2 + "\' AND u_id2 = \'" + uid1 + "\'))" +
+                    "AND (sender = user_id) ORDER BY time");
+
+            while(rs.next()) {
+                IndividualChat chat = new IndividualChat(rs.getString("u_id1"),
+                        rs.getString("u_id2"),
+                        rs.getString("sender"),
+                        rs.getString("name"),
+                        rs.getString("content"),
+                        Timestamp.valueOf(rs.getString("time")));
+                result.add(chat);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new IndividualChat[result.size()]);
     }
 }

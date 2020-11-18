@@ -1,4 +1,4 @@
-package ui.college;
+package ui.colleague;
 
 import main.Application;
 import model.User;
@@ -74,7 +74,7 @@ public class ColleaguePanel extends JPanel implements ActionListener {
         String currentUser = app.getCurrentUserID();
 
         for (int i = 0; i < users.length; i++) {
-            JPanel user = new SubColleaguePanel(users[i], currentUser);
+            JPanel user = new SubColleaguePanel(ui, users[i], currentUser);
             panel.add(user);
         }
 

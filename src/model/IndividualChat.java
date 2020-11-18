@@ -10,20 +10,21 @@ package model;
     FOREIGN KEY (u_id1) REFERENCES User_info ON DELETE CASCADE,
     FOREIGN KEY (u_id2) REFERENCES User_info ON DELETE CASCADE);*/
 
-import oracle.sql.TIMESTAMP;
 import java.sql.Timestamp;
 
 public class IndividualChat {
     private String uid1;
     private String uid2;
+    private String senderID;
     private String sender;
     private String content;
 
     private Timestamp time;
 
-    public IndividualChat(String uid1, String uid2, String sender, String content, Timestamp time) {
+    public IndividualChat(String uid1, String uid2, String senderID, String sender, String content, Timestamp time) {
         this.uid1 = uid1;
         this.uid2 = uid2;
+        this.senderID = senderID;
         this.sender = sender;
         this.content = content;
         this.time = time;
@@ -36,6 +37,8 @@ public class IndividualChat {
     public String getContent() {
         return content;
     }
+
+    public String getSenderID() { return senderID; }
 
     public String getSender() { return sender; }
 

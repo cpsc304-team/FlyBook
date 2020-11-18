@@ -268,8 +268,10 @@ INSERT INTO Contain_Task VALUES ('Finish Milestone5', 2, 's0005');
 
 -- Queries
 -- DELETE Operation
+DELETE FROM user_info WHERE user_id = "0001";
 
--- UPTIMESTAMP Operation
+-- UPDATE Operation
+UPDATE user_info SET password = "1111" WHERE user_id = "0001";
 
 -- Selection
 -- SELECT *

@@ -1,6 +1,8 @@
-package ui.college;
+package ui.colleague;
 
 import model.User;
+import ui.SuccessMessage;
+import ui.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,10 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class SubColleaguePanel extends JPanel implements ActionListener {
+    UI ui;
     User user;
     String currentUser;
 
-    public SubColleaguePanel(User user, String currentUser) {
+    public SubColleaguePanel(UI ui, User user, String currentUser) {
+        this.ui = ui;
         this.user = user;
         this.currentUser = currentUser;
 
@@ -87,7 +91,7 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
         if (e.getActionCommand().equals("Posts")) {
             // TODO: open the post panel which only shows the user's posts
         } else {
-            // TODO: open the char panel to chat with the user
+            new IndividualChatWindow(ui, currentUser, user.getUserid());
         }
     }
 }

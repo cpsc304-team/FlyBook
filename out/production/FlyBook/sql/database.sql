@@ -142,7 +142,7 @@ CREATE TABLE Task_Status
     PRIMARY KEY (stime));
 
 CREATE TABLE Contain_Task
-    (tname CHAR(50),
+    (tname CHAR(10),
     Priority_val INTEGER,
     sid CHAR(10),
     PRIMARY KEY (sid, tname),
@@ -269,7 +269,7 @@ INSERT INTO Contain_Task VALUES ('Finish Milestone5', 2, 's0005');
 -- Queries
 -- DELETE Operation
 
--- UPTIMESTAMP Operation
+-- UPDATE Operation
 
 -- Selection
 -- SELECT *

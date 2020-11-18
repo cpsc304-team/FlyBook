@@ -13,9 +13,9 @@ public class IndividualChatRecord extends JPanel {
         info.setLayout(new BoxLayout(info, BoxLayout.LINE_AXIS));
 
         JLabel content = new JLabel(chat.getContent());
-        JLabel sender = new JLabel(chat.getSender());
+        JLabel sender = new JLabel(chat.getSender().getName());
         sender.setFont(new Font("Helvetica", Font.BOLD, 15));
-        if (currentUser.equals(chat.getSenderID())) {
+        if (currentUser.equals(chat.getSender().getUserid())) {
             sender.setForeground(Color.BLUE);
         }
         JLabel time = new JLabel(chat.getTime().toString());

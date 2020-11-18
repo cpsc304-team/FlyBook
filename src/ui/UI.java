@@ -30,7 +30,6 @@ public class UI extends JFrame {
         // Start with the login panel
         JPanel loginPane = new LoginPanel(this);
 
-        // TODO: delete
         setContentPane(loginPane);
 
         pack();

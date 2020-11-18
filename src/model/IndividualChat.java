@@ -13,15 +13,15 @@ package model;
 import java.sql.Timestamp;
 
 public class IndividualChat {
-    private String uid1;
-    private String uid2;
+    private User sender; //sender
+    private User receiver;
     private String content;
 
     private Timestamp time;
 
-    public IndividualChat(String uid1, String uid2, String content, Timestamp time) {
-        this.uid1 = uid1;
-        this.uid2 = uid2;
+    public IndividualChat(User sender, User receiver, String content, Timestamp time) {
+        this.sender = sender;
+        this.receiver = receiver;
         this.content = content;
         this.time = time;
     }
@@ -34,11 +34,11 @@ public class IndividualChat {
         return content;
     }
 
-    public String getUid1() {
-        return uid1;
+    public User getSender() {
+        return sender;
     }
 
-    public String getUid2() {
-        return uid2;
+    public User getReceiver() {
+        return receiver;
     }
 }

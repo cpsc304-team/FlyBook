@@ -87,10 +87,8 @@ public class IndividualChatPanel extends JPanel {
         Application application = ui.getApplication();
 
         IndividualChat record = new IndividualChat(
-                uid1,
-                uid2,
-                uid1,
-                application.getUserByID(uid1).getName(),
+                application.getUserByID(uid1),
+                application.getUserByID(uid2),
                 content,
                 new Timestamp(System.currentTimeMillis()));
 

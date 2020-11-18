@@ -142,7 +142,7 @@ CREATE TABLE Task_Status
     PRIMARY KEY (stime));
 
 CREATE TABLE Contain_Task
-    (tname CHAR(10),
+    (tname CHAR(50),
     Priority_val INTEGER,
     sid CHAR(10),
     PRIMARY KEY (sid, tname),
@@ -268,8 +268,10 @@ INSERT INTO Contain_Task VALUES ('Finish Milestone5', 2, 's0005');
 
 -- Queries
 -- DELETE Operation
+DELETE FROM user_info WHERE user_id = "0001";
 
 -- UPDATE Operation
+UPDATE user_info SET password = "1111" WHERE user_id = "0001";
 
 -- Selection
 -- SELECT *

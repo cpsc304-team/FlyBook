@@ -20,8 +20,9 @@ public class Application {
     public static void main(String args[]) {
         Application app = new Application();
         app.oracleLogin();
-//        // TODO: test
-//        System.out.println("success!");
+        // TODO: test
+//        System.out.println("success!"); // for database setup
+
         app.start();
     }
 
@@ -31,6 +32,9 @@ public class Application {
 
     // Start the program by opening the application ui frame
     private void start() {
+        // TODO: test
+//        dbConnection.print();
+
         ui = new UI(this);
         ui.showFrame();
     }

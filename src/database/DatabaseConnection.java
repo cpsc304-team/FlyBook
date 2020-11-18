@@ -131,6 +131,12 @@ public class DatabaseConnection {
         SharePost sp4 = new SharePost("p0004",Timestamp.valueOf("2020-01-17 12:00:00"),"Hello! Karry from the north","0004");
         SharePost sp5 = new SharePost("p0005",Timestamp.valueOf("2020-01-18 12:00:00"),"Long time no see, Vancouver","0005");
 
+        insertSharePost(sp1);
+        insertSharePost(sp2);
+        insertSharePost(sp3);
+        insertSharePost(sp4);
+        insertSharePost(sp5);
+
         // media
         Media media1 = new Media("m0001", "Image");
         Media media2 = new Media("m0002", "Music");
@@ -138,12 +144,24 @@ public class DatabaseConnection {
         Media media4 = new Media("m0004", "Image");
         Media media5 = new Media("m0005", "Video");
 
+        insertMedia(media1);
+        insertMedia(media2);
+        insertMedia(media3);
+        insertMedia(media4);
+        insertMedia(media5);
+
         // post_contains
-         PostContains postContains1 = new PostContains("p0001", "m0001");
-         PostContains postContains2 = new PostContains("p0002", "m0002");
-         PostContains postContains3 = new PostContains("p0003", "m0003");
-         PostContains postContains4 = new PostContains("p0004", "m0004");
-         PostContains postContains5 = new PostContains("p0005", "m0005");
+        PostContains postContains1 = new PostContains("p0001", "m0001");
+        PostContains postContains2 = new PostContains("p0002", "m0002");
+        PostContains postContains3 = new PostContains("p0003", "m0003");
+        PostContains postContains4 = new PostContains("p0004", "m0004");
+        PostContains postContains5 = new PostContains("p0005", "m0005");
+
+        insertPostContains(postContains1);
+        insertPostContains(postContains2);
+        insertPostContains(postContains3);
+        insertPostContains(postContains4);
+        insertPostContains(postContains5);
 
         // mini_program
         MiniProgram miniProgram1 = new MiniProgram("mi0001", "Payroll Check", "Work");
@@ -152,12 +170,25 @@ public class DatabaseConnection {
         MiniProgram miniProgram4 = new MiniProgram("mi0004", "Payroll Check", "Work");
         MiniProgram miniProgram5 = new MiniProgram("mi0005", "Payroll Check", "Work");
 
+        insertMiniProgram(miniProgram1);
+        insertMiniProgram(miniProgram2);
+        insertMiniProgram(miniProgram3);
+        insertMiniProgram(miniProgram4);
+        insertMiniProgram(miniProgram5);
+
         // miniprogram_record
         MiniProgramRecord miniProgramRecord1 = new MiniProgramRecord("0001","mi0001",Timestamp.valueOf("2020-01-15 12:00:00"));
         MiniProgramRecord miniProgramRecord2 = new MiniProgramRecord("0002","mi002",Timestamp.valueOf("2020-01-15 12:30:00"));
         MiniProgramRecord miniProgramRecord3 = new MiniProgramRecord("0003","mi003",Timestamp.valueOf("2020-01-16 12:00:00"));
         MiniProgramRecord miniProgramRecord4 = new MiniProgramRecord("0004","mi004",Timestamp.valueOf("2020-01-17 12:00:00"));
         MiniProgramRecord miniProgramRecord5 = new MiniProgramRecord("0005","mi005",Timestamp.valueOf("2020-01-18 12:00:00"));
+
+        insertMiniProgramRecord(miniProgramRecord1);
+        insertMiniProgramRecord(miniProgramRecord2);
+        insertMiniProgramRecord(miniProgramRecord3);
+        insertMiniProgramRecord(miniProgramRecord4);
+        insertMiniProgramRecord(miniProgramRecord5);
+
 
         // group_member
         GroupMemberAdministrator groupMemberAdministrator1 = new GroupMemberAdministrator("0001","FrozenCloud");
@@ -166,12 +197,31 @@ public class DatabaseConnection {
         GroupMemberAdministrator groupMemberAdministrator4 = new GroupMemberAdministrator("0004","7k+");
         GroupMemberAdministrator groupMemberAdministrator5 = new GroupMemberAdministrator("0005","magge");
 
+        insertGroupAdministrator(groupMemberAdministrator1);
+        insertGroupAdministrator(groupMemberAdministrator2);
+        insertGroupAdministrator(groupMemberAdministrator3);
+        insertGroupAdministrator(groupMemberAdministrator4);
+        insertGroupAdministrator(groupMemberAdministrator5);
+
+        insertGroupMember(groupMemberAdministrator1);
+        insertGroupMember(groupMemberAdministrator2);
+        insertGroupMember(groupMemberAdministrator3);
+        insertGroupMember(groupMemberAdministrator4);
+        insertGroupMember(groupMemberAdministrator5);
+
+
         // group_joins
         GroupJoins groupJoins1 = new GroupJoins(Timestamp.valueOf("2020-02-16 12:00:00"),"p0001","g0002");
         GroupJoins groupJoins2 = new GroupJoins(Timestamp.valueOf("2020-02-17 12:00:00"),"p0002","g0001");
         GroupJoins groupJoins3 = new GroupJoins(Timestamp.valueOf("2020-02-18 12:00:00"),"p0003","g0002");
         GroupJoins groupJoins4 = new GroupJoins(Timestamp.valueOf("2020-02-19 12:00:00"),"p0004","g0003");
         GroupJoins groupJoins5 = new GroupJoins(Timestamp.valueOf("2020-02-20 12:00:00"),"p0005","g0001");
+
+        insertGroupJoins(groupJoins1);
+        insertGroupJoins(groupJoins2);
+        insertGroupJoins(groupJoins3);
+        insertGroupJoins(groupJoins4);
+        insertGroupJoins(groupJoins5);
 
         // group_creates
         GroupCreate groupCreate1 = new GroupCreate(Timestamp.valueOf("2020-02-15 12:00:00"),"p0001","g0001");
@@ -180,12 +230,25 @@ public class DatabaseConnection {
         GroupCreate groupCreate4 = new GroupCreate(Timestamp.valueOf("2020-02-19 12:00:00"),"p0004","g0004");
         GroupCreate groupCreate5 = new GroupCreate(Timestamp.valueOf("2020-02-20 12:00:00"),"p0005","g0005");
 
+        insertGroupCreate(groupCreate1);
+        insertGroupCreate(groupCreate2);
+        insertGroupCreate(groupCreate3);
+        insertGroupCreate(groupCreate4);
+        insertGroupCreate(groupCreate5);
+
         // group_record
         GroupRecord groupRecord1 = new GroupRecord("g0001","project_team1");
         GroupRecord groupRecord2 = new GroupRecord("g0002","project_team2");
         GroupRecord groupRecord3 = new GroupRecord("g0003","project_team3");
         GroupRecord groupRecord4 = new GroupRecord("g0004","project_team4");
         GroupRecord groupRecord5 = new GroupRecord("g0005","project_team5");
+
+        insertGroupRecord(groupRecord1);
+        insertGroupRecord(groupRecord2);
+        insertGroupRecord(groupRecord3);
+        insertGroupRecord(groupRecord4);
+        insertGroupRecord(groupRecord5);
+
 
 
 
@@ -725,6 +788,191 @@ public class DatabaseConnection {
             ps.setString(2, chat.getUid1());
             ps.setString(3, chat.getUid2());
             ps.setString(4, chat.getContent());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert SharePost
+    public void insertSharePost(SharePost sharePost) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?,?)");
+
+            ps.setString(1, sharePost.getPostid());
+            ps.setString(2, sharePost.getPosttime().toString());
+            ps.setString(3, sharePost.getUid());
+            ps.setString(4, sharePost.getContent());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert Media
+    public void insertMedia(Media media) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, media.getMediaid());
+            ps.setString(2, media.getMtype());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert PostContains
+    public void insertPostContains(PostContains postContains) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, postContains.getPostid());
+            ps.setString(2, postContains.getMediaid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert MiniProgram
+    public void insertMiniProgram(MiniProgram miniProgram) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, miniProgram.getPid());
+            ps.setString(2, miniProgram.getPname());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert MiniProgramRecord
+    public void insertMiniProgramRecord(MiniProgramRecord miniProgramRecord) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?)");
+
+            ps.setString(1, miniProgramRecord.getUid());
+            ps.setString(2, miniProgramRecord.getPid());
+            ps.setString(3, miniProgramRecord.getTime().toString());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupMember
+    public void insertGroupMember(GroupMemberAdministrator groupMember) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, groupMember.getNickname());
+            ps.setString(2, groupMember.getUid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupAdministrator
+    public void insertGroupAdministrator(GroupMemberAdministrator groupAdministrator) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, groupAdministrator.getNickname());
+            ps.setString(2, groupAdministrator.getUid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupRecord
+    public void insertGroupRecord(GroupRecord groupRecord) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, groupRecord.getGid());
+            ps.setString(2, groupRecord.getGname());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupJoins
+    public void insertGroupJoins(GroupJoins groupJoins) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?)");
+
+            ps.setString(1, groupJoins.getJoinTime().toString());
+            ps.setString(2, groupJoins.getUid());
+            ps.setString(3, groupJoins.getGid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupCreate
+    public void insertGroupCreate(GroupCreate groupCreate) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?)");
+
+            ps.setString(1, groupCreate.getCreateTime().toString());
+            ps.setString(2, groupCreate.getUid());
+            ps.setString(3, groupCreate.getGid());
 
             ps.executeUpdate();
             connection.commit();

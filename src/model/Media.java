@@ -8,19 +8,23 @@ package model;
 
 public class Media {
     private String mediaid;
-    private String mtype;
+    private String mediaType;
+    private String url;
 
-    public Media(String mediaid, String mtype) {
+    public Media(String mediaid, String mediaType, String url) {
         this.mediaid = mediaid;
-        this.mtype = mtype;
+        this.mediaType = mediaType;
+        this.url = url;
     }
 
     public String getMediaid() {
         return mediaid;
     }
 
-    public String getMtype() {
-        return mtype;
+    public String getMediaType() {
+        return mediaType;
     }
+
+    public String getUrl() { return url; }
 }
 

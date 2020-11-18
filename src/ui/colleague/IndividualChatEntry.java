@@ -32,6 +32,8 @@ public class IndividualChatEntry extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String content = textEntry.getText();
-        panel.addEntry(content);
+        if (!(content.isEmpty())) {
+            panel.addEntry(content);
+        }
     }
 }

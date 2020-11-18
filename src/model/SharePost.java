@@ -1,8 +1,6 @@
 package model;
 
-
 import java.sql.Timestamp;
-
 
 /*CREATE TABLE Share_Post
         (postid CHAR(10),
@@ -14,17 +12,17 @@ import java.sql.Timestamp;
 
 public class SharePost {
     private String postid;
-    private Timestamp posttime;
+    private Timestamp time;
     private String content;
-    private String uid;
+    private User user;
+    private Media media;
 
-
-
-    public SharePost(String postid, Timestamp posttime, String content, String uid) {
+    public SharePost(String postid, Timestamp time, String content, User user, Media media) {
         this.postid = postid;
-        this.posttime = posttime;
+        this.time = time;
         this.content = content;
-        this.uid = uid;
+        this.user = user;
+        this.media = media;
     }
 
     public String getContent() {
@@ -35,11 +33,13 @@ public class SharePost {
         return postid;
     }
 
-    public String getUid() {
-        return uid;
+    public User getUser() {
+        return user;
     }
 
-    public Timestamp getPosttime() {
-        return posttime;
+    public Timestamp getTime() {
+        return time;
     }
+
+    public Media getMedia() { return media; }
 }

@@ -1,6 +1,5 @@
 package database;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import model.*;
 
 import java.sql.*;
@@ -51,32 +50,25 @@ public class DatabaseConnection {
 
     // Drop all the tables
     public void dropTables() {
-        dropTable("contain_task");
-        dropTable("post_contains");
+//        dropTable("contain_task");
+//        dropTable("post_contains");
         dropTable("share_post");
-        dropTable("miniprogram_record");
+//        dropTable("miniprogram_record");
         dropTable("individual_chat");
-        dropTable("group_member");
-        dropTable("group_administrator");
-        dropTable("group_joins");
-        dropTable("group_creates");
-        dropTable("groupchat_record");
-        dropTable("meeting_record");
-        dropTable("schedule_record");
+//        dropTable("group_member");
+//        dropTable("group_administrator");
+//        dropTable("group_joins");
+//        dropTable("group_creates");
+//        dropTable("groupchat_record");
+//        dropTable("meeting_record");
+//        dropTable("schedule_record");
 
         dropTable("media");
         dropTable("time_zone");
         dropTable("user_info");
-        dropTable("mini_program");
-        dropTable("group_record");
-        dropTable("task_status");
-
-//        dropTable("post_contains");
-//        dropTable("media");
-//        dropTable("share_post");
-//        dropTable("individual_chat");
-//        dropTable("time_zone");
-//        dropTable("user_info");
+//        dropTable("mini_program");
+//        dropTable("group_record");
+//        dropTable("task_status");
     }
 
     // Set up the database
@@ -84,8 +76,8 @@ public class DatabaseConnection {
         userInfoSetUp();
         timeZoneSetUp();
         individualChatSetUp();
-//        sharePostSetUp();
-//        mediaSetUp();
+        mediaSetUp();
+        sharePostSetUp();
 //        postContainsSetUp();
 //        miniProgramSetUp();
 //        miniProgramRecordSetUp();
@@ -107,33 +99,37 @@ public class DatabaseConnection {
         insertTimeZone(tz1);
         TimeZone tz2 = new TimeZone("Toronto", "GMT-5");
         insertTimeZone(tz2);
-        TimeZone tz3 = new TimeZone("Edmonton", "GMT-7");
+        TimeZone tz3 = new TimeZone("Beijing", "GMT+8");
         insertTimeZone(tz3);
-        TimeZone tz4 = new TimeZone("Winnipeg", "GMT-4");
+        TimeZone tz4 = new TimeZone("London", "GMT+1");
         insertTimeZone(tz4);
-        TimeZone tz5 = new TimeZone("Montreal", "GMT-5");
+        TimeZone tz5 = new TimeZone("Seattle", "GMT-7");
         insertTimeZone(tz5);
-        TimeZone tz6 = new TimeZone("Ottawa", "GMT-5");
+        TimeZone tz6 = new TimeZone("Tokyo", "GMT+9");
         insertTimeZone(tz6);
+        TimeZone tz7 = new TimeZone("New York", "GMT-5");
+        insertTimeZone(tz7);
 
 
         // user_info
-        User admin = new User("0000", "0000", "admin", tz2, "admin@gmail.com");
-        insertUser(admin);
-        User u1 = new User("0001", "1", "Gelila Zhang", tz1, "gelila@gmail.com");
+        User u1 = new User("0001", "1", "Gelila Zhang", tz4, "gelilaz@gmail.com");
         insertUser(u1);
-        User u2 = new User("0002", "2", "Karry Yang", tz1, "kerry@gmail.com");
+        User u2 = new User("0002", "2", "Karry Yang", tz1, "kerryy@gmail.com");
         insertUser(u2);
-        User u3 = new User("0003", "3", "Dora Ni", tz1, "dora@gmail.com");
+        User u3 = new User("0003", "3", "Dora Ni", tz3, "doran@gmail.com");
         insertUser(u3);
+        User u4 = new User("0004", "4", "John Doe", tz7, "johnd@gmail.com");
+        insertUser(u4);
+        User u5 = new User("0005", "5", "Jane Doe", tz2, "janed@gmail.com");
+        insertUser(u5);
 
         // individual_chat
         IndividualChat chatG1 = new IndividualChat(u1, u2, "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
-        IndividualChat chatG2 = new IndividualChat(u1, u3, "How are you today?", Timestamp.valueOf("2020-11-18 11:23:08"));
-        IndividualChat chatK1 = new IndividualChat(u2, u1, "Hello! I'm karry", Timestamp.valueOf("2020-11-17 11:23:09"));
-        IndividualChat chatK2 = new IndividualChat(u2, u3, "Nice to see you", Timestamp.valueOf("2020-11-18 11:23:08"));
-        IndividualChat chatD1 = new IndividualChat(u3, u1, "Hello! I'm dora", Timestamp.valueOf("2020-11-17 11:23:10"));
-        IndividualChat chatD2 = new IndividualChat(u3, u2, "any recommended sushi?", Timestamp.valueOf("2020-11-18 11:23:08"));
+        IndividualChat chatK1 = new IndividualChat(u2, u1, "Hello! I am karry", Timestamp.valueOf("2020-11-17 11:24:12"));
+        IndividualChat chatD1 = new IndividualChat(u3, u1, "Hello! I am dora", Timestamp.valueOf("2020-11-17 11:23:10"));
+        IndividualChat chatG2 = new IndividualChat(u1, u3, "Hi!", Timestamp.valueOf("2020-11-17 11:31:48"));
+        IndividualChat chatK2 = new IndividualChat(u2, u3, "Nice to see you", Timestamp.valueOf("2020-11-17 21:23:08"));
+        IndividualChat chatD2 = new IndividualChat(u3, u2, "Any recommended sushi?", Timestamp.valueOf("2020-11-18 11:23:08"));
 
         insertIndividualChat(chatG1);
         insertIndividualChat(chatG2);
@@ -142,31 +138,32 @@ public class DatabaseConnection {
         insertIndividualChat(chatD1);
         insertIndividualChat(chatD2);
 
-//        // share_post
-//        SharePost sp1 = new SharePost("p0001",Timestamp.valueOf("2020-01-15 12:00:00"),"My first post!!","0001");
-//        SharePost sp2 = new SharePost("p0002",Timestamp.valueOf("2020-01-15 12:30:00"),"Hello everyone","0002");
-//        SharePost sp3 = new SharePost("p0003",Timestamp.valueOf("2020-01-16 12:00:00"),"Hello! THis is gelila","0003");
-//        SharePost sp4 = new SharePost("p0004",Timestamp.valueOf("2020-01-17 12:00:00"),"Hello! Karry from the north","0004");
-//        SharePost sp5 = new SharePost("p0005",Timestamp.valueOf("2020-01-18 12:00:00"),"Long time no see, Vancouver","0005");
-//
-//        insertSharePost(sp1);
-//        insertSharePost(sp2);
-//        insertSharePost(sp3);
-//        insertSharePost(sp4);
-//        insertSharePost(sp5);
-//
-//        // media
-//        Media media1 = new Media("m0001", "Image");
-//        Media media2 = new Media("m0002", "Music");
-//        Media media3 = new Media("m0003", "Video");
-//        Media media4 = new Media("m0004", "Image");
-//        Media media5 = new Media("m0005", "Video");
-//
-//        insertMedia(media1);
-//        insertMedia(media2);
-//        insertMedia(media3);
-//        insertMedia(media4);
-//        insertMedia(media5);
+        // media
+        Media media1 = new Media("M1", "Image", "https://i.imgur.com/QwEq1g2.jpg");
+        Media media2 = new Media("M2", "Music", "https://music.163.com/#/song?id=1405903472");
+        Media media3 = new Media("M3", "Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
+        Media media4 = new Media("M4", "Image", "https://i.imgur.com/veHL0mf.jpg");
+        Media media5 = new Media("M5", "Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
+
+        insertMedia(media1);
+        insertMedia(media2);
+        insertMedia(media3);
+        insertMedia(media4);
+        insertMedia(media5);
+
+        // share_post
+        SharePost sp1 = new SharePost("p1", Timestamp.valueOf("2020-11-17 12:00:00"),"My first post!!", u3, null);
+        SharePost sp2 = new SharePost("p2", Timestamp.valueOf("2020-11-17 12:30:00"),"Hello everyone", u2, null);
+        SharePost sp3 = new SharePost("p3", Timestamp.valueOf("2020-11-17 19:40:06"),"Hello! THis is Gelila", u1, null);
+        SharePost sp4 = new SharePost("p4", Timestamp.valueOf("2020-11-18 11:09:25"),"Favourite sushi", u2, media1);
+        SharePost sp5 = new SharePost("p5", Timestamp.valueOf("2020-11-18 18:05:20"),"Long time no see, Vancouver",u5, media4);
+
+        insertSharePost(sp1);
+        insertSharePost(sp2);
+        insertSharePost(sp3);
+        insertSharePost(sp4);
+        insertSharePost(sp5);
+
 //
 //        // post_contains
 //        PostContains postContains1 = new PostContains("p0001", "m0001");
@@ -355,6 +352,8 @@ public class DatabaseConnection {
         }
     }
 
+
+
     /*
      * ==================================================================
      *
@@ -363,31 +362,14 @@ public class DatabaseConnection {
      * ==================================================================
      * */
 
-    // Set up the time_zone table
-    private void timeZoneSetUp() {
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE time_zone (" +
-                    "city varchar2(20) not null PRIMARY KEY, " +
-                    "time_zone varchar2(5) not null)");
-
-            stmt.close();
-        } catch (SQLException e) {
-            // TODO: delete
-            System.out.println("Debug: timeZoneSetUp()");
-
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
     // Set up the user_info table
     private void userInfoSetUp() {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE user_info (" +
-                    "user_id varchar2(10) not null PRIMARY KEY, " +
-                    "password varchar2(10) not null, " +
-                    "name varchar2(20) not null, " +
+                    "user_id varchar2(10) NOT NULL PRIMARY KEY, " +
+                    "password varchar2(10) NOT NULL, " +
+                    "name varchar2(20) NOT NULL, " +
                     "city varchar2(20), " +
                     "email varchar2(100))");
 
@@ -395,6 +377,23 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             // TODO: delete
             System.out.println("Debug: userInfoSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the time_zone table
+    private void timeZoneSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE time_zone (" +
+                    "city varchar2(20) NOT NULL PRIMARY KEY, " +
+                    "time_zone varchar2(5) NOT NULL)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: timeZoneSetUp()");
 
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -422,45 +421,49 @@ public class DatabaseConnection {
         }
     }
 
-//    // Set up the individual_chat table
-//    private void sharePostSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE share_post (" +
-//                    "postid varchar2(10), " +
-//                    "post_time TIMESTAMP, " +
-//                    "u_id varchar2(10) NOT NULL, " +
-//                    "content varchar2(100), " +
-//                    "PRIMARY KEY (postid), " +
-//                    "FOREIGN KEY (u_id) REFERENCES user_info)");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: SharePostSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-//
-//    // Set up the Media table
-//    private void mediaSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE media (" +
-//                    "mediaid varchar2(10), " +
-//                    "mtype varchar2(20), " +
-//                    "PRIMARY KEY (mediaid))");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: MediaSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-//
+    // Set up the Media table
+    private void mediaSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE media (" +
+                    "media_id varchar2(10), " +
+                    "media_type varchar2(20), " +
+                    "url varchar2(1000), " +
+                    "PRIMARY KEY (media_id))");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: MediaSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the individual_chat table
+    private void sharePostSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE share_post (" +
+                    "post_id varchar2(10), " +
+                    "time TIMESTAMP, " +
+                    "user_id varchar2(10) NOT NULL, " +
+                    "content varchar2(100), " +
+                    "media_id varchar2(10), " +
+                    "PRIMARY KEY (post_id), " +
+                    "FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE, " +
+                    "FOREIGN KEY (media_id) REFERENCES media)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: SharePostSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+
 //    // Set up the PostContains table
 //    private void postContainsSetUp() {
 //        try {
@@ -724,6 +727,7 @@ public class DatabaseConnection {
 //    }
 
 
+
     /*
      * ==================================================================
      *
@@ -798,44 +802,52 @@ public class DatabaseConnection {
         }
     }
 
-//    // Insert SharePost
-//    public void insertSharePost(SharePost sharePost) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?,?)");
-//
-//            ps.setString(1, sharePost.getPostid());
-//            ps.setString(2, sharePost.getPosttime().toString());
-//            ps.setString(3, sharePost.getUid());
-//            ps.setString(4, sharePost.getContent());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
-//    // Insert Media
-//    public void insertMedia(Media media) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
-//
-//            ps.setString(1, media.getMediaid());
-//            ps.setString(2, media.getMtype());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
+    // Insert Media
+    public void insertMedia(Media media) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO media VALUES (?,?,?)");
+
+            ps.setString(1, media.getMediaid());
+            ps.setString(2, media.getMediaType());
+            ps.setString(3, media.getUrl());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert SharePost
+    public void insertSharePost(SharePost sharePost) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?,?,?)");
+
+            ps.setString(1, sharePost.getPostid());
+            ps.setTimestamp(2, sharePost.getTime());
+            ps.setString(3, sharePost.getUser().getUserid());
+            ps.setString(4, sharePost.getContent());
+            if (sharePost.getMedia() == null) {
+                ps.setNull(5, java.sql.Types.CHAR);
+            } else {
+                ps.setString(5, sharePost.getMedia().getMediaid());
+            }
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("debug insertSharePost()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
 //    // Insert PostContains
 //    public void insertPostContains(PostContains postContains) {
 //        try {

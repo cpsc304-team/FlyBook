@@ -14,17 +14,15 @@ import oracle.sql.TIMESTAMP;
 import java.sql.Timestamp;
 
 public class IndividualChat {
-    private String uid1;
+    private String uid1; // we consider uid1 to be sender by default.
     private String uid2;
-    private String sender;
     private String content;
 
     private Timestamp time;
 
-    public IndividualChat(String uid1, String uid2, String sender, String content, Timestamp time) {
+    public IndividualChat(String uid1, String uid2,String content, Timestamp time) {
         this.uid1 = uid1;
         this.uid2 = uid2;
-        this.sender = sender;
         this.content = content;
         this.time = time;
     }
@@ -36,8 +34,6 @@ public class IndividualChat {
     public String getContent() {
         return content;
     }
-
-    public String getSender() { return sender; }
 
     public String getUid1() {
         return uid1;

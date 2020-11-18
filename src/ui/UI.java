@@ -16,7 +16,7 @@ public class UI extends JFrame {
 
     public UI(Application application) {
         // TODO: Change the application name
-        super("Application");
+        super("FlyBook");
         this.application = application;
     }
 

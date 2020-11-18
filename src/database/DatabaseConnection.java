@@ -1,6 +1,7 @@
 package database;
 
 import model.IndividualChat;
+import model.SharePost;
 import model.User;
 import model.TimeZone;
 import java.sql.*;
@@ -52,8 +53,11 @@ public class DatabaseConnection {
         }
     }
 
-    // Drop tables
+    // Drop all the tables
     public void dropTables() {
+        dropTable("post_contains");
+        dropTable("media");
+        dropTable("share_post");
         dropTable("individual_chat");
         dropTable("time_zone");
         dropTable("user_info");
@@ -64,6 +68,9 @@ public class DatabaseConnection {
         userInfoSetUp();
         timeZoneSetUp();
         individualChatSetUp();
+        sharePostSetUp();
+        mediaSetUp();
+        postContainsSetUp();
     }
 
     // Load pre-set data
@@ -82,21 +89,36 @@ public class DatabaseConnection {
         TimeZone tz6 = new TimeZone("Ottawa", "GMT-5");
         insertTimeZone(tz6);
 
-        // user_info
 
+        // user_info
         User admin = new User("0000", "0000", "admin", tz2, "admin@gmail.com");
         insertUser(admin);
         User u1 = new User("0001", "1", "Gelila Zhang", tz1, "gelila@gmail.com");
         insertUser(u1);
-        User u2 = new User("0002", "2", "Kerry Yang", tz1, "kerry@gmail.com");
+        User u2 = new User("0002", "2", "Karry Yang", tz1, "kerry@gmail.com");
         insertUser(u2);
         User u3 = new User("0003", "3", "Dora Ni", tz1, "dora@gmail.com");
         insertUser(u3);
 
         // individual_chat
-        IndividualChat chat1 = new IndividualChat("0001", "0002", "Gelila Zhang", "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
-        insertIndividualChat(chat1);
+        IndividualChat chatG1 = new IndividualChat("0001", "0002",  "Hello!", Timestamp.valueOf("2020-11-17 11:23:08"));
+        IndividualChat chatG2 = new IndividualChat("0001", "0003",  "How are you today?", Timestamp.valueOf("2020-11-18 11:23:08"));
+        IndividualChat chatK1 = new IndividualChat("0002", "0001",  "Hello! I'm karry", Timestamp.valueOf("2020-11-17 11:23:09"));
+        IndividualChat chatK2 = new IndividualChat("0002", "0003",  "Nice to see you", Timestamp.valueOf("2020-11-18 11:23:08"));
+        IndividualChat chatD1 = new IndividualChat("0003", "0001",  "Hello! I'm dora", Timestamp.valueOf("2020-11-17 11:23:10"));
+        IndividualChat chatD2 = new IndividualChat("0003", "0002",  "any recommand sushi?", Timestamp.valueOf("2020-11-18 11:23:08"));
+
+        insertIndividualChat(chatG1);
+        insertIndividualChat(chatG2);
+        insertIndividualChat(chatK1);
+        insertIndividualChat(chatK2);
+        insertIndividualChat(chatD1);
+        insertIndividualChat(chatD2);
+
+        // share_post
+        SharePost sp1 = new SharePost("p0001",Timestamp.valueOf("2020-01-15 12:00:00"),"My first post!!","0001");
     }
+
 
     // Drop the table if it exists given a table name
     private void dropTable(String tableName) {
@@ -118,6 +140,14 @@ public class DatabaseConnection {
         }
     }
 
+    /*
+     * ==================================================================
+     *
+     * Below are all the methods for create tables
+     *
+     * ==================================================================
+     * */
+
 
     /* Below are the methods used to create the database */
     // Set up the time_zone table
@@ -137,22 +167,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Insert time_zone
-    public void insertTimeZone(TimeZone tz) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO time_zone VALUES (?,?)");
-            ps.setString(1, tz.getCity());
-            ps.setString(2, tz.getZoneCode());
 
-            ps.executeUpdate();
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
 
     // Set up the user_info table
     private void userInfoSetUp() {
@@ -173,6 +188,104 @@ public class DatabaseConnection {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
+
+
+
+    // Set up the individual_chat table
+    private void individualChatSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE individual_chat (" +
+                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
+                    "time TIMESTAMP, " +
+                    "u_id1 varchar2(10), " +
+                    "u_id2 varchar2(10), " +
+                    "content varchar2(100), " +
+                    "PRIMARY KEY (u_id1, u_id2, time), " +
+                    "FOREIGN KEY (u_id1) REFERENCES user_info ON DELETE CASCADE, " +
+                    "FOREIGN KEY (u_id2) REFERENCES user_info ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: individualChatSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the individual_chat table
+    private void sharePostSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE share_post (" +
+                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
+                    "postid varchar2(10), " +
+                    "post_time TIMESTAMP, " +
+                    "u_id varchar2(10) NOT NULL, " +
+                    "content varchar2(100), " +
+                    "PRIMARY KEY (postid), " +
+                    "FOREIGN KEY (u_id) REFERENCES user_info)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: SharePostSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the Media table
+    private void mediaSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE media (" +
+                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
+                    "mediaid varchar2(10), " +
+                    "mtype varchar2(20), " +
+                    "PRIMARY KEY (mediaid))");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: MediaSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the PostContains table
+    private void postContainsSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE post_contains (" +
+                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
+                    "postid varchar2(10), " +
+                    "mediaid varchar2(20), " +
+                    "PRIMARY KEY (postid,mediaid))," +
+                    "FOREIGN KEY (postid) REFERENCES Share_Post," +
+                    "FOREIGN KEY (mediaid) REFERENCES Media)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: PostContainsSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+
+
+
+    /*
+     * ==================================================================
+     *
+     * Below are all the methods for insert statements
+     *
+     * ==================================================================
+     * */
 
     // Insert user_info
     public void insertUser(User user) {
@@ -202,50 +315,13 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the individual_chat table
-    private void individualChatSetUp() {
+
+    // Insert time_zone
+    public void insertTimeZone(TimeZone tz) {
         try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE individual_chat (" +
-                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
-//                    "time TIMESTAMP, " +
-                    "time varchar2(25), " +
-
-                    "sender varchar2(20), " +
-                    "content varchar2(100), " +
-                    "u_id1 varchar2(10), " +
-                    "u_id2 varchar2(10), " +
-                    "PRIMARY KEY (u_id1, u_id2, time), " +
-                    "FOREIGN KEY (u_id1) REFERENCES user_info ON DELETE CASCADE, " +
-                    "FOREIGN KEY (u_id2) REFERENCES user_info ON DELETE CASCADE)");
-
-            stmt.close();
-        } catch (SQLException e) {
-            // TODO: delete
-            System.out.println("Debug: individualChatSetUp()");
-
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
-    // Insert user_info
-    public void insertIndividualChat(IndividualChat chat) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO individual_chat VALUES (?,?,?,?,?)");
-
-            // TODO: Trying to generate TIMESTAMP with no success :(
-//            Timestamp time = chat.getTime();
-//            DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-//            String text = dateFormat.format(time);
-//            System.out.println(text);
-//            System.out.println("TO_TIMESTAMP(\'" + text + "\', \'YYYY-MM-DD HH24:MI:SS\')");
-//            ps.setString(1, "TO_TIMESTAMP(\'" + text + "\', \'yyyy-MM-DD HH24:MI:SS\')");
-
-            ps.setString(1, chat.getTime().toString());
-            ps.setString(2, chat.getSender());
-            ps.setString(3, chat.getContent());
-            ps.setString(4, chat.getUid1());
-            ps.setString(5, chat.getUid2());
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO time_zone VALUES (?,?)");
+            ps.setString(1, tz.getCity());
+            ps.setString(2, tz.getZoneCode());
 
             ps.executeUpdate();
             connection.commit();
@@ -258,12 +334,47 @@ public class DatabaseConnection {
     }
 
 
-    /* Below are the methods used to generate queries or projections that
-     * the application needs */
+    // Insert IndividualChar
+    public void insertIndividualChat(IndividualChat chat) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO individual_chat VALUES (?,?,?,?)");
+
+            // TODO: Trying to generate TIMESTAMP with no success :(
+//            Timestamp time = chat.getTime();
+//            DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+//            String text = dateFormat.format(time);
+//            System.out.println(text);
+//            System.out.println("TO_TIMESTAMP(\'" + text + "\', \'YYYY-MM-DD HH24:MI:SS\')");
+//            ps.setString(1, "TO_TIMESTAMP(\'" + text + "\', \'yyyy-MM-DD HH24:MI:SS\')");
+
+            ps.setString(1, chat.getTime().toString());
+            ps.setString(2, chat.getUid1());
+            ps.setString(3, chat.getUid2());
+            ps.setString(4, chat.getContent());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
+    /*
+     * ==================================================================
+     *
+     * Below are the methods used to generate queries or projections that
+     * the application needs
+     *
+     * ==================================================================
+     * */
 
     //Return all cities listed in time_zone
     public String[] getTimeZoneCities() {
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
 
         try {
             Statement stmt = connection.createStatement();
@@ -309,6 +420,7 @@ public class DatabaseConnection {
 
         return result.toArray(new User[result.size()]);
     }
+
 
     // Check if the userid and password match what have been stored when login
     public boolean containLoginInfo(String userid, String password) {

@@ -3,6 +3,8 @@ package model;
 import oracle.sql.DATE;
 import oracle.sql.TIMESTAMP;
 
+import java.sql.Timestamp;
+
 /*CREATE TABLE Schedule_Record
     (sid CHAR(10),
     stime TIMESTAMP,
@@ -14,13 +16,13 @@ import oracle.sql.TIMESTAMP;
 
 public class ScheduleRecord {
     private String sid;
-    private TIMESTAMP stime;
+    private Timestamp stime;
     private String event;
     private String uid;
     private User user;
     private TaskStatus taskStatus;
 
-    public ScheduleRecord(String sid, TIMESTAMP stime, String event, String uid, User user, TaskStatus taskStatus) {
+    public ScheduleRecord(String sid, Timestamp stime, String event, String uid, User user, TaskStatus taskStatus) {
         this.sid = sid;
         this.stime = stime;
         this.event = event;
@@ -33,7 +35,7 @@ public class ScheduleRecord {
         return uid;
     }
 
-    public TIMESTAMP getStime() {
+    public Timestamp getStime() {
         return stime;
     }
 

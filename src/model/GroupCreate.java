@@ -1,15 +1,16 @@
 package model;
 
-import oracle.sql.TIMESTAMP;
+
+import java.sql.Timestamp;
 
 public class GroupCreate {
-    private TIMESTAMP createTime;
+    private Timestamp createTime;
     private String uid;
     private String gid;
     private User user;
     private GroupRecord groupRecord;
 
-    public GroupCreate(TIMESTAMP createTime, String uid, String gid, User user, GroupRecord groupRecord) {
+    public GroupCreate(Timestamp createTime, String uid, String gid, User user, GroupRecord groupRecord) {
         this.createTime = createTime;
         this.uid = uid;
         this.gid = gid;
@@ -17,7 +18,7 @@ public class GroupCreate {
         this.groupRecord = groupRecord;
     }
 
-    public TIMESTAMP getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 

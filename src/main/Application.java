@@ -101,7 +101,7 @@ public class Application {
         return dbConnection.getIndividualChatHistory(uid1, uid2);
     }
 
-    public void addIndividualChar(IndividualChat record) {
+    public void addIndividualChat(IndividualChat record) {
         dbConnection.insertIndividualChat(record);
     }
 }

@@ -20,6 +20,7 @@ public class IndividualChatEntry extends JPanel implements ActionListener {
         add(textEntry);
 
         JButton send = new JButton("Send");
+        send.addActionListener(this);
         add(send);
     }
 
@@ -30,8 +31,6 @@ public class IndividualChatEntry extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("received");
-
         String content = textEntry.getText();
         panel.addEntry(content);
     }

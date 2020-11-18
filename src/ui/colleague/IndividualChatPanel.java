@@ -3,12 +3,11 @@ package ui.colleague;
 import main.Application;
 import model.IndividualChat;
 import model.User;
+import ui.MainPanel;
 import ui.UI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 
 public class IndividualChatPanel extends JPanel {
@@ -95,8 +94,7 @@ public class IndividualChatPanel extends JPanel {
                 content,
                 new Timestamp(System.currentTimeMillis()));
 
-        System.out.println(record.getContent());
-        application.addIndividualChar(record);
-        window.setContentPane(new IndividualChatPanel(ui, window, uid1, uid2));
+        application.addIndividualChat(record);
+        window.refresh(ui, uid1, uid2);
     }
 }

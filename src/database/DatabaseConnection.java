@@ -187,12 +187,20 @@ public class DatabaseConnection {
         GroupRecord groupRecord4 = new GroupRecord("g0004","project_team4");
         GroupRecord groupRecord5 = new GroupRecord("g0005","project_team5");
 
+
+
         // groupchat_record
         GroupChatRecord groupChatRecord1 = new GroupChatRecord(Timestamp.valueOf("2020-02-17 12:00:00"), "0001","Nice to see you guys! This is karry","g0001");
         GroupChatRecord groupChatRecord2 = new GroupChatRecord(Timestamp.valueOf("2020-02-18 12:00:00"), "0002","Nice to see you guys! This is dora.","g0001");
         GroupChatRecord groupChatRecord3 = new GroupChatRecord(Timestamp.valueOf("2020-02-19 12:00:00"), "0003","Nice to see you guys! This is gelila.","g0001");
         GroupChatRecord groupChatRecord4 = new GroupChatRecord(Timestamp.valueOf("2020-02-20 12:00:00"), "0004","Nice to see you guys! This is tony.","g0001");
         GroupChatRecord groupChatRecord5 = new GroupChatRecord(Timestamp.valueOf("2020-02-21 12:00:00"), "0005","Nice to see you guys! This is Mike.","g0001");
+
+        insertGroupChatRecord(groupChatRecord1);
+        insertGroupChatRecord(groupChatRecord2);
+        insertGroupChatRecord(groupChatRecord3);
+        insertGroupChatRecord(groupChatRecord4);
+        insertGroupChatRecord(groupChatRecord5);
 
         // meeting_record
         MeetingRecord meetingRecord1 = new MeetingRecord("m0001",10,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0001");
@@ -201,12 +209,25 @@ public class DatabaseConnection {
         MeetingRecord meetingRecord4 = new MeetingRecord("m0001",7,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0002");
         MeetingRecord meetingRecord5 = new MeetingRecord("m0001",4,"random chatting",Timestamp.valueOf("2020-08-20 17:00:00"),Timestamp.valueOf("2020-08-16 18:00:00"),"g0002");
 
+        insertMeetingRecord(meetingRecord1);
+        insertMeetingRecord(meetingRecord2);
+        insertMeetingRecord(meetingRecord3);
+        insertMeetingRecord(meetingRecord4);
+        insertMeetingRecord(meetingRecord5);
+
         // schedule_record
         ScheduleRecord scheduleRecord1 = new ScheduleRecord("s0001",Timestamp.valueOf("2020-08-16 12:00:00"),"event1","0001");
         ScheduleRecord scheduleRecord2 = new ScheduleRecord("s0002",Timestamp.valueOf("2020-08-17 14:00:00"),"event2","0001");
         ScheduleRecord scheduleRecord3 = new ScheduleRecord("s0003",Timestamp.valueOf("2020-08-18 16:00:00"),"event3","0002");
         ScheduleRecord scheduleRecord4 = new ScheduleRecord("s0004",Timestamp.valueOf("2020-08-19 16:00:00"),"event4","0002");
         ScheduleRecord scheduleRecord5 = new ScheduleRecord("s0005",Timestamp.valueOf("2020-08-20 17:00:00"),"event5","0003");
+
+        insertScheduleRecord(scheduleRecord1);
+        insertScheduleRecord(scheduleRecord2);
+        insertScheduleRecord(scheduleRecord3);
+        insertScheduleRecord(scheduleRecord4);
+        insertScheduleRecord(scheduleRecord5);
+
 
         // task_status
         TaskStatus taskStatus1 = new TaskStatus(Timestamp.valueOf("2020-08-16 12:00:00"),0);
@@ -215,12 +236,25 @@ public class DatabaseConnection {
         TaskStatus taskStatus4 = new TaskStatus(Timestamp.valueOf("2020-08-19 16:00:00"),1);
         TaskStatus taskStatus5 = new TaskStatus(Timestamp.valueOf("2020-08-20 17:00:00"),0);
 
+        insertTaskStatus(taskStatus1);
+        insertTaskStatus(taskStatus2);
+        insertTaskStatus(taskStatus3);
+        insertTaskStatus(taskStatus4);
+        insertTaskStatus(taskStatus5);
+
         // contain_task
         ContainTask containTask1 = new ContainTask("Finish Milestone1",1,"s0001");
         ContainTask containTask2 = new ContainTask("Finish Milestone2",3,"s0002");
         ContainTask containTask3 = new ContainTask("Finish Milestone3",2,"s0003");
         ContainTask containTask4 = new ContainTask("Finish Milestone4",4,"s0004");
         ContainTask containTask5 = new ContainTask("Finish Milestone5",2,"s0005");
+
+        insertContainTask(containTask1);
+        insertContainTask(containTask2);
+        insertContainTask(containTask3);
+        insertContainTask(containTask4);
+        insertContainTask(containTask5);
+
     }
 
     // Drop the table if it exists given a table name
@@ -701,6 +735,110 @@ public class DatabaseConnection {
             rollbackConnection();
         }
     }
+
+    // Insert groupchat record
+    public void insertGroupChatRecord(GroupChatRecord gcr) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO groupchat_record VALUES (?,?,?)");
+
+            ps.setString(1, gcr.getTime().toString());
+            ps.setString(2, gcr.getContent());
+            ps.setString(3, gcr.getGid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
+    // Insert meeting record
+    public void insertMeetingRecord(MeetingRecord mr) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO meeting_record VALUES (?,?,?,?,?,?)");
+
+            ps.setString(1, mr.getMid());
+            ps.setString(2, Integer.toString(mr.getAttendance()));
+            ps.setString(3, mr.getTopic());
+            ps.setString(4, mr.getStartTime().toString());
+            ps.setString(5, mr.getEndTime().toString());
+            ps.setString(6, mr.getGid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
+    // Insert task status
+    public void insertTaskStatus(TaskStatus ts) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO task_status VALUES (?,?)");
+
+            ps.setString(1, ts.getStime().toString());
+            ps.setString(2, Integer.toString(ts.getPassed()));
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert schedule record
+    public void insertScheduleRecord(ScheduleRecord sr) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule_record VALUES (?,?,?,?)");
+
+            ps.setString(1, sr.getSid());
+            ps.setString(2, sr.getStime().toString());
+            ps.setString(3, sr.getEvent());
+            ps.setString(4, sr.getUid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
+    // Insert contain task
+    public void insertContainTask(ContainTask ct) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO contain_task VALUES (?,?,?)");
+
+            ps.setString(1, ct.getTname());
+            ps.setString(2, Integer.toString(ct.getPriorityVal()));
+            ps.setString(3, ct.getSid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
+
 
 
     /*

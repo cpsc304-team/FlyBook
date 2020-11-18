@@ -43,8 +43,8 @@ public class ScheduleRecord {
         return event;
     }
 
-    public void setSid(String sid) {
-        this.sid = sid;
+    public String getSid() {
+        return sid;
     }
 }
 

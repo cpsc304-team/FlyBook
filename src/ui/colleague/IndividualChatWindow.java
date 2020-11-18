@@ -16,4 +16,9 @@ public class IndividualChatWindow extends JFrame {
         setVisible(true);
         setResizable(false);
     }
+
+    public void refresh(UI ui, String uid1, String uid2) {
+        setContentPane(new IndividualChatPanel(ui, this, uid1, uid2));
+        validate();
+    }
 }

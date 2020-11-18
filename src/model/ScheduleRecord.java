@@ -19,16 +19,16 @@ public class ScheduleRecord {
     private Timestamp stime;
     private String event;
     private String uid;
-    private User user;
-    private TaskStatus taskStatus;
+//    private User user;
+//    private TaskStatus taskStatus;
 
-    public ScheduleRecord(String sid, Timestamp stime, String event, String uid, User user, TaskStatus taskStatus) {
+    public ScheduleRecord(String sid, Timestamp stime, String event, String uid) {
         this.sid = sid;
         this.stime = stime;
         this.event = event;
         this.uid = uid;
-        this.user = user;
-        this.taskStatus = taskStatus;
+//        this.user = user;
+//        this.taskStatus = taskStatus;
     }
 
     public String getUid() {
@@ -45,14 +45,6 @@ public class ScheduleRecord {
 
     public void setSid(String sid) {
         this.sid = sid;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public TaskStatus getTaskStatus() {
-        return taskStatus;
     }
 }
 

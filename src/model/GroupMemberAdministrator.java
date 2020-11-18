@@ -17,12 +17,12 @@ CREATE TABLE Group_administrator
 public class GroupMemberAdministrator {
      private String uid;
      private String nickname;
-     private User user;
+//     private User user;
 
-     public GroupMemberAdministrator(String uid, String nickname, User user) {
+     public GroupMemberAdministrator(String uid, String nickname) {
           this.uid = uid;
           this.nickname = nickname;
-          this.user = user;
+//          this.user = user;
      }
 
      public String getUid() {
@@ -31,10 +31,6 @@ public class GroupMemberAdministrator {
 
      public String getNickname() {
           return nickname;
-     }
-
-     public User getUser() {
-          return user;
      }
 }
 

@@ -1,9 +1,7 @@
 package database;
 
-import model.IndividualChat;
-import model.SharePost;
-import model.User;
-import model.TimeZone;
+import model.*;
+
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -117,8 +115,102 @@ public class DatabaseConnection {
 
         // share_post
         SharePost sp1 = new SharePost("p0001",Timestamp.valueOf("2020-01-15 12:00:00"),"My first post!!","0001");
-    }
+        SharePost sp2 = new SharePost("p0002",Timestamp.valueOf("2020-01-15 12:30:00"),"Hello everyone","0002");
+        SharePost sp3 = new SharePost("p0003",Timestamp.valueOf("2020-01-16 12:00:00"),"Hello! THis is gelila","0003");
+        SharePost sp4 = new SharePost("p0004",Timestamp.valueOf("2020-01-17 12:00:00"),"Hello! Karry from the north","0004");
+        SharePost sp5 = new SharePost("p0005",Timestamp.valueOf("2020-01-18 12:00:00"),"Long time no see, Vancouver","0005");
 
+        // media
+        Media media1 = new Media("m0001", "Image");
+        Media media2 = new Media("m0002", "Music");
+        Media media3 = new Media("m0003", "Video");
+        Media media4 = new Media("m0004", "Image");
+        Media media5 = new Media("m0005", "Video");
+
+        // post_contains
+         PostContains postContains1 = new PostContains("p0001", "m0001");
+         PostContains postContains2 = new PostContains("p0002", "m0002");
+         PostContains postContains3 = new PostContains("p0003", "m0003");
+         PostContains postContains4 = new PostContains("p0004", "m0004");
+         PostContains postContains5 = new PostContains("p0005", "m0005");
+
+        // mini_program
+        MiniProgram miniProgram1 = new MiniProgram("mi0001", "Payroll Check", "Work");
+        MiniProgram miniProgram2 = new MiniProgram("mi0002", "Monthly Report", "Work");
+        MiniProgram miniProgram3 = new MiniProgram("mi0003", "Announcement", "Work");
+        MiniProgram miniProgram4 = new MiniProgram("mi0004", "Payroll Check", "Work");
+        MiniProgram miniProgram5 = new MiniProgram("mi0005", "Payroll Check", "Work");
+
+        // miniprogram_record
+        MiniProgramRecord miniProgramRecord1 = new MiniProgramRecord("0001","mi0001",Timestamp.valueOf("2020-01-15 12:00:00"));
+        MiniProgramRecord miniProgramRecord2 = new MiniProgramRecord("0002","mi002",Timestamp.valueOf("2020-01-15 12:30:00"));
+        MiniProgramRecord miniProgramRecord3 = new MiniProgramRecord("0003","mi003",Timestamp.valueOf("2020-01-16 12:00:00"));
+        MiniProgramRecord miniProgramRecord4 = new MiniProgramRecord("0004","mi004",Timestamp.valueOf("2020-01-17 12:00:00"));
+        MiniProgramRecord miniProgramRecord5 = new MiniProgramRecord("0005","mi005",Timestamp.valueOf("2020-01-18 12:00:00"));
+
+        // group_member
+        GroupMemberAdministrator groupMemberAdministrator1 = new GroupMemberAdministrator("0001","FrozenCloud");
+        GroupMemberAdministrator groupMemberAdministrator2 = new GroupMemberAdministrator("0002","Doooora");
+        GroupMemberAdministrator groupMemberAdministrator3 = new GroupMemberAdministrator("0003","QQQ");
+        GroupMemberAdministrator groupMemberAdministrator4 = new GroupMemberAdministrator("0004","7k+");
+        GroupMemberAdministrator groupMemberAdministrator5 = new GroupMemberAdministrator("0005","magge");
+
+        // group_joins
+        GroupJoins groupJoins1 = new GroupJoins(Timestamp.valueOf("2020-02-16 12:00:00"),"p0001","g0002");
+        GroupJoins groupJoins2 = new GroupJoins(Timestamp.valueOf("2020-02-17 12:00:00"),"p0002","g0001");
+        GroupJoins groupJoins3 = new GroupJoins(Timestamp.valueOf("2020-02-18 12:00:00"),"p0003","g0002");
+        GroupJoins groupJoins4 = new GroupJoins(Timestamp.valueOf("2020-02-19 12:00:00"),"p0004","g0003");
+        GroupJoins groupJoins5 = new GroupJoins(Timestamp.valueOf("2020-02-20 12:00:00"),"p0005","g0001");
+
+        // group_creates
+        GroupCreate groupCreate1 = new GroupCreate(Timestamp.valueOf("2020-02-15 12:00:00"),"p0001","g0001");
+        GroupCreate groupCreate2 = new GroupCreate(Timestamp.valueOf("2020-02-17 12:00:00"),"p0002","g0002");
+        GroupCreate groupCreate3 = new GroupCreate(Timestamp.valueOf("2020-02-18 12:00:00"),"p0003","g0003");
+        GroupCreate groupCreate4 = new GroupCreate(Timestamp.valueOf("2020-02-19 12:00:00"),"p0004","g0004");
+        GroupCreate groupCreate5 = new GroupCreate(Timestamp.valueOf("2020-02-20 12:00:00"),"p0005","g0005");
+
+        // group_record
+        GroupRecord groupRecord1 = new GroupRecord("g0001","project_team1");
+        GroupRecord groupRecord2 = new GroupRecord("g0002","project_team2");
+        GroupRecord groupRecord3 = new GroupRecord("g0003","project_team3");
+        GroupRecord groupRecord4 = new GroupRecord("g0004","project_team4");
+        GroupRecord groupRecord5 = new GroupRecord("g0005","project_team5");
+
+        // groupchat_record
+        GroupChatRecord groupChatRecord1 = new GroupChatRecord(Timestamp.valueOf("2020-02-17 12:00:00"), "0001","Nice to see you guys! This is karry","g0001");
+        GroupChatRecord groupChatRecord2 = new GroupChatRecord(Timestamp.valueOf("2020-02-18 12:00:00"), "0002","Nice to see you guys! This is dora.","g0001");
+        GroupChatRecord groupChatRecord3 = new GroupChatRecord(Timestamp.valueOf("2020-02-19 12:00:00"), "0003","Nice to see you guys! This is gelila.","g0001");
+        GroupChatRecord groupChatRecord4 = new GroupChatRecord(Timestamp.valueOf("2020-02-20 12:00:00"), "0004","Nice to see you guys! This is tony.","g0001");
+        GroupChatRecord groupChatRecord5 = new GroupChatRecord(Timestamp.valueOf("2020-02-21 12:00:00"), "0005","Nice to see you guys! This is Mike.","g0001");
+
+        // meeting_record
+        MeetingRecord meetingRecord1 = new MeetingRecord("m0001",10,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0001");
+        MeetingRecord meetingRecord2 = new MeetingRecord("m0001",5,"team discussion",Timestamp.valueOf("2020-08-19 12:00:00"),Timestamp.valueOf("2020-08-19 13:00:00"),"g0001");
+        MeetingRecord meetingRecord3 = new MeetingRecord("m0001",6,"project discussion",Timestamp.valueOf("2020-09-10 12:00:00"),Timestamp.valueOf("2020-08-16 16:00:00"),"g0001");
+        MeetingRecord meetingRecord4 = new MeetingRecord("m0001",7,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0002");
+        MeetingRecord meetingRecord5 = new MeetingRecord("m0001",4,"random chatting",Timestamp.valueOf("2020-08-20 17:00:00"),Timestamp.valueOf("2020-08-16 18:00:00"),"g0002");
+
+        // schedule_record
+        ScheduleRecord scheduleRecord1 = new ScheduleRecord("s0001",Timestamp.valueOf("2020-08-16 12:00:00"),"event1","0001");
+        ScheduleRecord scheduleRecord2 = new ScheduleRecord("s0002",Timestamp.valueOf("2020-08-17 14:00:00"),"event2","0001");
+        ScheduleRecord scheduleRecord3 = new ScheduleRecord("s0003",Timestamp.valueOf("2020-08-18 16:00:00"),"event3","0002");
+        ScheduleRecord scheduleRecord4 = new ScheduleRecord("s0004",Timestamp.valueOf("2020-08-19 16:00:00"),"event4","0002");
+        ScheduleRecord scheduleRecord5 = new ScheduleRecord("s0005",Timestamp.valueOf("2020-08-20 17:00:00"),"event5","0003");
+
+        // task_status
+        TaskStatus taskStatus1 = new TaskStatus(Timestamp.valueOf("2020-08-16 12:00:00"),0);
+        TaskStatus taskStatus2 = new TaskStatus(Timestamp.valueOf("2020-08-17 14:00:00"),1);
+        TaskStatus taskStatus3 = new TaskStatus(Timestamp.valueOf("2020-08-18 16:00:00"),1);
+        TaskStatus taskStatus4 = new TaskStatus(Timestamp.valueOf("2020-08-19 16:00:00"),1);
+        TaskStatus taskStatus5 = new TaskStatus(Timestamp.valueOf("2020-08-20 17:00:00"),0);
+
+        // contain_task
+        ContainTask containTask1 = new ContainTask("Finish Milestone1",1,"s0001");
+        ContainTask containTask2 = new ContainTask("Finish Milestone2",3,"s0002");
+        ContainTask containTask3 = new ContainTask("Finish Milestone3",2,"s0003");
+        ContainTask containTask4 = new ContainTask("Finish Milestone4",4,"s0004");
+        ContainTask containTask5 = new ContainTask("Finish Milestone5",2,"s0005");
+    }
 
     // Drop the table if it exists given a table name
     private void dropTable(String tableName) {

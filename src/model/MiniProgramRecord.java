@@ -16,15 +16,15 @@ public class MiniProgramRecord {
     private String uid;
     private String pid;
     private Timestamp time;
-    private User user;
-    private MiniProgram miniProgram;
+//    private User user;
+//    private MiniProgram miniProgram;
 
-    public MiniProgramRecord(String uid, String pid, Timestamp time, User user, MiniProgram miniProgram) {
+    public MiniProgramRecord(String uid, String pid, Timestamp time) {
         this.uid = uid;
         this.pid = pid;
         this.time = time;
-        this.user = user;
-        this.miniProgram = miniProgram;
+//        this.user = user;
+//        this.miniProgram = miniProgram;
     }
 
     public String getUid() {
@@ -39,11 +39,4 @@ public class MiniProgramRecord {
         return time;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public MiniProgram getMiniProgram() {
-        return miniProgram;
-    }
 }

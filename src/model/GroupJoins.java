@@ -14,15 +14,15 @@ public class GroupJoins {
     private Timestamp jointime;
     private String uid;
     private String gid;
-    private User user;
-    private GroupRecord groupRecord;
+//    private User user;
+//    private GroupRecord groupRecord;
 
-    public GroupJoins(Timestamp jointime, String uid, String gid, User user, GroupRecord groupRecord) {
+    public GroupJoins(Timestamp jointime, String uid, String gid) {
         this.jointime = jointime;
         this.uid = uid;
         this.gid = gid;
-        this.user = user;
-        this.groupRecord = groupRecord;
+//        this.user = user;
+//        this.groupRecord = groupRecord;
     }
 
     public Timestamp getJoinTime() {
@@ -35,13 +35,5 @@ public class GroupJoins {
 
     public String getGid() {
         return gid;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public GroupRecord getGroupRecord() {
-        return groupRecord;
     }
 }

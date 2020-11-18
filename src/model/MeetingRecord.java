@@ -18,17 +18,16 @@ public class MeetingRecord {
     private Timestamp startTime;
     private Timestamp endTime;
     private String gid;
-    private GroupRecord groupRecord;
+//    private GroupRecord groupRecord;
 
-    public MeetingRecord (String mid, int attendance, String topic, Timestamp startTime, Timestamp endTime,
-                          String gid, GroupRecord groupRecord) {
+    public MeetingRecord (String mid, int attendance, String topic, Timestamp startTime, Timestamp endTime, String gid) {
         this.mid = mid;
         this.attendance = attendance;
         this.topic = topic;
         this.startTime = startTime;
         this.endTime = endTime;
         this.gid = gid;
-        this.groupRecord = groupRecord;
+//        this.groupRecord = groupRecord;
     }
 
     public String getMid() {
@@ -53,10 +52,6 @@ public class MeetingRecord {
 
     public String getGid() {
         return gid;
-    }
-
-    public GroupRecord getGroupRecord() {
-        return groupRecord;
     }
 }
 

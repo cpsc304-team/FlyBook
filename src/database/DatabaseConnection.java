@@ -196,7 +196,6 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE individual_chat (" +
-                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
                     "time TIMESTAMP, " +
                     "u_id1 varchar2(10), " +
                     "u_id2 varchar2(10), " +
@@ -219,7 +218,6 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE share_post (" +
-                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
                     "postid varchar2(10), " +
                     "post_time TIMESTAMP, " +
                     "u_id varchar2(10) NOT NULL, " +
@@ -241,7 +239,6 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE media (" +
-                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
                     "mediaid varchar2(10), " +
                     "mtype varchar2(20), " +
                     "PRIMARY KEY (mediaid))");
@@ -260,7 +257,6 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE post_contains (" +
-                    // TODO: change to TIMESTAMP if it could be generated in SQL given a string
                     "postid varchar2(10), " +
                     "mediaid varchar2(20), " +
                     "PRIMARY KEY (postid,mediaid))," +
@@ -276,7 +272,248 @@ public class DatabaseConnection {
         }
     }
 
+    // Set up the mini program table
+    private void miniProgramSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE mini_program (" +
+                    "miniid varchar2(10), " +
+                    "mediaid varchar2(20)," +
+                    "type varchar2(20) " +
+                    "PRIMARY KEY (miniid))");
 
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: miniProgramSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+
+    // Set up the mini program record table
+    private void miniProgramRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE miniprogram_record (" +
+                    "u_id varchar2(10), " +
+                    "miniid varchar2(20)," +
+                    "time TIMESTAMP " +
+                    "PRIMARY KEY (u_id , miniid,time)," +
+                    "FOREIGN KEY (u_id) REFERENCES user_info," +
+                    "FOREIGN KEY (miniid) REFERENCES mini_program)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: miniProgramRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the group member table
+    private void groupMemberSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE group_member" +
+                    "(nickname varchar2(10)," +
+                    "u_id varchar2(10)," +
+                    "PRIMARY KEY (u_id)," +
+                    "FOREIGN KEY (u_id) REFERENCES User_info)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: groupMemberSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the group admin table
+    private void groupadministratorSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE group_administrator" +
+                    "(nickname varchar2(10)," +
+                    "u_id varchar2(10)," +
+                    "PRIMARY KEY (u_id)," +
+                    "FOREIGN KEY (u_id) REFERENCES User_info)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: groupadministratorSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the group record table
+    private void groupRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE group_record" +
+                    "(gid varchar2(10)," +
+                    "gname varchar2(10)," +
+                    "PRIMARY KEY (gid)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: groupRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the group joins table
+    private void groupJoinsSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE group_joins" +
+                    "(join_time TIMESTAMP," +
+                    "u_id varchar2(10)," +
+                    "gid varchar2(10)," +
+                    "PRIMARY KEY (u_id,gid)," +
+                    "FOREIGN KEY (u_id) REFERENCES user_info," +
+                    "FOREIGN KEY (gid) REFERENCES group_record)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: groupJoinsSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the group creates table
+    private void groupCreatesSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE group_joins" +
+                    "(create_time TIMESTAMP," +
+                    "u_id varchar2(10)," +
+                    "gid varchar2(10)," +
+                    "PRIMARY KEY (u_id,gid)," +
+                    "FOREIGN KEY (u_id) REFERENCES user_info," +
+                    "FOREIGN KEY (gid) REFERENCES group_record)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: groupCreatesSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the group chat record table
+    private void groupChatRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE groupchat_record" +
+                    "(time TIMESTAMP," +
+                    "content varchar2(100)," +
+                    "gid varchar2(10)," +
+                    "PRIMARY KEY (u_id,gid, time)," +
+                    "FOREIGN KEY (u_id) REFERENCES user_info," +
+                    "FOREIGN KEY (gid) REFERENCES group_record ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: groupChatRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the meeting record table
+    private void meetingRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE groupchat_record" +
+                    "(mid varchar2(10)," +
+                    "attendance INTEGER," +
+                    "topic varchar2(50)," +
+                    "start_time TIMESTAMP," +
+                    "end_time TIMESTAMP," +
+                    "gid varchar2(10) NOT NULL," +
+                    "PRIMAR KEY (mid)" +
+                    "FOREIGN KEY (gid) REFERENCES group_record ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: meetingRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the task status table
+    private void taskStatusSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE task_status" +
+                    "(stime varchar2(10)," +
+                    "passed INTEGER," +
+                    "PRIMARY KEY (stime))");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: taskStatusSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the schedule record table
+    private void scheduleRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE schedule_record" +
+                    "(sid varchar2(10)," +
+                    "stime TIMESTAMP," +
+                    "event varchar2(50)," +
+                    "u_id varchar2(10) NOT NULL," +
+                    "PRIMARY KEY (sid)," +
+                    "FOREIGN KEY (u_id) REFERENCES user_info," +
+                    "FOREIGN KEY (gid) REFERENCES task_status)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: scheduleRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up contain_task table
+    private void containTaskSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE contain_task" +
+                    "(tname varchar2(10)," +
+                    "priority INTEGER," +
+                    "sid varchar2(20)," +
+                    "PRIMARY KEY (sid,tname)," +
+                    "FOREIGN KEY (sid) REFERENCES schedule_record ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: containTaskSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
 
 
     /*

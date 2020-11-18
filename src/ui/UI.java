@@ -4,6 +4,8 @@ import main.Application;
 import ui.colleague.ColleaguePanel;
 import ui.colleague.IndividualChatPanel;
 import ui.colleague.IndividualChatWindow;
+import ui.post.NewPostPanel;
+import ui.post.PostPanel;
 import ui.user.AccountPanel;
 import ui.user.LoginPanel;
 import ui.user.PasswordPanel;
@@ -51,7 +53,7 @@ public class UI extends JFrame {
         } else if (s.equals("Group")) {
 
         } else if (s.equals("Post")) {
-
+            setContentPane(new PostPanel(this));
         } else if (s.equals("Mini-Program")) {
 
         } else if (s.equals("Meeting")) {
@@ -64,6 +66,8 @@ public class UI extends JFrame {
             setContentPane(new PasswordPanel(this));
         } else if (s.equals("Change Profile")) {
 
+        } else if (s.equals("New Post")) {
+            setContentPane(new NewPostPanel(this));
         }
         revalidate();
     }

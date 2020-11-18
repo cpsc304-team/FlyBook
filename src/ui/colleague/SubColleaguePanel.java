@@ -1,8 +1,8 @@
 package ui.colleague;
 
 import model.User;
-import ui.SuccessMessage;
 import ui.UI;
+import ui.post.IndividualPostWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +89,7 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Posts")) {
-            // TODO: open the post panel which only shows the user's posts
+            new IndividualPostWindow(ui, user.getUserid());
         } else {
             new IndividualChatWindow(ui, currentUser, user.getUserid());
         }

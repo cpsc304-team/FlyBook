@@ -152,11 +152,11 @@ public class DatabaseConnection {
         insertMedia(media5);
 
         // share_post
-        SharePost sp1 = new SharePost("p1", Timestamp.valueOf("2020-11-17 12:00:00"),"My first post!!", u3, null);
-        SharePost sp2 = new SharePost("p2", Timestamp.valueOf("2020-11-17 12:30:00"),"Hello everyone", u2, null);
-        SharePost sp3 = new SharePost("p3", Timestamp.valueOf("2020-11-17 19:40:06"),"Hello! THis is Gelila", u1, null);
-        SharePost sp4 = new SharePost("p4", Timestamp.valueOf("2020-11-18 11:09:25"),"Favourite sushi", u2, media1);
-        SharePost sp5 = new SharePost("p5", Timestamp.valueOf("2020-11-18 18:05:20"),"Long time no see, Vancouver",u5, media4);
+        SharePost sp1 = new SharePost("P1", Timestamp.valueOf("2020-11-17 12:00:00"),"My first post!!", u3, null);
+        SharePost sp2 = new SharePost("P2", Timestamp.valueOf("2020-11-17 12:30:00"),"Hello everyone", u2, null);
+        SharePost sp3 = new SharePost("P3", Timestamp.valueOf("2020-11-17 19:40:06"),"Hello! This is Gelila", u1, media2);
+        SharePost sp4 = new SharePost("P4", Timestamp.valueOf("2020-11-18 11:09:25"),"Favourite sushi", u2, media1);
+        SharePost sp5 = new SharePost("P5", Timestamp.valueOf("2020-11-18 18:05:20"),"Long time no see, Vancouver",u5, media4);
 
         insertSharePost(sp1);
         insertSharePost(sp2);
@@ -1282,11 +1282,11 @@ public class DatabaseConnection {
     public void print() {
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM individual_chat");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
 
             while(rs.next()) {
-                System.out.println(rs.getString("sender") +
-                        " to " + rs.getString("receiver") +
+                System.out.println(rs.getString("post_id") +
+                        " | " + rs.getString("user_id") +
                         ": " + rs.getString("content") +
                         " | " + rs.getString("time"));
             }
@@ -1325,5 +1325,143 @@ public class DatabaseConnection {
         }
 
         return result.toArray(new IndividualChat[result.size()]);
+    }
+
+    // Get all the posts posted by a user
+    public SharePost[] getIndividualPost(String uid) {
+        ArrayList<SharePost> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post " +
+                    "WHERE user_id = \'" + uid + "\' ORDER BY time");
+
+            while(rs.next()) {
+                SharePost post = new SharePost(
+                        rs.getString("post_id"),
+                        Timestamp.valueOf(rs.getString("time")),
+                        rs.getString("content"),
+                        getUserByID(rs.getString("user_id")),
+                        getMediaByID(rs.getString("media_id")));
+                result.add(post);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new SharePost[result.size()]);
+    }
+
+    public Media getMediaByID(String media_id) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM media " +
+                    "WHERE media_id = \'" + media_id + "\'");
+
+            while(rs.next()) {
+                Media media = new Media(rs.getString("media_id"),
+                        rs.getString("media_type"),
+                        rs.getString("url"));
+                return media;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    public SharePost[] getPosts() {
+        ArrayList<SharePost> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post ");
+
+            while(rs.next()) {
+                SharePost post = new SharePost(
+                        rs.getString("post_id"),
+                        Timestamp.valueOf(rs.getString("time")),
+                        rs.getString("content"),
+                        getUserByID(rs.getString("user_id")),
+                        getMediaByID(rs.getString("media_id")));
+                result.add(post);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new SharePost[result.size()]);
+    }
+
+    public void deletePost(SharePost post) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM share_post WHERE post_id = ?");
+            ps.setString(1, post.getPostid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public Media[] getMedia() {
+        ArrayList<Media> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM media ");
+
+            while(rs.next()) {
+                Media media = new Media(
+                        rs.getString("media_id"),
+                        rs.getString("media_type"),
+                        rs.getString("url"));
+                result.add(media);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Media[result.size()]);
+    }
+
+    public SharePost getPostByID(String post_id) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post " +
+                    "WHERE post_id = \'" + post_id + "\'");
+
+            while(rs.next()) {
+                SharePost post = new SharePost(
+                        rs.getString("post_id"),
+                        Timestamp.valueOf(rs.getString("time")),
+                        rs.getString("content"),
+                        getUserByID(rs.getString("user_id")),
+                        getMediaByID(rs.getString("media_id")));
+                return post;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
     }
 }

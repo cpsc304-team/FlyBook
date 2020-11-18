@@ -1,12 +1,12 @@
 package main;
 
-import model.IndividualChat;
+import model.*;
 import database.DatabaseConnection;
-import model.TimeZone;
-import model.User;
 import ui.ErrorMessage;
 import ui.SuccessMessage;
 import ui.UI;
+
+import java.sql.Timestamp;
 
 public class Application {
     private DatabaseConnection dbConnection;
@@ -33,7 +33,7 @@ public class Application {
     // Start the program by opening the application ui frame
     private void start() {
         // TODO: test
-//        dbConnection.print();
+//        System.out.println(dbConnection.getMediaByID("M6") == null);
 
         ui = new UI(this);
         ui.showFrame();
@@ -107,5 +107,37 @@ public class Application {
 
     public void addIndividualChat(IndividualChat record) {
         dbConnection.insertIndividualChat(record);
+    }
+
+    public SharePost[] getIndividualPost(String uid) {
+        return dbConnection.getIndividualPost(uid);
+    }
+
+    public SharePost[] getPosts() {
+        return dbConnection.getPosts();
+    }
+
+    public SharePost getPostByID(String pid) {
+        return dbConnection.getPostByID(pid);
+    }
+
+    public void deletePost(SharePost post) {
+        dbConnection.deletePost(post);
+    }
+
+    public Media[] getMediaList() {
+        return dbConnection.getMedia();
+    }
+
+    public Media getMediaByID(String mid) {
+        return dbConnection.getMediaByID(mid);
+    }
+
+    public void addPost(SharePost post) {
+        dbConnection.insertSharePost(post);
+    }
+
+    public void addMedia(Media media) {
+        dbConnection.insertMedia(media);
     }
 }

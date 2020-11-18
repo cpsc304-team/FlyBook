@@ -69,6 +69,17 @@ public class DatabaseConnection {
         sharePostSetUp();
         mediaSetUp();
         postContainsSetUp();
+        miniProgramSetUp();
+        miniProgramRecordSetUp();
+        groupMemberSetUp();
+        groupadministratorSetUp();
+        groupJoinsSetUp();
+        groupCreatesSetUp();
+        groupChatRecordSetUp();
+        meetingRecordSetUp();
+        taskStatusSetUp();
+        scheduleRecordSetUp();
+        containTaskSetUp();
     }
 
     // Load pre-set data

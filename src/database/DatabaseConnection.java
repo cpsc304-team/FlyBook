@@ -702,6 +702,191 @@ public class DatabaseConnection {
         }
     }
 
+    // Insert SharePost
+    public void insertSharePost(SharePost sharePost) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?,?)");
+
+            ps.setString(1, sharePost.getPostid());
+            ps.setString(2, sharePost.getPosttime().toString());
+            ps.setString(3, sharePost.getUid());
+            ps.setString(4, sharePost.getContent());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert Media
+    public void insertMedia(Media media) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, media.getMediaid());
+            ps.setString(2, media.getMtype());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert PostContains
+    public void insertPostContains(PostContains postContains) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, postContains.getPostid());
+            ps.setString(2, postContains.getMediaid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert MiniProgram
+    public void insertMiniProgram(MiniProgram miniProgram) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, miniProgram.getPid());
+            ps.setString(2, miniProgram.getPname());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert MiniProgramRecord
+    public void insertMiniProgramRecord(MiniProgramRecord miniProgramRecord) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?)");
+
+            ps.setString(1, miniProgramRecord.getUid());
+            ps.setString(2, miniProgramRecord.getPid());
+            ps.setString(3, miniProgramRecord.getTime().toString());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupMember
+    public void insertGroupMember(GroupMemberAdministrator groupMember) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, groupMember.getNickname());
+            ps.setString(2, groupMember.getUid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupAdministrator
+    public void insertGroupAdministrator(GroupMemberAdministrator groupAdministrator) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, groupAdministrator.getNickname());
+            ps.setString(2, groupAdministrator.getUid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupRecord
+    public void insertGroupRecord(GroupRecord groupRecord) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?)");
+
+            ps.setString(1, groupRecord.getGid());
+            ps.setString(2, groupRecord.getGname());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupJoins
+    public void insertGroupJoins(GroupJoins groupJoins) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?)");
+
+            ps.setString(1, groupJoins.getJoinTime().toString());
+            ps.setString(2, groupJoins.getUid());
+            ps.setString(3, groupJoins.getGid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert GroupCreate
+    public void insertGroupCreate(GroupCreate groupCreate) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?)");
+
+            ps.setString(1, groupCreate.getCreateTime().toString());
+            ps.setString(2, groupCreate.getUid());
+            ps.setString(3, groupCreate.getGid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
 
     /*
      * ==================================================================

@@ -1,9 +1,9 @@
 package main;
 
 import model.IndividualChat;
+import database.DatabaseConnection;
 import model.TimeZone;
 import model.User;
-import database.DatabaseConnection;
 import ui.ErrorMessage;
 import ui.SuccessMessage;
 import ui.UI;

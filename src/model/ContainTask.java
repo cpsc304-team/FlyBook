@@ -12,13 +12,13 @@ public class ContainTask {
     private String tname;
     private int priorityVal;
     private String sid;
-    private ScheduleRecord scheduleRecord;
+//    private ScheduleRecord scheduleRecord;
 
-    public ContainTask(String tname, int priorityVal, String sid, ScheduleRecord scheduleRecord) {
+    public ContainTask(String tname, int priorityVal, String sid) {
         this.tname = tname;
         this.priorityVal = priorityVal;
         this.sid = sid;
-        this.scheduleRecord = scheduleRecord;
+//        this.scheduleRecord = scheduleRecord;
     }
 
     public String getTname() {
@@ -31,10 +31,6 @@ public class ContainTask {
 
     public String getSid() {
         return sid;
-    }
-
-    public ScheduleRecord getScheduleRecord() {
-        return scheduleRecord;
     }
 }
 

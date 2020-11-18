@@ -1,7 +1,7 @@
 package model;
 
-import oracle.sql.DATE;
-import oracle.sql.TIMESTAMP;
+
+import java.sql.Timestamp;
 
 
 /*CREATE TABLE Share_Post
@@ -14,13 +14,13 @@ import oracle.sql.TIMESTAMP;
 
 public class SharePost {
     private String postid;
-    private TIMESTAMP posttime;
+    private Timestamp posttime;
     private String content;
     private String uid;
 
 
 
-    public SharePost(String postid, TIMESTAMP posttime, String content, String uid) {
+    public SharePost(String postid, Timestamp posttime, String content, String uid) {
         this.postid = postid;
         this.posttime = posttime;
         this.content = content;
@@ -39,7 +39,7 @@ public class SharePost {
         return uid;
     }
 
-    public TIMESTAMP getPosttime() {
+    public Timestamp getPosttime() {
         return posttime;
     }
 }

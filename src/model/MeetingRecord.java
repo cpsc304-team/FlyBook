@@ -1,7 +1,7 @@
 package model;
 
-import oracle.sql.DATE;
-import oracle.sql.TIMESTAMP;
+
+import java.sql.Timestamp;
 
 
 /*CREATE TABLE Meeting_Record
@@ -15,20 +15,19 @@ public class MeetingRecord {
     private String mid;
     private int attendance;
     private String topic;
-    private TIMESTAMP startTime;
-    private TIMESTAMP endTime;
+    private Timestamp startTime;
+    private Timestamp endTime;
     private String gid;
-    private GroupRecord groupRecord;
+//    private GroupRecord groupRecord;
 
-    public MeetingRecord (String mid, int attendance, String topic, TIMESTAMP startTime, TIMESTAMP endTime,
-                          String gid, GroupRecord groupRecord) {
+    public MeetingRecord (String mid, int attendance, String topic, Timestamp startTime, Timestamp endTime, String gid) {
         this.mid = mid;
         this.attendance = attendance;
         this.topic = topic;
         this.startTime = startTime;
         this.endTime = endTime;
         this.gid = gid;
-        this.groupRecord = groupRecord;
+//        this.groupRecord = groupRecord;
     }
 
     public String getMid() {
@@ -43,20 +42,16 @@ public class MeetingRecord {
         return topic;
     }
 
-    public TIMESTAMP getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public TIMESTAMP getEndTime() {
+    public Timestamp getEndTime() {
         return endTime;
     }
 
     public String getGid() {
         return gid;
-    }
-
-    public GroupRecord getGroupRecord() {
-        return groupRecord;
     }
 }
 

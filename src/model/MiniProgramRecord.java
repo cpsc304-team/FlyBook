@@ -2,6 +2,8 @@ package model;
 
 import oracle.sql.TIMESTAMP;
 
+import java.sql.Timestamp;
+
 /*CREATE TABLE MiniProgram_Record
     (u_id CHAR(10),
     pid CHAR(10),
@@ -13,16 +15,16 @@ import oracle.sql.TIMESTAMP;
 public class MiniProgramRecord {
     private String uid;
     private String pid;
-    private TIMESTAMP time;
-    private User user;
-    private MiniProgram miniProgram;
+    private Timestamp time;
+//    private User user;
+//    private MiniProgram miniProgram;
 
-    public MiniProgramRecord(String uid, String pid, TIMESTAMP time, User user, MiniProgram miniProgram) {
+    public MiniProgramRecord(String uid, String pid, Timestamp time) {
         this.uid = uid;
         this.pid = pid;
         this.time = time;
-        this.user = user;
-        this.miniProgram = miniProgram;
+//        this.user = user;
+//        this.miniProgram = miniProgram;
     }
 
     public String getUid() {
@@ -33,15 +35,8 @@ public class MiniProgramRecord {
         return pid;
     }
 
-    public TIMESTAMP getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public MiniProgram getMiniProgram() {
-        return miniProgram;
-    }
 }

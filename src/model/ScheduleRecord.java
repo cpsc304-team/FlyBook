@@ -3,6 +3,8 @@ package model;
 import oracle.sql.DATE;
 import oracle.sql.TIMESTAMP;
 
+import java.sql.Timestamp;
+
 /*CREATE TABLE Schedule_Record
     (sid CHAR(10),
     stime TIMESTAMP,
@@ -14,26 +16,26 @@ import oracle.sql.TIMESTAMP;
 
 public class ScheduleRecord {
     private String sid;
-    private TIMESTAMP stime;
+    private Timestamp stime;
     private String event;
     private String uid;
-    private User user;
-    private TaskStatus taskStatus;
+//    private User user;
+//    private TaskStatus taskStatus;
 
-    public ScheduleRecord(String sid, TIMESTAMP stime, String event, String uid, User user, TaskStatus taskStatus) {
+    public ScheduleRecord(String sid, Timestamp stime, String event, String uid) {
         this.sid = sid;
         this.stime = stime;
         this.event = event;
         this.uid = uid;
-        this.user = user;
-        this.taskStatus = taskStatus;
+//        this.user = user;
+//        this.taskStatus = taskStatus;
     }
 
     public String getUid() {
         return uid;
     }
 
-    public TIMESTAMP getStime() {
+    public Timestamp getStime() {
         return stime;
     }
 
@@ -41,16 +43,8 @@ public class ScheduleRecord {
         return event;
     }
 
-    public void setSid(String sid) {
-        this.sid = sid;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public TaskStatus getTaskStatus() {
-        return taskStatus;
+    public String getSid() {
+        return sid;
     }
 }
 

@@ -1,6 +1,6 @@
 package model;
 
-import oracle.sql.TIMESTAMP;
+import java.sql.Timestamp;
 
 /*CREATE TABLE Group_Joins
     (join_time TIMESTAMP,
@@ -11,21 +11,21 @@ import oracle.sql.TIMESTAMP;
     FOREIGN KEY (gid) REFERENCES Group_Record);*/
 
 public class GroupJoins {
-    private TIMESTAMP jointime;
+    private Timestamp jointime;
     private String uid;
     private String gid;
-    private User user;
-    private GroupRecord groupRecord;
+//    private User user;
+//    private GroupRecord groupRecord;
 
-    public GroupJoins(TIMESTAMP jointime, String uid, String gid, User user, GroupRecord groupRecord) {
+    public GroupJoins(Timestamp jointime, String uid, String gid) {
         this.jointime = jointime;
         this.uid = uid;
         this.gid = gid;
-        this.user = user;
-        this.groupRecord = groupRecord;
+//        this.user = user;
+//        this.groupRecord = groupRecord;
     }
 
-    public TIMESTAMP getJoinTime() {
+    public Timestamp getJoinTime() {
         return jointime;
     }
 
@@ -35,13 +35,5 @@ public class GroupJoins {
 
     public String getGid() {
         return gid;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public GroupRecord getGroupRecord() {
-        return groupRecord;
     }
 }

@@ -35,6 +35,8 @@ public class AccountPanel extends JPanel implements ActionListener {
 
         add(info);
         add(button);
+
+
     }
 
     // TODO

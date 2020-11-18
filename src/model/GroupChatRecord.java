@@ -1,24 +1,25 @@
 package model;
 
-import oracle.sql.DATE;
-import oracle.sql.TIMESTAMP;
+
+
+import java.sql.Timestamp;
 
 public class GroupChatRecord {
-    private TIMESTAMP time;
+    private Timestamp time;
     private String sender;
     private String content;
     private String gid;
-    private GroupRecord groupRecord;
+//    private GroupRecord groupRecord;
 
-    public GroupChatRecord(TIMESTAMP time, String sender, String content, String gid, GroupRecord groupRecord) {
+    public GroupChatRecord(Timestamp time, String sender, String content, String gid) {
         this.time = time;
         this.sender = sender;
         this.content = content;
         this.gid = gid;
-        this.groupRecord = groupRecord;
+//        this.groupRecord = groupRecord;
     }
 
-    public TIMESTAMP getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
@@ -32,10 +33,6 @@ public class GroupChatRecord {
 
     public String getGid() {
         return gid;
-    }
-
-    public GroupRecord getGroupRecord() {
-        return groupRecord;
     }
 }
 

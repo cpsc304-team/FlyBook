@@ -58,6 +58,7 @@ public class NewPostPanel extends JPanel implements ActionListener {
 
         add(pane);
         pane.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JLabel content = new JLabel("Share your thoughts...");
         add(content);
         content.setAlignmentX(LEFT_ALIGNMENT);
@@ -144,19 +145,20 @@ public class NewPostPanel extends JPanel implements ActionListener {
                 SharePost post;
                 Media media = null;
                 int numPost = application.getPosts().length + 1;
-                int numMedia = application.getMediaList().length + 1;
 
                 if (!(url.isEmpty()) && !(type.isEmpty())) {
                     try {
                         new URL(url);
-                        while (application.getMediaByID("M" + numMedia) != null) {
-                            numMedia++;
-                        }
-                        String mid = "M" + numMedia;
-                        media = new Media(mid, type, url);
-                        application.addMedia(media);
-                    } catch (MalformedURLException exception) {
 
+                        if (application.getMediaByUrl(url) != null) {
+                            media = application.getMediaByUrl(url);
+                        } else {
+                            media = new Media(type, url);
+                            application.addMedia(media);
+                        }
+                    } catch (MalformedURLException exception) {
+                        new ErrorMessage("The url you add is invalid.");
+                        return;
                     }
                 }
 

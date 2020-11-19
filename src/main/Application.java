@@ -6,8 +6,6 @@ import ui.ErrorMessage;
 import ui.SuccessMessage;
 import ui.UI;
 
-import java.sql.Timestamp;
-
 public class Application {
     private DatabaseConnection dbConnection;
     private UI ui;
@@ -129,8 +127,8 @@ public class Application {
         return dbConnection.getMedia();
     }
 
-    public Media getMediaByID(String mid) {
-        return dbConnection.getMediaByID(mid);
+    public Media getMediaByUrl(String url) {
+        return dbConnection.getMediaByUrl(url);
     }
 
     public void addPost(SharePost post) {

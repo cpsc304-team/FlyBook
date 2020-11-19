@@ -50,25 +50,25 @@ public class DatabaseConnection {
 
     // Drop all the tables
     public void dropTables() {
-//        dropTable("contain_task");
-//        dropTable("post_contains");
+        dropTable("contain_task");
+        dropTable("post_contains");
         dropTable("share_post");
-//        dropTable("miniprogram_record");
+        dropTable("miniprogram_record");
         dropTable("individual_chat");
-//        dropTable("group_member");
-//        dropTable("group_administrator");
-//        dropTable("group_joins");
-//        dropTable("group_creates");
-//        dropTable("groupchat_record");
-//        dropTable("meeting_record");
-//        dropTable("schedule_record");
+        dropTable("group_member");
+        dropTable("group_administrator");
+        dropTable("group_joins");
+        dropTable("group_creates");
+        dropTable("groupchat_record");
+        dropTable("meeting_record");
+        dropTable("schedule_record");
 
         dropTable("media");
         dropTable("time_zone");
         dropTable("user_info");
-//        dropTable("mini_program");
-//        dropTable("group_record");
-//        dropTable("task_status");
+        dropTable("mini_program");
+        dropTable("group_record");
+        dropTable("task_status");
     }
 
     // Set up the database
@@ -139,11 +139,11 @@ public class DatabaseConnection {
         insertIndividualChat(chatD2);
 
         // media
-        Media media1 = new Media("M1", "Image", "https://i.imgur.com/QwEq1g2.jpg");
-        Media media2 = new Media("M2", "Music", "https://music.163.com/#/song?id=1405903472");
-        Media media3 = new Media("M3", "Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
-        Media media4 = new Media("M4", "Image", "https://i.imgur.com/veHL0mf.jpg");
-        Media media5 = new Media("M5", "Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
+        Media media1 = new Media("Image", "https://i.imgur.com/QwEq1g2.jpg");
+        Media media2 = new Media("Music", "https://music.163.com/#/song?id=1405903472");
+        Media media3 = new Media("Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
+        Media media4 = new Media("Image", "https://i.imgur.com/veHL0mf.jpg");
+        Media media5 = new Media("Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
 
         insertMedia(media1);
         insertMedia(media2);
@@ -348,6 +348,7 @@ public class DatabaseConnection {
             rs.close();
             stmt.close();
         } catch (SQLException e) {
+            System.out.println("Debug: drop " + tableName);
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -367,11 +368,12 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE user_info (" +
-                    "user_id varchar2(10) NOT NULL PRIMARY KEY, " +
+                    "user_id varchar2(10), " +
                     "password varchar2(10) NOT NULL, " +
                     "name varchar2(20) NOT NULL, " +
                     "city varchar2(20), " +
-                    "email varchar2(100))");
+                    "email varchar2(100), " +
+                    "PRIMARY KEY (user_id))");
 
             stmt.close();
         } catch (SQLException e) {
@@ -387,8 +389,9 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE time_zone (" +
-                    "city varchar2(20) NOT NULL PRIMARY KEY, " +
-                    "time_zone varchar2(5) NOT NULL)");
+                    "city varchar2(20), " +
+                    "time_zone varchar2(5) NOT NULL, " +
+                    "PRIMARY KEY (city))");
 
             stmt.close();
         } catch (SQLException e) {
@@ -426,10 +429,9 @@ public class DatabaseConnection {
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate("CREATE TABLE media (" +
-                    "media_id varchar2(10), " +
                     "media_type varchar2(20), " +
                     "url varchar2(1000), " +
-                    "PRIMARY KEY (media_id))");
+                    "PRIMARY KEY (url))");
 
             stmt.close();
         } catch (SQLException e) {
@@ -449,10 +451,10 @@ public class DatabaseConnection {
                     "time TIMESTAMP, " +
                     "user_id varchar2(10) NOT NULL, " +
                     "content varchar2(100), " +
-                    "media_id varchar2(10), " +
+                    "media_url varchar2(1000), " +
                     "PRIMARY KEY (post_id), " +
                     "FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE, " +
-                    "FOREIGN KEY (media_id) REFERENCES media)");
+                    "FOREIGN KEY (media_url) REFERENCES media)");
 
             stmt.close();
         } catch (SQLException e) {
@@ -736,7 +738,7 @@ public class DatabaseConnection {
      * ==================================================================
      * */
 
-    // Insert user_info
+    // Insert User
     public void insertUser(User user) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO user_info VALUES (?,?,?,?,?)");
@@ -764,7 +766,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Insert time_zone
+    // Insert TimeZone
     public void insertTimeZone(TimeZone tz) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO time_zone VALUES (?,?)");
@@ -782,7 +784,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Insert IndividualChar
+    // Insert IndividualChat
     public void insertIndividualChat(IndividualChat chat) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO individual_chat VALUES (?,?,?,?)");
@@ -805,11 +807,10 @@ public class DatabaseConnection {
     // Insert Media
     public void insertMedia(Media media) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO media VALUES (?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO media VALUES (?,?)");
 
-            ps.setString(1, media.getMediaid());
-            ps.setString(2, media.getMediaType());
-            ps.setString(3, media.getUrl());
+            ps.setString(1, media.getMediaType());
+            ps.setString(2, media.getUrl());
 
             ps.executeUpdate();
             connection.commit();
@@ -833,7 +834,7 @@ public class DatabaseConnection {
             if (sharePost.getMedia() == null) {
                 ps.setNull(5, java.sql.Types.CHAR);
             } else {
-                ps.setString(5, sharePost.getMedia().getMediaid());
+                ps.setString(5, sharePost.getMedia().getUrl());
             }
 
             ps.executeUpdate();
@@ -1129,7 +1130,26 @@ public class DatabaseConnection {
         return result.toArray(new String[result.size()]);
     }
 
-    // Get a user's info with time_zone
+    // return timezone given city name
+    public TimeZone getTimeZoneByCity(String city) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM time_zone WHERE city = \'" + city + "\'");
+
+            while(rs.next()) {
+                TimeZone timezone = new TimeZone(rs.getString("city"), rs.getString("time_zone"));
+                return timezone;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Get all users' info combined with time_zone info
     public User[] getUser() {
         ArrayList<User> result = new ArrayList<User>();
 
@@ -1155,6 +1175,31 @@ public class DatabaseConnection {
         }
 
         return result.toArray(new User[result.size()]);
+    }
+
+    // Get a user's info by user ID
+    public User getUserByID(String userid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, time_zone " +
+                    "WHERE user_id = \'" + userid + "\' AND user_info.city = time_zone.city");
+
+            while(rs.next()) {
+                TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));
+                User user = new User(rs.getString("user_id"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        timezone,
+                        rs.getString("email"));
+                return user;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
     }
 
     // Check if the userid and password match what have been stored when login
@@ -1203,50 +1248,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Get a user's info by user ID
-    public User getUserByID(String userid) {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, time_zone " +
-                    "WHERE user_id = \'" + userid + "\' AND user_info.city = time_zone.city");
-
-            while(rs.next()) {
-                TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));
-                User user = new User(rs.getString("user_id"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        timezone,
-                        rs.getString("email"));
-                return user;
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return null;
-    }
-
-    // return timezone given city name
-    public TimeZone getTimeZoneByCity(String city) {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM time_zone WHERE city = \'" + city + "\'");
-
-            while(rs.next()) {
-                TimeZone timezone = new TimeZone(rs.getString("city"), rs.getString("time_zone"));
-                return timezone;
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return null;
-    }
-
+    // Reset user's password
     public void resetPassword(String userid, String password) {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET password = ? WHERE user_id = ?");
@@ -1263,6 +1265,7 @@ public class DatabaseConnection {
         }
     }
 
+    // Delete a user
     public void deleteAccount(String userid) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM user_info WHERE user_id = ?");
@@ -1275,26 +1278,6 @@ public class DatabaseConnection {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
-        }
-    }
-
-    // method for testing tables
-    public void print() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
-
-            while(rs.next()) {
-                System.out.println(rs.getString("post_id") +
-                        " | " + rs.getString("user_id") +
-                        ": " + rs.getString("content") +
-                        " | " + rs.getString("time"));
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
 
@@ -1342,40 +1325,21 @@ public class DatabaseConnection {
                         Timestamp.valueOf(rs.getString("time")),
                         rs.getString("content"),
                         getUserByID(rs.getString("user_id")),
-                        getMediaByID(rs.getString("media_id")));
+                        getMediaByUrl(rs.getString("media_url")));
                 result.add(post);
             }
 
             rs.close();
             stmt.close();
         } catch (SQLException e) {
+            System.out.println("Debug: getIndividualPost()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
 
         return result.toArray(new SharePost[result.size()]);
     }
 
-    public Media getMediaByID(String media_id) {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM media " +
-                    "WHERE media_id = \'" + media_id + "\'");
-
-            while(rs.next()) {
-                Media media = new Media(rs.getString("media_id"),
-                        rs.getString("media_type"),
-                        rs.getString("url"));
-                return media;
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return null;
-    }
-
+    // Get all the posts in share_post table
     public SharePost[] getPosts() {
         ArrayList<SharePost> result = new ArrayList<>();
 
@@ -1389,7 +1353,7 @@ public class DatabaseConnection {
                         Timestamp.valueOf(rs.getString("time")),
                         rs.getString("content"),
                         getUserByID(rs.getString("user_id")),
-                        getMediaByID(rs.getString("media_id")));
+                        getMediaByUrl(rs.getString("media_url")));
                 result.add(post);
             }
 
@@ -1402,6 +1366,32 @@ public class DatabaseConnection {
         return result.toArray(new SharePost[result.size()]);
     }
 
+    // Get a post by post_id
+    public SharePost getPostByID(String post_id) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post " +
+                    "WHERE post_id = \'" + post_id + "\'");
+
+            while(rs.next()) {
+                SharePost post = new SharePost(
+                        rs.getString("post_id"),
+                        Timestamp.valueOf(rs.getString("time")),
+                        rs.getString("content"),
+                        getUserByID(rs.getString("user_id")),
+                        getMediaByUrl(rs.getString("media_url")));
+                return post;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Delete a post
     public void deletePost(SharePost post) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM share_post WHERE post_id = ?");
@@ -1417,6 +1407,7 @@ public class DatabaseConnection {
         }
     }
 
+    // Get all the media
     public Media[] getMedia() {
         ArrayList<Media> result = new ArrayList<>();
 
@@ -1426,7 +1417,6 @@ public class DatabaseConnection {
 
             while(rs.next()) {
                 Media media = new Media(
-                        rs.getString("media_id"),
                         rs.getString("media_type"),
                         rs.getString("url"));
                 result.add(media);
@@ -1441,20 +1431,18 @@ public class DatabaseConnection {
         return result.toArray(new Media[result.size()]);
     }
 
-    public SharePost getPostByID(String post_id) {
+    // Get a media given its url
+    public Media getMediaByUrl(String url) {
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post " +
-                    "WHERE post_id = \'" + post_id + "\'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM media " +
+                    "WHERE url = \'" + url + "\'");
 
             while(rs.next()) {
-                SharePost post = new SharePost(
-                        rs.getString("post_id"),
-                        Timestamp.valueOf(rs.getString("time")),
-                        rs.getString("content"),
-                        getUserByID(rs.getString("user_id")),
-                        getMediaByID(rs.getString("media_id")));
-                return post;
+                Media media = new Media(
+                        rs.getString("media_type"),
+                        rs.getString("url"));
+                return media;
             }
 
             rs.close();
@@ -1463,5 +1451,28 @@ public class DatabaseConnection {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
         return null;
+    }
+
+
+
+    // TODO: delete
+    // Testing tables
+    public void print() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
+
+            while(rs.next()) {
+                System.out.println(rs.getString("post_id") +
+                        " | " + rs.getString("user_id") +
+                        ": " + rs.getString("content") +
+                        " | " + rs.getString("time"));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
     }
 }

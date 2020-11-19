@@ -2,13 +2,15 @@ package model;
 
 import java.sql.Timestamp;
 
-/*CREATE TABLE Share_Post
-        (postid CHAR(10),
-        post_time TIMESTAMP,
-        content CHAR(1000),
-        u_id CHAR(10) NOT NULL,
-        PRIMARY KEY (postid),
-        FOREIGN KEY (u_id) REFERENCES User_info);*/
+/*CREATE TABLE share_post (
+        post_id varchar2(10),
+        time TIMESTAMP,
+        user_id varchar2(10) NOT NULL,
+        content varchar2(100),
+        media_url varchar2(10),
+        PRIMARY KEY (post_id),
+        FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
+        FOREIGN KEY (media_url) REFERENCES media);*/
 
 public class SharePost {
     private String postid;

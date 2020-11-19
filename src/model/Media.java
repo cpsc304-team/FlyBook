@@ -1,24 +1,17 @@
 package model;
 
-
-/*CREATE TABLE Media
-        (mediaid CHAR(10),
-        mtype CHAR(10),
-        PRIMARY KEY (mediaid));*/
+/*CREATE TABLE media (
+        media_type varchar2(20),
+        url varchar2(1000),
+        PRIMARY KEY (url));*/
 
 public class Media {
-    private String mediaid;
     private String mediaType;
     private String url;
 
-    public Media(String mediaid, String mediaType, String url) {
-        this.mediaid = mediaid;
-        this.mediaType = mediaType;
+    public Media(String mediaType, String url) {
         this.url = url;
-    }
-
-    public String getMediaid() {
-        return mediaid;
+        this.mediaType = mediaType;
     }
 
     public String getMediaType() {

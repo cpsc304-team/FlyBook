@@ -1,14 +1,13 @@
 package model;
 
-/*CREATE TABLE Individual_Chat
-    (time TIMESTAMP,
-    sender CHAR(20),
-    content CHAR(100),
-    u_id1 CHAR(10),
-    u_id2 CHAR(10),
-    PRIMARY KEY (u_id1, u_id2, time),
-    FOREIGN KEY (u_id1) REFERENCES User_info ON DELETE CASCADE,
-    FOREIGN KEY (u_id2) REFERENCES User_info ON DELETE CASCADE);*/
+/*CREATE TABLE individual_chat (
+    time TIMESTAMP,
+    sender varchar2(10),
+    receiver varchar2(10),
+    content varchar2(100),
+    PRIMARY KEY (sender, receiver, time),
+    FOREIGN KEY (sender) REFERENCES user_info ON DELETE CASCADE,
+    FOREIGN KEY (receiver) REFERENCES user_info ON DELETE CASCADE);*/
 
 import java.sql.Timestamp;
 

@@ -1,9 +1,9 @@
 package model;
 
-/*CREATE TABLE Time_Zone
-    (city CHAR(20),
-    time_zone CHAR(5),
-    PRIMARY KEY (city));*/
+/*CREATE TABLE time_zone (
+        city varchar2(20),
+        time_zone varchar2(5) NOT NULL,
+        PRIMARY KEY (city));*/
 
 public class TimeZone {
     private String city;

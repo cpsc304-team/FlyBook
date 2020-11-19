@@ -16,28 +16,17 @@ import java.sql.Timestamp;
 
 public class ScheduleRecord {
     private String sid;
-    private Timestamp stime;
     private String event;
-    private String uid;
-//    private User user;
-//    private TaskStatus taskStatus;
+    private User user;
+    private TaskStatus taskStatus;
 
-    public ScheduleRecord(String sid, Timestamp stime, String event, String uid) {
+    public ScheduleRecord(String sid, String event, User user, TaskStatus taskStatus) {
         this.sid = sid;
-        this.stime = stime;
         this.event = event;
-        this.uid = uid;
-//        this.user = user;
-//        this.taskStatus = taskStatus;
+        this.user = user;
+        this.taskStatus = taskStatus;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public Timestamp getStime() {
-        return stime;
-    }
 
     public String getEvent() {
         return event;
@@ -45,6 +34,14 @@ public class ScheduleRecord {
 
     public String getSid() {
         return sid;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
     }
 }
 

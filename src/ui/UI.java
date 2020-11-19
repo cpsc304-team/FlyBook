@@ -75,4 +75,16 @@ public class UI extends JFrame {
     public Application getApplication() {
         return application;
     }
+
+    public JButton setbackButton(JButton backbtn) {
+//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
+//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+//        JButton back = new JButton(i2);
+
+        backbtn.setOpaque(false);
+        backbtn.setContentAreaFilled(false);
+        backbtn.setBorderPainted(false);
+        backbtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return backbtn;
+    }
 }

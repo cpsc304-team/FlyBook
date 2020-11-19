@@ -33,9 +33,17 @@ public class AccountPanel extends JPanel implements ActionListener {
         button.add(generateButton("Log Out"));
         button.add(generateButton("Delete Account"));
 
+
+        // back button
+        JButton back = new JButton("←");
+        back.addActionListener(this);
+        back.setActionCommand("back");
+        ui.setbackButton(back);
+
+
         add(info);
         add(button);
-
+        add(back);
 
     }
 
@@ -126,6 +134,8 @@ public class AccountPanel extends JPanel implements ActionListener {
             ui.switchPanel("Change Profile");
         } else if (e.getActionCommand().equals("Log Out")) {
             ui.switchPanel("Login");
+        } else if (e.getActionCommand().equals("back")) {
+            ui.switchPanel("Main");
         } else {
                 Application application = ui.getApplication();
                 application.deleteAccount();

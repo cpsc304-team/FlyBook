@@ -138,14 +138,6 @@ public class DatabaseConnection {
         insertIndividualChat(chatD1);
         insertIndividualChat(chatD2);
 
-        // media
-//<<<<<<< HEAD
-//        Media media1 = new Media("m0001", "Image", "https://i.imgur.com/QwEq1g2.jpg");
-//        Media media2 = new Media("m0002", "Music", "https://music.163.com/#/song?id=1405903472");
-//        Media media3 = new Media("m0003", "Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
-//        Media media4 = new Media("m0004", "Image", "https://i.imgur.com/veHL0mf.jpg");
-//        Media media5 = new Media("m0005", "Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
-//=======
         Media media1 = new Media("Image", "https://i.imgur.com/QwEq1g2.jpg");
         Media media2 = new Media("Music", "https://music.163.com/#/song?id=1405903472");
         Media media3 = new Media("Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
@@ -476,25 +468,25 @@ public class DatabaseConnection {
     }
 
 
-    // Set up the PostContains table
-    private void postContainsSetUp() {
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE post_contains (" +
-                    "postid varchar2(10), " +
-                    "mediaid varchar2(20), " +
-                    "PRIMARY KEY (postid,mediaid)," +
-                    "FOREIGN KEY (postid) REFERENCES Share_Post," +
-                    "FOREIGN KEY (mediaid) REFERENCES Media)");
-
-            stmt.close();
-        } catch (SQLException e) {
-            // TODO: delete
-            System.out.println("Debug: PostContainsSetUp()");
-
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
+//    // Set up the PostContains table
+//    private void postContainsSetUp() {
+//        try {
+//            Statement stmt = connection.createStatement();
+//            stmt.executeUpdate("CREATE TABLE post_contains (" +
+//                    "postid varchar2(10), " +
+//                    "mediaid varchar2(20), " +
+//                    "PRIMARY KEY (postid,mediaid)," +
+//                    "FOREIGN KEY (postid) REFERENCES Share_Post," +
+//                    "FOREIGN KEY (mediaid) REFERENCES Media)");
+//
+//            stmt.close();
+//        } catch (SQLException e) {
+//            // TODO: delete
+//            System.out.println("Debug: PostContainsSetUp()");
+//
+//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+//        }
+//    }
 //
     // Set up the mini program table
     private void miniProgramSetUp() {

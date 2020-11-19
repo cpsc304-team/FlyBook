@@ -6,10 +6,7 @@ import ui.colleague.IndividualChatPanel;
 import ui.colleague.IndividualChatWindow;
 import ui.post.NewPostPanel;
 import ui.post.PostPanel;
-import ui.user.AccountPanel;
-import ui.user.LoginPanel;
-import ui.user.PasswordPanel;
-import ui.user.RegisterPanel;
+import ui.user.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +62,7 @@ public class UI extends JFrame {
         } else if (s.equals("Reset Password")) {
             setContentPane(new PasswordPanel(this));
         } else if (s.equals("Change Profile")) {
-
+            setContentPane(new EditProfilePanel(this));
         } else if (s.equals("New Post")) {
             setContentPane(new NewPostPanel(this));
         }

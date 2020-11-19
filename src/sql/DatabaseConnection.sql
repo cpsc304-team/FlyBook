@@ -97,6 +97,18 @@ UPDATE user_info
 SET password = '1111' -- 1111 could be replaced by other password input
 WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
 
+UPDATE user_info
+SET name = 'admin' -- admin could be replaced by other name
+WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
+
+UPDATE user_info
+SET city = 'Vancouver' -- Vancouver could be replaced by other city name
+WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
+
+UPDATE user_info
+SET email = 'email@gmail.com' -- email address could be replaced by other email
+WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
+
 -- Selection
 SELECT *
 FROM time_zone

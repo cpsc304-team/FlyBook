@@ -21,6 +21,34 @@ public class AccountPanel extends JPanel implements ActionListener {
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
+        JPanel pane = new JPanel();
+//        JPanel pane = new JPanel() {
+//            @Override
+//            protected void paintComponent(Graphics g) {
+//                super.paintComponent(g);
+//                try {
+//                    Image i = ImageIO.read(new File("images/Background2.png"));
+//                    g.drawImage(i, 0, 0, null);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
+        pane.setOpaque(false);
+
+        Application application = ui.getApplication();
+        JLabel title = new JLabel("Post  ");
+        title.setForeground(new Color(53, 120, 139));
+        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
+
+        pane.add(backButton());
+        pane.add(Box.createHorizontalGlue());
+        pane.add(title);
+
+        add(pane);
+        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         JPanel info = new JPanel(new FlowLayout());
         info.add(labelPanel());
         info.add(infoPanel());
@@ -34,9 +62,23 @@ public class AccountPanel extends JPanel implements ActionListener {
         button.add(generateButton("Delete Account"));
 
         add(info);
+        info.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(button);
+        button.setAlignmentX(Component.LEFT_ALIGNMENT);
+    }
 
-
+    private JButton backButton() {
+//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
+//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+//        JButton back = new JButton(i2);
+        JButton back = new JButton("←");
+        back.addActionListener(this);
+        back.setActionCommand("Back");
+        back.setOpaque(false);
+        back.setContentAreaFilled(false);
+        back.setBorderPainted(false);
+        back.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return back;
     }
 
     // TODO
@@ -120,7 +162,9 @@ public class AccountPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Reset Password")) {
+        if (e.getActionCommand().equals("Back")) {
+            ui.switchPanel("Main");
+        } else if (e.getActionCommand().equals("Reset Password")) {
             ui.switchPanel("Reset Password");
         } else if (e.getActionCommand().equals("Change Profile")){
             ui.switchPanel("Change Profile");

@@ -1475,4 +1475,52 @@ public class DatabaseConnection {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
+
+    public void updateUserName(String uid, String input) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET name = ? WHERE user_id = ?");
+            ps.setString(1, input);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void updateUserCity(String uid, String input) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET city = ? WHERE user_id = ?");
+            ps.setString(1, input);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void updateUserEmail(String uid, String input) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET email = ? WHERE user_id = ?");
+            ps.setString(1, input);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
 }

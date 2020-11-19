@@ -138,4 +138,16 @@ public class Application {
     public void addMedia(Media media) {
         dbConnection.insertMedia(media);
     }
+
+    public void updateUser(String name, String city, String email) {
+        if (!(name.isEmpty())) {
+            dbConnection.updateUserName(currentUser, name);
+        }
+        if (!(city.isEmpty())) {
+            dbConnection.updateUserCity(currentUser, city);
+        }
+        if (!(email.isEmpty())) {
+            dbConnection.updateUserEmail(currentUser, email);
+        }
+    }
 }

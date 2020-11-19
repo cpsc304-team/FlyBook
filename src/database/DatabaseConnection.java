@@ -51,31 +51,23 @@ public class DatabaseConnection {
     // Drop all the tables
     public void dropTables() {
         dropTable("contain_task");
-<<<<<<< HEAD
         dropTable("schedule_record");
-=======
->>>>>>> origin/main
-        dropTable("post_contains");
-        dropTable("share_post");
-        dropTable("miniprogram_record");
-        dropTable("individual_chat");
+        dropTable("task_status");
+        dropTable("meeting_record");
+        dropTable("groupchat_record");
         dropTable("group_member");
         dropTable("group_administrator");
         dropTable("group_joins");
         dropTable("group_creates");
-        dropTable("groupchat_record");
-        dropTable("meeting_record");
-<<<<<<< HEAD
-=======
-        dropTable("schedule_record");
-
->>>>>>> origin/main
+    //  dropTable("post_contains");
+        dropTable("share_post");
         dropTable("media");
-        dropTable("time_zone");
-        dropTable("user_info");
+        dropTable("miniprogram_record");
         dropTable("mini_program");
         dropTable("group_record");
-        dropTable("task_status");
+        dropTable("individual_chat");
+        dropTable("time_zone");
+        dropTable("user_info");
     }
 
     // Set up the database
@@ -85,7 +77,7 @@ public class DatabaseConnection {
         individualChatSetUp();
         mediaSetUp();
         sharePostSetUp();
-        postContainsSetUp();
+//        postContainsSetUp();
         miniProgramSetUp();
         miniProgramRecordSetUp();
         groupMemberSetUp();
@@ -147,19 +139,18 @@ public class DatabaseConnection {
         insertIndividualChat(chatD2);
 
         // media
-<<<<<<< HEAD
-        Media media1 = new Media("m0001", "Image", "https://i.imgur.com/QwEq1g2.jpg");
-        Media media2 = new Media("m0002", "Music", "https://music.163.com/#/song?id=1405903472");
-        Media media3 = new Media("m0003", "Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
-        Media media4 = new Media("m0004", "Image", "https://i.imgur.com/veHL0mf.jpg");
-        Media media5 = new Media("m0005", "Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
-=======
+//<<<<<<< HEAD
+//        Media media1 = new Media("m0001", "Image", "https://i.imgur.com/QwEq1g2.jpg");
+//        Media media2 = new Media("m0002", "Music", "https://music.163.com/#/song?id=1405903472");
+//        Media media3 = new Media("m0003", "Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
+//        Media media4 = new Media("m0004", "Image", "https://i.imgur.com/veHL0mf.jpg");
+//        Media media5 = new Media("m0005", "Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
+//=======
         Media media1 = new Media("Image", "https://i.imgur.com/QwEq1g2.jpg");
         Media media2 = new Media("Music", "https://music.163.com/#/song?id=1405903472");
         Media media3 = new Media("Video", "https://www.youtube.com/watch?v=BoZ0Zwab6Oc");
         Media media4 = new Media("Image", "https://i.imgur.com/veHL0mf.jpg");
         Media media5 = new Media("Video", "https://www.youtube.com/watch?v=HXV3zeQKqGY");
->>>>>>> origin/main
 
         insertMedia(media1);
         insertMedia(media2);
@@ -181,18 +172,18 @@ public class DatabaseConnection {
         insertSharePost(sp5);
 
 
-        // post_contains
-        PostContains postContains1 = new PostContains(sp1, media1);
-        PostContains postContains2 = new PostContains(sp2, media2);
-        PostContains postContains3 = new PostContains(sp3, media3);
-        PostContains postContains4 = new PostContains(sp4, media4);
-        PostContains postContains5 = new PostContains(sp5, media5);
-
-        insertPostContains(postContains1);
-        insertPostContains(postContains2);
-        insertPostContains(postContains3);
-        insertPostContains(postContains4);
-        insertPostContains(postContains5);
+//        // post_contains
+//        PostContains postContains1 = new PostContains(sp1, media1);
+//        PostContains postContains2 = new PostContains(sp2, media2);
+//        PostContains postContains3 = new PostContains(sp3, media3);
+//        PostContains postContains4 = new PostContains(sp4, media4);
+//        PostContains postContains5 = new PostContains(sp5, media5);
+//
+//        insertPostContains(postContains1);
+//        insertPostContains(postContains2);
+//        insertPostContains(postContains3);
+//        insertPostContains(postContains4);
+//        insertPostContains(postContains5);
 
         // mini_program
         MiniProgram miniProgram1 = new MiniProgram("mi0001", "Payroll Check", "Work");
@@ -866,23 +857,23 @@ public class DatabaseConnection {
     }
 
 
-    // Insert PostContains
-    public void insertPostContains(PostContains postContains) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO post_contains VALUES (?,?)");
-
-            ps.setString(1, postContains.getSharePost().getPostid());
-            ps.setString(2, postContains.getMedia().getMediaid());
-
-            ps.executeUpdate();
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
+//    // Insert PostContains
+//    public void insertPostContains(PostContains postContains) {
+//        try {
+//            PreparedStatement ps = connection.prepareStatement("INSERT INTO post_contains VALUES (?,?)");
+//
+//            ps.setString(1, postContains.getSharePost().getPostid());
+//            ps.setString(2, postContains.getMedia().getMediaid());
+//
+//            ps.executeUpdate();
+//            connection.commit();
+//
+//            ps.close();
+//        } catch (SQLException e) {
+//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
+//            rollbackConnection();
+//        }
+//    }
 
     // Insert MiniProgram
     public void insertMiniProgram(MiniProgram miniProgram) {

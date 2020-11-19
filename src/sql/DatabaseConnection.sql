@@ -7,7 +7,27 @@
  *
  * ==================================================================
  * */
+
 -- CREATE TABLE: set up the database
+
+DROP TABLE Contain_Task;
+DROP TABLE Schedule_Record;
+DROP TABLE Task_Status;
+DROP TABLE Meeting_Record;
+DROP TABLE GroupChat_Record;
+DROP TABLE Group_Creates;
+DROP TABLE Group_Joins;
+DROP TABLE group_record;
+DROP TABLE Group_administrator;
+DROP TABLE Group_Member;
+DROP TABLE Mini_Program;
+DROP TABLE MiniProgram_Record;
+DROP TABLE Media;
+DROP TABLE Share_Post;
+DROP TABLE Individual_Chat;
+DROP TABLE Time_Zone;
+DROP TABLE User_info;
+
 CREATE TABLE user_info (
     user_id varchar2(10),
     password varchar2(10) NOT NULL,
@@ -45,6 +65,90 @@ CREATE TABLE share_post (
     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (media_url) REFERENCES media);
 
+CREATE TABLE mini_program (
+    miniid varchar2(10),
+    mediaid varchar2(20),
+    type varchar2(20),
+    PRIMARY KEY (miniid));
+
+CREATE TABLE miniprogram_record (
+    u_id varchar2(10),
+    miniid varchar2(20),
+    time TIMESTAMP,
+    PRIMARY KEY (u_id , miniid,time),
+    FOREIGN KEY (u_id) REFERENCES user_info,
+    FOREIGN KEY (miniid) REFERENCES mini_program);
+
+CREATE TABLE group_member (
+    nickname varchar2(30),
+    u_id varchar2(10),
+    PRIMARY KEY (u_id),
+    FOREIGN KEY (u_id) REFERENCES User_info);
+
+CREATE TABLE group_administrator
+    (nickname varchar2(30),
+    u_id varchar2(10),
+    PRIMARY KEY (u_id),
+    FOREIGN KEY (u_id) REFERENCES User_info);
+
+CREATE TABLE group_record
+    (gid varchar2(10) PRIMARY KEY,
+    gname varchar2(30));
+
+CREATE TABLE group_joins
+    (join_time TIMESTAMP,
+    u_id varchar2(10),
+    gid varchar2(10),
+    PRIMARY KEY (u_id,gid),
+    FOREIGN KEY (u_id) REFERENCES user_info,
+    FOREIGN KEY (gid) REFERENCES group_record);
+
+CREATE TABLE group_creates
+    (create_time TIMESTAMP,
+    u_id varchar2(10),
+    gid varchar2(10),
+    PRIMARY KEY (u_id,gid),
+    FOREIGN KEY (u_id) REFERENCES user_info,
+    FOREIGN KEY (gid) REFERENCES group_record);
+
+CREATE TABLE groupchat_record
+    (time TIMESTAMP,
+    u_id varchar2(10),
+    content varchar2(100),
+    gid varchar2(10),
+    PRIMARY KEY (u_id, gid, time),
+    FOREIGN KEY (u_id) REFERENCES user_info,
+    FOREIGN KEY (gid) REFERENCES group_record ON DELETE CASCADE);
+
+CREATE TABLE meeting_record
+    (mid varchar2(10) PRIMARY KEY,
+    attendance INTEGER,
+    topic varchar2(50),
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    gid varchar2(10) NOT NULL,
+    FOREIGN KEY (gid) REFERENCES group_record ON DELETE CASCADE);
+
+CREATE TABLE task_status
+    (stime TIMESTAMP,
+    passed INTEGER,
+    PRIMARY KEY (stime));
+
+CREATE TABLE schedule_record
+    (sid varchar2(10) PRIMARY KEY,
+    stime TIMESTAMP,
+    event varchar2(50),
+    u_id varchar2(10),
+    FOREIGN KEY (u_id) REFERENCES user_info,
+    FOREIGN KEY (stime) REFERENCES task_status);
+
+CREATE TABLE contain_task
+    (tname varchar2(50),
+    priority_val INTEGER,
+    sid varchar2(20),
+    PRIMARY KEY (sid,tname),
+    FOREIGN KEY (sid) REFERENCES schedule_record ON DELETE CASCADE);
+
 
 -- INSERT: load pre-set data
 INSERT INTO user_info VALUES ('0001','1','Gelila Zhang','London', 'gelilaz@gmail.com');
@@ -79,6 +183,78 @@ INSERT INTO share_post VALUES ('P2', '2020-11-17 12:30:00', '0002', 'Hello every
 INSERT INTO share_post VALUES ('P3', '2020-11-17 19:40:06', '0001', 'Hello! This is Gelila', 'https://music.163.com/#/song?id=1405903472');
 INSERT INTO share_post VALUES ('P4', '2020-11-18 11:09:25', '0002', 'Favourite sushi', 'https://i.imgur.com/QwEq1g2.jpg');
 INSERT INTO share_post VALUES ('P5', '2020-11-18 18:05:20', '0005', 'Long time no see, Vancouver', 'https://i.imgur.com/veHL0mf.jpg');
+
+INSERT INTO mini_program VALUES ('mi0001', 'Payroll Check', 'Work');
+INSERT INTO mini_program VALUES ('mi0002', 'Monthly Report', 'Work');
+INSERT INTO mini_program VALUES ('mi0003', 'Announcement', 'Work');
+INSERT INTO mini_program VALUES ('mi0004', 'Dashboards', 'Work');
+INSERT INTO mini_program VALUES ('mi0005', 'Expenses', 'Work');
+
+INSERT INTO miniprogram_record VALUES ('0001','mi0001','2020-01-15 12:00:00');
+INSERT INTO miniprogram_record VALUES ('0002','mi0002','2020-01-15 12:30:00');
+INSERT INTO miniprogram_record VALUES ('0003','mi0003','2020-01-16 12:00:00');
+INSERT INTO miniprogram_record VALUES ('0004','mi0004','2020-01-17 12:00:00');
+INSERT INTO miniprogram_record VALUES ('0005','mi0005','2020-01-18 12:00:00');
+
+INSERT INTO group_record VALUES('g0001','project_team1');
+INSERT INTO group_record VALUES('g0002','project_team2');
+INSERT INTO group_record VALUES('g0003','project_team3');
+INSERT INTO group_record VALUES('g0004','project_team4');
+INSERT INTO group_record VALUES('g0005','project_team5');
+
+INSERT INTO group_member VALUES('0001','FrozenCloud');
+INSERT INTO group_member VALUES('0002','Doooora');
+INSERT INTO group_member VALUES('0003','QQQ');
+INSERT INTO group_member VALUES('0004','7k+');
+INSERT INTO group_member VALUES('0005','magge');
+
+INSERT INTO group_administrator VALUES('0001','FrozenCloud');
+INSERT INTO group_administrator VALUES('0002','Doooora');
+INSERT INTO group_administrator VALUES('0003','QQQ');
+INSERT INTO group_administrator VALUES('0004','7k+');
+INSERT INTO group_administrator VALUES('0005','magge');
+
+INSERT INTO group_joins VALUES('2020-02-16 12:00:00','0001','g0002');
+INSERT INTO group_joins VALUES('2020-02-17 12:00:00','0002','g0001');
+INSERT INTO group_joins VALUES('2020-02-18 12:00:00','0003','g0002');
+INSERT INTO group_joins VALUES('2020-02-19 12:00:00','0004','g0003');
+INSERT INTO group_joins VALUES('2020-02-20 12:00:00','0005','g0001');
+
+INSERT INTO group_creates VALUES('2020-02-15 12:00:00'),'0001','g0001');
+INSERT INTO group_creates VALUES('2020-02-17 12:00:00'),'0002','g0002');
+INSERT INTO group_creates VALUES('2020-02-18 12:00:00'),'0003','g0003');
+INSERT INTO group_creates VALUES('2020-02-19 12:00:00'),'0004','g0004');
+INSERT INTO group_creates VALUES('2020-02-20 12:00:00'),'0005','g0005');
+
+INSERT INTO groupchat_record VALUES('2020-02-17 12:00:00'), '0001','Nice to see you guys! This is karry','g0001');
+INSERT INTO groupchat_record VALUES('2020-02-18 12:00:00'), '0002','Nice to see you guys! This is dora.','g0001');
+INSERT INTO groupchat_record VALUES('2020-02-19 12:00:00'), '0003','Nice to see you guys! This is gelil','g0001');
+INSERT INTO groupchat_record VALUES('2020-02-20 12:00:00'), '0004','Nice to see you guys! This is tony.','g0001');
+INSERT INTO groupchat_record VALUES('2020-02-21 12:00:00'), '0005','Nice to see you guys! This is Mike.','g0001');
+
+INSERT INTO meeting_record VALUES('m0001',10,'Welcome ceremony','2020-08-16 12:00:00','2020-08-16 14:00:00','g0001');
+INSERT INTO meeting_record VALUES('m0002',5,'team discussion','2020-08-19 12:00:00','2020-08-19 13:00:00','g0001');
+INSERT INTO meeting_record VALUES('m0003',6,'project discussion','2020-09-10 12:00:00','2020-08-16 16:00:00','g0001');
+INSERT INTO meeting_record VALUES('m0004',7,'Welcome ceremony','2020-08-16 12:00:00','2020-08-16 14:00:00','g0002');
+INSERT INTO meeting_record VALUES('m0005',4,'random chatting','2020-08-20 17:00:00','2020-08-16 18:00:00','g0002');
+
+INSERT INTO task_status VALUES('2020-08-16 12:00:00'),0);
+INSERT INTO task_status VALUES('2020-08-17 14:00:00'),1);
+INSERT INTO task_status VALUES('2020-08-18 16:00:00'),1);
+INSERT INTO task_status VALUES('2020-08-19 16:00:00'),1);
+INSERT INTO task_status VALUES('2020-08-20 17:00:00'),0);
+
+INSERT INTO schedule_record VALUES('s0001','event1','0001',0);
+INSERT INTO schedule_record VALUES('s0002','event2','0001',1);
+INSERT INTO schedule_record VALUES('s0003','event3','0002',1);
+INSERT INTO schedule_record VALUES('s0004','event4','0002',1);
+INSERT INTO schedule_record VALUES('s0005','event5','0003',0);
+
+INSERT INTO contain_task VALUES('Finish Milestone1',1,'s0001');
+INSERT INTO contain_task VALUES('Finish Milestone2',3,'s0002');
+INSERT INTO contain_task VALUES('Finish Milestone3',2,'s0003');
+INSERT INTO contain_task VALUES('Finish Milestone4',4,'s0004');
+INSERT INTO contain_task VALUES('Finish Milestone5',2,'s0005');
 
 
 /*
@@ -151,8 +327,17 @@ ORDER BY time;
 
 -- Aggregation with GROUP BY
 
+
 -- Aggregation with HAVING
+
+SELECT COUNT(*)
+FROM group_join, time_zone
+GROUP BY group_id
+HAVING COUNT(*) >= 2;
 
 -- Nested Aggregation with GROUP BY
 
 -- Division
+
+-- SELECT ALL THE CHECK THE USER THAT JOINS ALL THE GROUPS?
+

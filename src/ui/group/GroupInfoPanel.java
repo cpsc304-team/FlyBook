@@ -1,6 +1,7 @@
-package ui.user;
+package ui.group;
 
 import main.Application;
+import model.group.Group;
 import ui.UI;
 
 import javax.swing.*;
@@ -9,18 +10,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
-public class EditProfilePanel extends JPanel implements ActionListener {
+public class GroupInfoPanel extends JPanel implements ActionListener {
     UI ui;
+    Group group;
+    Application app;
 
     private Integer TEXT_SPACE = 18;
     private Integer ENTRY_SPACE = 9;
 
-    JTextField nameField = new JTextField(10);
-    JComboBox cityField;
-    JTextField emailField = new JTextField(10);
-
-    public EditProfilePanel(UI ui) {
+    public GroupInfoPanel(UI ui, Group group) {
         this.ui = ui;
+        this.group = group;
+        this.app = ui.getApplication();
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
@@ -41,7 +42,7 @@ public class EditProfilePanel extends JPanel implements ActionListener {
         pane.setOpaque(false);
 
         Application application = ui.getApplication();
-        JLabel title = new JLabel("Edit Profile  ");
+        JLabel title = new JLabel(group.getName());
         title.setForeground(new Color(53, 120, 139));
         title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
 
@@ -89,19 +90,14 @@ public class EditProfilePanel extends JPanel implements ActionListener {
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        JLabel name = generateText("Name");
+        JLabel name = generateText("Group Name:");
         name.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textPanel.add(name);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel city = generateText("City");
+        JLabel city = generateText("Your Nickname:");
         city.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textPanel.add(city);
-        textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
-
-        JLabel email = generateText("E-mail");
-        email.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        textPanel.add(email);
 
         return textPanel;
     }
@@ -118,34 +114,58 @@ public class EditProfilePanel extends JPanel implements ActionListener {
         JPanel entryPanel = new JPanel();
         entryPanel.setLayout(new BoxLayout(entryPanel, BoxLayout.Y_AXIS));
 
-        entryPanel.add(nameField);
-        entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
-        cityField = city();
-        entryPanel.add(cityField);
-        entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
-        entryPanel.add(emailField);
+        entryPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
+        JPanel namePanel = new JPanel();
+        namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
+        JLabel name = generateText(group.getName());
+        name.setAlignmentX(Component.LEFT_ALIGNMENT);
+        namePanel.add(name);
+
+        if (app.isAdmin(group.getGroupid())) {
+            JButton changeName = new JButton("Change");
+            changeName.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String name = JOptionPane.showInputDialog("Enter a new name");
+                    app.updateGroupName(group.getGroupid(), name);
+                    group.setName(name);
+                    ui.setContentPane(new GroupInfoPanel(ui, group));
+                    ui.revalidate();
+                }
+            });
+            namePanel.add(changeName);
+            changeName.setAlignmentX(Component.LEFT_ALIGNMENT);
+        }
+
+        entryPanel.add(namePanel);
+        namePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+//        entryPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
+
+        JPanel nicknamePanel = new JPanel();
+        nicknamePanel.setLayout(new BoxLayout(nicknamePanel, BoxLayout.X_AXIS));
+        JLabel nickname = generateText(app.getGroupMemberByID(app.getCurrentUserID(), group.getGroupid()).getNickname());
+        name.setAlignmentX(Component.LEFT_ALIGNMENT);
+        nicknamePanel.add(nickname);
+
+        JButton changeNickname = new JButton("Change");
+        changeNickname.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String name = JOptionPane.showInputDialog("Enter a new nickname");
+                app.updateNickname(group.getGroupid(), name);
+                ui.setContentPane(new GroupInfoPanel(ui, group));
+                ui.revalidate();
+            }
+        });
+        nicknamePanel.add(changeNickname);
+        changeNickname.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        entryPanel.add(nicknamePanel);
+        entryPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
         return entryPanel;
     }
 
-    private JComboBox city() {
-        Application application = ui.getApplication();
-        String[] cities = application.getCities();
-        return new JComboBox(cities);
-    }
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Submit")) {
-            String name = nameField.getText();
-            String city = (String) Objects.requireNonNull(cityField.getSelectedItem());
-            String email = emailField.getText();
-            Application app = ui.getApplication();
-            app.updateUser(name, city, email);
-            ui.switchPanel("Account");
-        } else {
-            ui.switchPanel("Account");
-        }
+        ui.switchPanel("Group");
     }
 }

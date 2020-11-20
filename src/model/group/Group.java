@@ -30,6 +30,10 @@ public class Group {
         this.creator = creator;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getGroupid() {
         return groupid;
     }

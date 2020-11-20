@@ -8,11 +8,11 @@ import java.sql.Timestamp;
 
 public class GroupChat {
     private Timestamp time;
-    private User sender;
+    private GroupMember sender;
     private String content;
     private Group group;
 
-    public GroupChat(Timestamp time, User sender, String content, Group group) {
+    public GroupChat(Timestamp time, GroupMember sender, String content, Group group) {
         this.time = time;
         this.sender = sender;
         this.content = content;
@@ -23,7 +23,7 @@ public class GroupChat {
         return time;
     }
 
-    public User getSender() {
+    public GroupMember getSender() {
         return sender;
     }
 

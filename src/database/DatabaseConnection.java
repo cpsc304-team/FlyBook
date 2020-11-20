@@ -193,17 +193,17 @@ public class DatabaseConnection {
         insertGroupJoins(member5);
 
         // group_chat
-        GroupChat groupChat1 = new GroupChat(Timestamp.valueOf("2020-11-17 12:01:30"), u1,"Hello folks!", group1);
-        GroupChat groupChat2 = new GroupChat(Timestamp.valueOf("2020-11-17 12:02:00"), u2,"Nice to see you guys! This is Karry.", group1);
-        GroupChat groupChat3 = new GroupChat(Timestamp.valueOf("2020-11-17 12:03:00"), u3,"Hi, I am Dora!", group1);
-        GroupChat groupChat4 = new GroupChat(Timestamp.valueOf("2020-11-18 12:01:30"), u4,"This is our project group", group2);
-        GroupChat groupChat5 = new GroupChat(Timestamp.valueOf("2020-11-18 12:02:00"), u5,"Thanks for doing this!", group2);
+        GroupChat groupChat1 = new GroupChat(Timestamp.valueOf("2020-11-17 12:01:30"), member1,"Hello folks!", group1);
+        GroupChat groupChat2 = new GroupChat(Timestamp.valueOf("2020-11-17 12:02:00"), member2,"Nice to see you guys! This is Karry.", group1);
+        GroupChat groupChat3 = new GroupChat(Timestamp.valueOf("2020-11-17 12:03:00"), member3,"Hi, I am Dora!", group1);
+        GroupChat groupChat4 = new GroupChat(Timestamp.valueOf("2020-11-18 12:01:30"), member4,"This is our project group", group2);
+        GroupChat groupChat5 = new GroupChat(Timestamp.valueOf("2020-11-18 12:02:00"), member5,"Thanks for doing this!", group2);
 
-        insertGroupChatRecord(groupChat1);
-        insertGroupChatRecord(groupChat2);
-        insertGroupChatRecord(groupChat3);
-        insertGroupChatRecord(groupChat4);
-        insertGroupChatRecord(groupChat5);
+        insertGroupChat(groupChat1);
+        insertGroupChat(groupChat2);
+        insertGroupChat(groupChat3);
+        insertGroupChat(groupChat4);
+        insertGroupChat(groupChat5);
 
 //        // meeting_record
 //        MeetingRecord meetingRecord1 = new MeetingRecord("m0001",10,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0001");
@@ -857,12 +857,12 @@ public class DatabaseConnection {
     }
 
     // Insert groupchat record
-    public void insertGroupChatRecord(GroupChat gcr) {
+    public void insertGroupChat(GroupChat gcr) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_chat VALUES (?,?,?,?)");
 
             ps.setTimestamp(1, gcr.getTime());
-            ps.setString(2,gcr.getSender().getUserid());
+            ps.setString(2,gcr.getSender().getUser().getUserid());
             ps.setString(3, gcr.getContent());
             ps.setString(4, gcr.getGroup().getGroupid());
 
@@ -1147,12 +1147,59 @@ public class DatabaseConnection {
         }
     }
 
-    // Reset user's password
-    public void resetPassword(String userid, String password) {
+    public void updatePassword(String userid, String password) {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET password = ? WHERE user_id = ?");
             ps.setString(1, password);
             ps.setString(2, userid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void updateUserName(String uid, String input) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET name = ? WHERE user_id = ?");
+            ps.setString(1, input);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void updateUserCity(String uid, String input) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET city = ? WHERE user_id = ?");
+            ps.setString(1, input);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void updateUserEmail(String uid, String input) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET email = ? WHERE user_id = ?");
+            ps.setString(1, input);
+            ps.setString(2, uid);
 
             ps.executeUpdate();
             connection.commit();
@@ -1375,49 +1422,205 @@ public class DatabaseConnection {
         }
     }
 
-    public void updateUserName(String uid, String input) {
+    public Group[] getGroupsByUser(String userid) {
+        ArrayList<Group> result = new ArrayList<>();
+
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET name = ? WHERE user_id = ?");
-            ps.setString(1, input);
-            ps.setString(2, uid);
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_joins " +
+                    "WHERE user_id = \'" + userid + "\'");
+
+            while(rs.next()) {
+                result.add(getGroupByID(rs.getString("group_id")));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupsByUser()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Group[result.size()]);
+    }
+
+    private Group getGroupByID(String gid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_record, group_creates " +
+                    "WHERE group_record.group_id = \'" + gid + "\'");
+
+            while(rs.next()) {
+                Group group = new Group(
+                        gid,
+                        Timestamp.valueOf(rs.getString("create_time")),
+                        rs.getString("group_name"),
+                        getUserByID(rs.getString("user_id")));
+                return group;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    public boolean isAdmin(String uid, String gid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_admin " +
+                    "WHERE user_id = \'" + uid + "\'");
+
+            while(rs.next()) {
+                return true;
+            }
+
+            rs.close();
+            stmt.close();
+
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Debug: isAdmin()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Group[] getGroups() {
+        ArrayList<Group> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_record");
+
+            while(rs.next()) {
+                result.add(getGroupByID(rs.getString("group_id")));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroups()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Group[result.size()]);
+    }
+
+    public GroupMember[] getGroupMembers(String gid) {
+        ArrayList<GroupMember> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_joins " +
+                    "WHERE group_id = \'" + gid + "\'");
+
+            while(rs.next()) {
+                GroupMember member = new GroupMember(
+                        Timestamp.valueOf(rs.getString("join_time")),
+                        getUserByID(rs.getString("user_id")),
+                        getGroupByID(rs.getString("group_id")),
+                        rs.getString("nickname")
+                );
+                result.add(member);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupMembers()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupMember[result.size()]);
+    }
+
+    public GroupChat[] getGroupChatHistory(String gid) {
+        ArrayList<GroupChat> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_chat " +
+                    "WHERE group_id = \'" + gid + "\'");
+
+            while(rs.next()) {
+                GroupChat chat = new GroupChat(
+                        Timestamp.valueOf(rs.getString("time")),
+                        getGroupMemberByID(rs.getString("user_id"), rs.getString("group_id")),
+                        rs.getString("content"),
+                        getGroupByID(rs.getString("group_id"))
+                );
+                result.add(chat);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupChatHistory()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupChat[result.size()]);
+    }
+
+    public GroupMember getGroupMemberByID(String uid, String gid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_joins " +
+                    "WHERE group_id = \'" + gid + "\' " +
+                    "AND user_id = \'" + uid + "\'");
+
+            while(rs.next()) {
+                GroupMember member = new GroupMember(
+                        Timestamp.valueOf(rs.getString("join_time")),
+                        getUserByID(rs.getString("user_id")),
+                        getGroupByID(rs.getString("group_id")),
+                        rs.getString("nickname"));
+                return member;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupMemberByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void updateGroupName(String gid, String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE group_record SET group_name = ? WHERE group_id = ?");
+            ps.setString(1, name);
+            ps.setString(2, gid);
 
             ps.executeUpdate();
             connection.commit();
 
             ps.close();
         } catch (SQLException e) {
+            System.out.println("Debug: updateGroupName()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
     }
 
-    public void updateUserCity(String uid, String input) {
+    public void updateNickname(String gid, String uid, String name) {
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET city = ? WHERE user_id = ?");
-            ps.setString(1, input);
-            ps.setString(2, uid);
+            PreparedStatement ps = connection.prepareStatement("UPDATE group_joins SET nickname = ? WHERE group_id = ? AND user_id = ?");
+            ps.setString(1, name);
+            ps.setString(2, gid);
+            ps.setString(3, uid);
 
             ps.executeUpdate();
             connection.commit();
 
             ps.close();
         } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
-
-    public void updateUserEmail(String uid, String input) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE user_info SET email = ? WHERE user_id = ?");
-            ps.setString(1, input);
-            ps.setString(2, uid);
-
-            ps.executeUpdate();
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
+            System.out.println("Debug: updateNickname()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }

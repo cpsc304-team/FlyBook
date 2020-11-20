@@ -2,6 +2,9 @@ package main;
 
 import model.*;
 import database.DatabaseConnection;
+import model.group.Group;
+import model.group.GroupChat;
+import model.group.GroupMember;
 import model.post.Media;
 import model.post.SharePost;
 import model.user.TimeZone;
@@ -35,6 +38,12 @@ public class Application {
     // Start the program by opening the application ui frame
     private void start() {
         // TODO: test
+//        currentUser = "0001";
+//        Group[] groups = getCurrentUsersGroups();
+//        for (int i = 0; i < groups.length; i++) {
+//            Group group = groups[i];
+//            System.out.println(group.getGroupid() + group.getName() + group.getCreator().getName() + group.getCreationTime().toString());
+//        }
 //        System.out.println("success!");
 
         ui = new UI(this);
@@ -94,7 +103,7 @@ public class Application {
     public String[] getCities() { return dbConnection.getTimeZoneCities(); }
 
     public void resetPassword(String password) {
-        dbConnection.resetPassword(currentUser, password);
+        dbConnection.updatePassword(currentUser, password);
         new SuccessMessage("You reset your password successfully!");
     }
 
@@ -153,5 +162,51 @@ public class Application {
         if (!(email.isEmpty())) {
             dbConnection.updateUserEmail(currentUser, email);
         }
+    }
+
+    public Group[] getCurrentUsersGroups() {
+        return dbConnection.getGroupsByUser(currentUser);
+    }
+
+    public boolean isAdmin(String gid) {
+        return dbConnection.isAdmin(currentUser, gid);
+    }
+
+    public boolean isMember(String gid) {
+        GroupMember[] members = dbConnection.getGroupMembers(gid);
+        for (int i = 0; i < members.length; i++) {
+            if (members[i].getUser().getUserid().equals(currentUser)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Group[] getGroups() {
+        return dbConnection.getGroups();
+    }
+
+    public GroupChat[] getGroupChatHistory(String gid) {
+        return dbConnection.getGroupChatHistory(gid);
+    }
+
+    public GroupMember getGroupMemberByID(String userid, String groupid) {
+        return dbConnection.getGroupMemberByID(userid, groupid);
+    }
+
+    public void addGroupChat(GroupChat record) {
+        dbConnection.insertGroupChat(record);
+    }
+
+    public void joinGroup(GroupMember member) {
+        dbConnection.insertGroupJoins(member);
+    }
+
+    public void updateGroupName(String gid, String name) {
+        dbConnection.updateGroupName(gid, name);
+    }
+
+    public void updateNickname(String gid, String name) {
+        dbConnection.updateNickname(gid, currentUser, name);
     }
 }

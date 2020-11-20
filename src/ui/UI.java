@@ -1,9 +1,11 @@
 package ui;
 
 import main.Application;
+import model.group.Group;
 import ui.colleague.ColleaguePanel;
 import ui.colleague.IndividualChatPanel;
 import ui.colleague.IndividualChatWindow;
+import ui.group.GroupListPanel;
 import ui.post.NewPostPanel;
 import ui.post.PostPanel;
 import ui.user.*;
@@ -48,7 +50,7 @@ public class UI extends JFrame {
         } else if (s.equals("Colleague")) {
             setContentPane(new ColleaguePanel(this));
         } else if (s.equals("Group")) {
-
+            setContentPane(new GroupListPanel(this));
         } else if (s.equals("Post")) {
             setContentPane(new PostPanel(this));
         } else if (s.equals("Mini-Program")) {

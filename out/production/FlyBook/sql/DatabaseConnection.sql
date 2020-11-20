@@ -65,7 +65,18 @@ CREATE TABLE share_post (
     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (media_url) REFERENCES media);
 
+CREATE TABLE group_record (
+    group_id varchar2(10),
+    group_name varchar2(30),
+    PRIMARY KEY (group_id));
 
+CREATE TABLE group_creates (
+    create_time TIMESTAMP,
+    user_id varchar2(10),
+    group_id varchar2(10),
+    PRIMARY KEY (user_id, group_id),
+    FOREIGN KEY (user_id) REFERENCES user_info,
+    FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);
 
 CREATE TABLE group_admin (
     user_id varchar2(10),
@@ -74,11 +85,6 @@ CREATE TABLE group_admin (
     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);
 
-CREATE TABLE group_record (
-    group_id varchar2(10),
-    group_name varchar2(30),
-    PRIMARY KEY (group_id));
-
 CREATE TABLE group_joins (
     join_time TIMESTAMP,
     user_id varchar2(10),
@@ -86,14 +92,6 @@ CREATE TABLE group_joins (
     nickname varchar2(20),
     PRIMARY KEY (user_id, group_id),
     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
-    FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE)
-
-CREATE TABLE group_creates (
-    create_time TIMESTAMP,
-    user_id varchar2(10),
-    group_id varchar2(10),
-    PRIMARY KEY (user_id, group_id),
-    FOREIGN KEY (user_id) REFERENCES user_info,
     FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);
 
 CREATE TABLE group_chat (
@@ -182,41 +180,26 @@ INSERT INTO share_post VALUES ('P3', '2020-11-17 19:40:06', '0001', 'Hello! This
 INSERT INTO share_post VALUES ('P4', '2020-11-18 11:09:25', '0002', 'Favourite sushi', 'https://i.imgur.com/QwEq1g2.jpg');
 INSERT INTO share_post VALUES ('P5', '2020-11-18 18:05:20', '0005', 'Long time no see, Vancouver', 'https://i.imgur.com/veHL0mf.jpg');
 
-INSERT INTO group_record VALUES('g0001','project_team1');
-INSERT INTO group_record VALUES('g0002','project_team2');
-INSERT INTO group_record VALUES('g0003','project_team3');
-INSERT INTO group_record VALUES('g0004','project_team4');
-INSERT INTO group_record VALUES('g0005','project_team5');
+INSERT INTO group_record VALUES('G1','Project Team 1');
+INSERT INTO group_record VALUES('G2','Project Team 2');
 
-INSERT INTO group_member VALUES('0001','FrozenCloud');
-INSERT INTO group_member VALUES('0002','Doooora');
-INSERT INTO group_member VALUES('0003','QQQ');
-INSERT INTO group_member VALUES('0004','7k+');
-INSERT INTO group_member VALUES('0005','magge');
+INSERT INTO group_creates VALUES('2020-11-17 12:00:00','0001','G1');
+INSERT INTO group_creates VALUES('2020-11-18 12:01:00','0004','G2');
 
-INSERT INTO group_administrator VALUES('0001','FrozenCloud');
-INSERT INTO group_administrator VALUES('0002','Doooora');
-INSERT INTO group_administrator VALUES('0003','QQQ');
-INSERT INTO group_administrator VALUES('0004','7k+');
-INSERT INTO group_administrator VALUES('0005','magge');
+INSERT INTO group_admin VALUES('0001','G1');
+INSERT INTO group_admin VALUES('0004','G2');
 
-INSERT INTO group_joins VALUES('2020-02-16 12:00:00','0001','g0002');
-INSERT INTO group_joins VALUES('2020-02-17 12:00:00','0002','g0001');
-INSERT INTO group_joins VALUES('2020-02-18 12:00:00','0003','g0002');
-INSERT INTO group_joins VALUES('2020-02-19 12:00:00','0004','g0003');
-INSERT INTO group_joins VALUES('2020-02-20 12:00:00','0005','g0001');
+INSERT INTO group_joins VALUES('2020-11-17 12:00:00','0001','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 12:00:01','0002','G1', 'Frozen Cloud');
+INSERT INTO group_joins VALUES('2020-11-17 12:00:02','0003','G1', 'Doooora');
+INSERT INTO group_joins VALUES('2020-11-18 12:01:00','0004','G2', '7k+');
+INSERT INTO group_joins VALUES('2020-11-18 12:01:01','0005','G2', 'magge');
 
-INSERT INTO group_creates VALUES('2020-02-15 12:00:00'),'0001','g0001');
-INSERT INTO group_creates VALUES('2020-02-17 12:00:00'),'0002','g0002');
-INSERT INTO group_creates VALUES('2020-02-18 12:00:00'),'0003','g0003');
-INSERT INTO group_creates VALUES('2020-02-19 12:00:00'),'0004','g0004');
-INSERT INTO group_creates VALUES('2020-02-20 12:00:00'),'0005','g0005');
-
-INSERT INTO groupchat_record VALUES('2020-02-17 12:00:00'), '0001','Nice to see you guys! This is karry','g0001');
-INSERT INTO groupchat_record VALUES('2020-02-18 12:00:00'), '0002','Nice to see you guys! This is dora.','g0001');
-INSERT INTO groupchat_record VALUES('2020-02-19 12:00:00'), '0003','Nice to see you guys! This is gelil','g0001');
-INSERT INTO groupchat_record VALUES('2020-02-20 12:00:00'), '0004','Nice to see you guys! This is tony.','g0001');
-INSERT INTO groupchat_record VALUES('2020-02-21 12:00:00'), '0005','Nice to see you guys! This is Mike.','g0001');
+INSERT INTO groupchat_record VALUES('2020-11-17 12:01:30', '0001','Hello folks!','G1');
+INSERT INTO groupchat_record VALUES('2020-11-17 12:02:00', '0002','Nice to see you guys! This is Karry.','G1');
+INSERT INTO groupchat_record VALUES('2020-11-17 12:03:00', '0003','Hi, I am Dora!','G1');
+INSERT INTO groupchat_record VALUES('2020-11-18 12:01:30', '0004','This is our project group','G2');
+INSERT INTO groupchat_record VALUES('2020-11-18 12:02:00', '0005','Thanks for doing this!','G2');
 
 -- INSERT INTO meeting_record VALUES('m0001',10,'Welcome ceremony','2020-08-16 12:00:00','2020-08-16 14:00:00','g0001');
 -- INSERT INTO meeting_record VALUES('m0002',5,'team discussion','2020-08-19 12:00:00','2020-08-19 13:00:00','g0001');

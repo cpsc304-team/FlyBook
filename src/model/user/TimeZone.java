@@ -1,4 +1,4 @@
-package model;
+package model.user;
 
 /*CREATE TABLE time_zone (
         city varchar2(20),

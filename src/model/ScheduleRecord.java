@@ -1,9 +1,6 @@
 package model;
 
-import oracle.sql.DATE;
-import oracle.sql.TIMESTAMP;
-
-import java.sql.Timestamp;
+import model.user.User;
 
 /*CREATE TABLE Schedule_Record
     (sid CHAR(10),

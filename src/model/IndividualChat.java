@@ -9,6 +9,8 @@ package model;
     FOREIGN KEY (sender) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (receiver) REFERENCES user_info ON DELETE CASCADE);*/
 
+import model.user.User;
+
 import java.sql.Timestamp;
 
 public class IndividualChat {

@@ -1,4 +1,6 @@
-package model;
+package model.post;
+
+import model.user.User;
 
 import java.sql.Timestamp;
 

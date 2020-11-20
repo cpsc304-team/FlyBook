@@ -1,4 +1,4 @@
-package model;
+package model.user;
 
 /*CREATE TABLE user_info (
         user_id varchar2(10),

@@ -1,6 +1,6 @@
 package ui.colleague;
 
-import model.User;
+import model.user.User;
 import ui.UI;
 import ui.post.IndividualPostWindow;
 

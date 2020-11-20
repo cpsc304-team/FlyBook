@@ -2,8 +2,7 @@ package ui.colleague;
 
 import main.Application;
 import model.IndividualChat;
-import model.User;
-import ui.MainPanel;
+import model.user.User;
 import ui.UI;
 
 import javax.swing.*;

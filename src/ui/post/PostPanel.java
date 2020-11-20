@@ -1,8 +1,7 @@
 package ui.post;
 
 import main.Application;
-import model.SharePost;
-import model.User;
+import model.post.SharePost;
 import ui.UI;
 
 import javax.swing.*;

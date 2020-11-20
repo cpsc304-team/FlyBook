@@ -1,4 +1,4 @@
-package model;
+package model.post;
 
 /*CREATE TABLE media (
         media_type varchar2(20),

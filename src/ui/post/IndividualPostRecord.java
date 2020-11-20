@@ -1,8 +1,8 @@
 package ui.post;
 
 import main.Application;
-import model.Media;
-import model.SharePost;
+import model.post.Media;
+import model.post.SharePost;
 import ui.UI;
 
 import javax.imageio.ImageIO;

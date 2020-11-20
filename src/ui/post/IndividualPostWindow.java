@@ -1,13 +1,9 @@
 package ui.post;
 
 import main.Application;
-import model.IndividualChat;
-import model.SharePost;
-import model.User;
+import model.post.SharePost;
+import model.user.User;
 import ui.UI;
-import ui.colleague.IndividualChatEntry;
-import ui.colleague.IndividualChatPanel;
-import ui.colleague.IndividualChatRecord;
 
 import javax.swing.*;
 import java.awt.*;

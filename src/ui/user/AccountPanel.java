@@ -1,7 +1,7 @@
 package ui.user;
 
 import main.Application;
-import model.User;
+import model.user.User;
 import ui.UI;
 
 import javax.swing.*;
@@ -38,7 +38,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         pane.setOpaque(false);
 
         Application application = ui.getApplication();
-        JLabel title = new JLabel("Post  ");
+        JLabel title = new JLabel("Account  ");
         title.setForeground(new Color(53, 120, 139));
         title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
 

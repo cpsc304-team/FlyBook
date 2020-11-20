@@ -1,7 +1,7 @@
 package ui.colleague;
 
 import main.Application;
-import model.User;
+import model.user.User;
 import ui.UI;
 
 import javax.swing.*;

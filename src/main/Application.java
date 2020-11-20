@@ -2,6 +2,10 @@ package main;
 
 import model.*;
 import database.DatabaseConnection;
+import model.post.Media;
+import model.post.SharePost;
+import model.user.TimeZone;
+import model.user.User;
 import ui.ErrorMessage;
 import ui.SuccessMessage;
 import ui.UI;
@@ -31,7 +35,7 @@ public class Application {
     // Start the program by opening the application ui frame
     private void start() {
         // TODO: test
-//        System.out.println(dbConnection.getMediaByID("M6") == null);
+//        System.out.println("success!");
 
         ui = new UI(this);
         ui.showFrame();

@@ -3,8 +3,8 @@ package ui.post;
 import main.Application;
 import model.post.Media;
 import model.post.SharePost;
-import ui.ErrorMessage;
-import ui.SuccessMessage;
+import ui.utilities.ErrorMessage;
+import ui.utilities.SuccessMessage;
 import ui.UI;
 
 import javax.swing.*;

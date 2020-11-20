@@ -1,7 +1,7 @@
 package ui.user;
 
 import main.Application;
-import ui.ErrorMessage;
+import ui.utilities.ErrorMessage;
 import ui.UI;
 
 import javax.swing.*;

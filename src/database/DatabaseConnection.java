@@ -1,5 +1,6 @@
 package database;
 
+import com.sun.tools.corba.se.idl.constExpr.Times;
 import model.*;
 import model.group.*;
 import model.meeting.MeetingRecord;
@@ -193,8 +194,8 @@ public class DatabaseConnection {
         GroupMember m1 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:01"), u1, group1, null);
         GroupMember m2 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:02"), u2, group1, null);
         GroupMember m3 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:03"), u3, group1, null);
-        GroupMember m4 = new GroupMember(Timestamp.valueOf("2020-11-18 11:00:04"), u4, group2, null);
-        GroupMember m5 = new GroupMember(Timestamp.valueOf("2020-11-18 11:00:05"), u5, group2, null);
+        GroupMember m4 = new GroupMember(Timestamp.valueOf("2020-11-18 11:00:04"), u4, group1, null);
+        GroupMember m5 = new GroupMember(Timestamp.valueOf("2020-11-18 11:00:05"), u5, group1, null);
         GroupMember member1 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:00"), u1, group2, null);
         GroupMember member2 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:01"), u2, group2, "Frozen Cloud");
         GroupMember member3 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:02"), u3, group2, "Doooora");
@@ -214,7 +215,7 @@ public class DatabaseConnection {
         insertGroupJoins(member5);
 
         // group_chat
-        GroupChat groupChat0 = new GroupChat(Timestamp.valueOf("2020-11-17 11:01:30"), member1,"Welcome to CPSC 304. Please create your own project team.", group1);
+        GroupChat groupChat0 = new GroupChat(Timestamp.valueOf("2020-11-17 11:01:30"), m0,"Welcome to CPSC 304. Please create your own project team.", group1);
         GroupChat groupChat1 = new GroupChat(Timestamp.valueOf("2020-11-17 12:01:30"), member1,"Hello folks!", group2);
         GroupChat groupChat2 = new GroupChat(Timestamp.valueOf("2020-11-17 12:02:00"), member2,"Nice to see you guys! This is Karry.", group2);
         GroupChat groupChat3 = new GroupChat(Timestamp.valueOf("2020-11-17 12:03:00"), member3,"Hi, I am Dora!", group2);
@@ -232,6 +233,7 @@ public class DatabaseConnection {
         MeetingRecord meetingRecord1 = new MeetingRecord("M1",6,"Welcome Ceremony", Timestamp.valueOf("2020-11-17 18:00:00"), Timestamp.valueOf("2020-11-17 19:00:00"), group1);
         MeetingRecord meetingRecord2 = new MeetingRecord("M2",3,"Team Discussion", Timestamp.valueOf("2020-11-17 19:03:00"), Timestamp.valueOf("2020-11-17 20:00:00"), group2);
         MeetingRecord meetingRecord3 = new MeetingRecord("M3",2,"Project Meeting", Timestamp.valueOf("2020-11-19 12:00:00"), Timestamp.valueOf("2020-11-19 14:00:00"), group3);
+
 
         insertMeetingRecord(meetingRecord1);
         insertMeetingRecord(meetingRecord2);
@@ -1518,7 +1520,7 @@ public class DatabaseConnection {
     }
 
     // get a group given the group ID
-    private Group getGroupByID(String gid) {
+    public Group getGroupByID(String gid) {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM group_record, group_creates " +
@@ -1655,6 +1657,29 @@ public class DatabaseConnection {
         }
     }
 
+    // Get all the groups which the user is an admin
+    public Group[] getAdminGroups(String uid) {
+        ArrayList<Group> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_admin " +
+                    "WHERE user_id = \'" + uid + "\'");
+
+            while(rs.next()) {
+                result.add(getGroupByID(rs.getString("group_id")));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getAdminGroups()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Group[result.size()]);
+    }
+
     // get all the chat records in the group given the group ID
     public GroupChat[] getGroupChatHistory(String gid) {
         ArrayList<GroupChat> result = new ArrayList<>();
@@ -1684,6 +1709,183 @@ public class DatabaseConnection {
         return result.toArray(new GroupChat[result.size()]);
     }
 
+    // Get all the past meetings the user has joined
+    public MeetingRecord[] getPastMeetingsByID(String uid) {
+        ArrayList<MeetingRecord> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM meeting_record, meeting_joins " +
+                    "WHERE user_id = \'" + uid + "\'" +
+                    "AND attendance > 0" +
+                    "AND meeting_record.meeting_id = meeting_joins.meeting_id");
+
+            while(rs.next()) {
+                MeetingRecord meeting = new MeetingRecord(
+                        rs.getString("meeting_id"),
+                        Integer. valueOf(rs.getString("attendance")),
+                        rs.getString("topic"),
+                        Timestamp.valueOf(rs.getString("start_time")),
+                        Timestamp.valueOf(rs.getString("end_time")),
+                        getGroupByID(rs.getString("group_id"))
+                );
+                result.add(meeting);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getPastMeetingsByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new MeetingRecord[result.size()]);
+    }
+
+    // Get all the current meentings the user could join
+    public MeetingRecord[] getCurrentMeetingsByID(String uid) {
+        ArrayList<MeetingRecord> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM meeting_record, group_joins " +
+                    "WHERE (user_id = \'" + uid + "\'" +
+                    "AND attendance = 0)" +
+                    "AND meeting_record.group_id = group_joins.group_id");
+
+            while(rs.next()) {
+                MeetingRecord meeting = new MeetingRecord(
+                        rs.getString("meeting_id"),
+                        Integer. valueOf(rs.getString("attendance")),
+                        rs.getString("topic"),
+                        Timestamp.valueOf(rs.getString("start_time")),
+                        null,
+                        getGroupByID(rs.getString("group_id"))
+                );
+                result.add(meeting);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getCurrentMeetingsByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new MeetingRecord[result.size()]);
+    }
+
+    // Check if the user has already joined the meeting
+    public boolean hasJoined(String mid, String uid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM meeting_joins " +
+                    "WHERE user_id = \'" + uid + "\'" +
+                    "AND meeting_id = \'" + mid + "\'");
+
+            while(rs.next()) {
+                return true;
+            }
+
+            rs.close();
+            stmt.close();
+
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Debug: hasJoined()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Count the number of people attending the meeting
+    public int countAttendance(String mid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS \"number\" FROM meeting_joins " +
+                    "WHERE meeting_id = \'" + mid + "\'");
+
+            while(rs.next()) {
+                return Integer.valueOf(rs.getString("number"));
+            }
+
+            rs.close();
+            stmt.close();
+
+            return 0;
+        } catch (SQLException e) {
+            System.out.println("Debug: hasJoined()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return 0;
+        }
+    }
+
+    public void updateMeetingInfo(Timestamp endTime, int attendance, String mid) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE meeting_record SET attendance = ?, end_time = ? WHERE meeting_id = ?");
+            ps.setTimestamp(2, endTime);
+            ps.setInt(1, attendance);
+            ps.setString(3, mid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: updateMeetingInfo()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Get a meeting record given the meeting ID
+    public MeetingRecord getMeetingByID(String mid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM meeting_record " +
+                    "WHERE meeting_id = \'" + mid + "\'");
+
+            while(rs.next()) {
+                MeetingRecord meeting = new MeetingRecord(
+                        rs.getString("meeting_id"),
+                        Integer. valueOf(rs.getString("attendance")),
+                        rs.getString("topic"),
+                        Timestamp.valueOf(rs.getString("start_time")),
+                        Timestamp.valueOf(rs.getString("end_time")),
+                        getGroupByID(rs.getString("group_id"))
+                );
+                return meeting;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getPastMeetingsByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Count total number of meetings
+    public int countMeetings() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS \"number\" FROM meeting_record ");
+
+            while(rs.next()) {
+                return Integer.valueOf(rs.getString("number"));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: countGroups()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return 0;
+    }
+
 
 
     // TODO: delete
@@ -1706,6 +1908,4 @@ public class DatabaseConnection {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
-
-
 }

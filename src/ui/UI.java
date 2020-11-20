@@ -6,6 +6,7 @@ import ui.colleague.ColleaguePanel;
 import ui.colleague.IndividualChatPanel;
 import ui.colleague.IndividualChatWindow;
 import ui.group.GroupListPanel;
+import ui.meeting.MeetingListPanel;
 import ui.post.NewPostPanel;
 import ui.post.PostPanel;
 import ui.user.*;
@@ -56,7 +57,7 @@ public class UI extends JFrame {
         } else if (s.equals("Mini-Program")) {
 
         } else if (s.equals("Meeting")) {
-
+            setContentPane(new MeetingListPanel(this));
         } else if (s.equals("Schedule")) {
 
         } else if (s.equals("Account")) {

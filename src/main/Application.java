@@ -5,13 +5,16 @@ import database.DatabaseConnection;
 import model.group.Group;
 import model.group.GroupChat;
 import model.group.GroupMember;
+import model.meeting.MeetingRecord;
 import model.post.Media;
 import model.post.SharePost;
 import model.user.TimeZone;
 import model.user.User;
-import ui.ErrorMessage;
-import ui.SuccessMessage;
+import ui.utilities.ErrorMessage;
+import ui.utilities.SuccessMessage;
 import ui.UI;
+
+import java.sql.Timestamp;
 
 public class Application {
     private DatabaseConnection dbConnection;
@@ -38,12 +41,6 @@ public class Application {
     // Start the program by opening the application ui frame
     private void start() {
         // TODO: test
-//        currentUser = "0001";
-//        Group[] groups = getCurrentUsersGroups();
-//        for (int i = 0; i < groups.length; i++) {
-//            Group group = groups[i];
-//            System.out.println(group.getGroupid() + group.getName() + group.getCreator().getName() + group.getCreationTime().toString());
-//        }
 //        System.out.println("success!");
 
         ui = new UI(this);
@@ -208,5 +205,44 @@ public class Application {
 
     public void updateNickname(String gid, String name) {
         dbConnection.updateNickname(gid, currentUser, name);
+    }
+
+    public MeetingRecord[] getPastMeetingsByID() {
+        return dbConnection.getPastMeetingsByID(currentUser);
+    }
+
+    public MeetingRecord[] getCurrentMeetingsByID() {
+        return dbConnection.getCurrentMeetingsByID(currentUser);
+    }
+
+    public void joinMeeting(MeetingRecord meeting) {
+        if (!(dbConnection.hasJoined(meeting.getMeetingid(), currentUser))) {
+            dbConnection.insertMeetingJoins(meeting, getCurrentUser());
+        }
+    }
+
+    public void endMeeting(MeetingRecord meeting) {
+        Integer attendance = dbConnection.countAttendance(meeting.getMeetingid());
+        dbConnection.updateMeetingInfo(new Timestamp(System.currentTimeMillis()), attendance, meeting.getMeetingid());
+    }
+
+    public MeetingRecord getMeetingByID(String mid) {
+        return dbConnection.getMeetingByID(mid);
+    }
+
+    public Group[] getAdminGroups() {
+        return dbConnection.getAdminGroups(currentUser);
+    }
+
+    public int countMeetings() {
+        return dbConnection.countMeetings();
+    }
+
+    public Group getGroupByID(String gid) {
+        return dbConnection.getGroupByID(gid);
+    }
+
+    public void addMeeting(MeetingRecord meeting) {
+        dbConnection.insertMeetingRecord(meeting);
     }
 }

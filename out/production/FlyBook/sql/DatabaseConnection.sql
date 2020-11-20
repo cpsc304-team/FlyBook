@@ -303,6 +303,10 @@ SET nickname = 'admin' -- admin could be replaced by other nickname
 WHERE group_id = 'G1' -- G1 could be replaced by other group_id
     AND user_id = '0001'; -- 0001 could be replaced by other user_id
 
+UPDATE meeting_record
+SET attendance = '3', end_time = '2020-11-17 20:00:00' -- attendance and end_time value could be replaced
+WHERE meeting_id = 'M2';
+
 -- Selection
 SELECT *
 FROM time_zone
@@ -338,6 +342,26 @@ SELECT *
 FROM group_chat
 WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
 
+SELECT COUNT(*) AS "number"
+FROM meeting_record;
+
+SELECT *
+FROM group_admin
+WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
+
+SELECT *
+FROM meeting_record
+WHERE meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
+
+SELECT COUNT(*) AS "number"
+FROM meeting_joins
+WHERE meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
+
+SELECT *
+FROM meeting_joins
+WHERE user_id = '0001' -- 0001 could be replaced by other user_id
+    AND meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
+
 -- Projection
 SELECT city FROM time_zone;
 select user_id from user_info;
@@ -364,6 +388,18 @@ ORDER BY time;
 SELECT *
 FROM group_record, group_creates
 WHERE group_record.group_id = 'G1'; -- G1 could be replaced by other group_id
+
+SELECT *
+FROM meeting_record, group_joins
+WHERE user_id = '0001' -- 0001 could be replaced by other user_id
+    AND attendance = 0
+    AND meeting_record.group_id = group_joins.group_id;
+
+SELECT *
+FROM meeting_record, meeting_joins
+WHERE user_id = '0001' -- 0001 could be replaced by other user_id
+    AND attendance > 0
+    AND meeting_record.meeting_id = meeting_joins.meeting_id;
 
 -- Aggregation with GROUP BY
 

@@ -3,7 +3,7 @@ package ui.group;
 import main.Application;
 import model.group.Group;
 import model.group.GroupMember;
-import ui.SuccessMessage;
+import ui.utilities.SuccessMessage;
 import ui.UI;
 
 import javax.swing.*;

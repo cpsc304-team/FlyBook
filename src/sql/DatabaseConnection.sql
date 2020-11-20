@@ -103,15 +103,23 @@ CREATE TABLE group_chat (
     FOREIGN KEY (user_id) REFERENCES user_info,
     FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);
 
--- CREATE TABLE meeting_record
---     (mid varchar2(10) PRIMARY KEY,
---     attendance INTEGER,
---     topic varchar2(50),
---     start_time TIMESTAMP,
---     end_time TIMESTAMP,
---     gid varchar2(10) NOT NULL,
---     FOREIGN KEY (gid) REFERENCES group_record ON DELETE CASCADE);
---
+CREATE TABLE meeting_record (
+    meeting_id varchar2(10),
+    attendance INTEGER,
+    topic varchar2(50),
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    group_id varchar2(10) NOT NULL,
+    PRIMARY KEY (meeting_id),
+    FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);
+
+CREATE TABLE meeting_joins (
+    meeting_id varchar2(10),
+    user_id varchar2(10),
+    PRIMARY KEY (meeting_id, user_id),
+    FOREIGN KEY (user_id) REFERENCES user_info),
+    FOREIGN KEY (meeting_id) REFERENCES group_record ON DELETE CASCADE);
+
 -- CREATE TABLE task_status
 --     (stime TIMESTAMP,
 --     passed INTEGER,
@@ -147,6 +155,7 @@ CREATE TABLE group_chat (
 --     FOREIGN KEY (miniid) REFERENCES mini_program);
 
 -- INSERT: load pre-set data
+INSERT INTO user_info VALUES ('0000','0','Admin','Toronto', 'admin@gmail.com');
 INSERT INTO user_info VALUES ('0001','1','Gelila Zhang','London', 'gelilaz@gmail.com');
 INSERT INTO user_info VALUES ('0002','2','Kerry Yang','Vancouver', 'kerryy@gmail.com');
 INSERT INTO user_info VALUES ('0003','3','Dora Ni','Beijing', 'doran@gmail.com');
@@ -180,33 +189,53 @@ INSERT INTO share_post VALUES ('P3', '2020-11-17 19:40:06', '0001', 'Hello! This
 INSERT INTO share_post VALUES ('P4', '2020-11-18 11:09:25', '0002', 'Favourite sushi', 'https://i.imgur.com/QwEq1g2.jpg');
 INSERT INTO share_post VALUES ('P5', '2020-11-18 18:05:20', '0005', 'Long time no see, Vancouver', 'https://i.imgur.com/veHL0mf.jpg');
 
-INSERT INTO group_record VALUES('G1','Project Team 1');
-INSERT INTO group_record VALUES('G2','Project Team 2');
+INSERT INTO group_record VALUES('G1','CPSC 304');
+INSERT INTO group_record VALUES('G2','Project Team 1');
+INSERT INTO group_record VALUES('G3','Project Team 2');
 
-INSERT INTO group_creates VALUES('2020-11-17 12:00:00','0001','G1');
-INSERT INTO group_creates VALUES('2020-11-18 12:01:00','0004','G2');
+INSERT INTO group_creates VALUES('2020-11-17 11:00:00','0000','G1');
+INSERT INTO group_creates VALUES('2020-11-17 12:00:00','0001','G2');
+INSERT INTO group_creates VALUES('2020-11-18 12:01:00','0004','G3');
 
-INSERT INTO group_admin VALUES('0001','G1');
-INSERT INTO group_admin VALUES('0004','G2');
+INSERT INTO group_admin VALUES('0000','G1');
+INSERT INTO group_admin VALUES('0001','G2');
+INSERT INTO group_admin VALUES('0004','G3');
 
-INSERT INTO group_joins VALUES('2020-11-17 12:00:00','0001','G1', null);
-INSERT INTO group_joins VALUES('2020-11-17 12:00:01','0002','G1', 'Frozen Cloud');
-INSERT INTO group_joins VALUES('2020-11-17 12:00:02','0003','G1', 'Doooora');
-INSERT INTO group_joins VALUES('2020-11-18 12:01:00','0004','G2', '7k+');
-INSERT INTO group_joins VALUES('2020-11-18 12:01:01','0005','G2', 'magge');
+INSERT INTO group_joins VALUES('2020-11-17 11:00:00','0000','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 11:00:01','0001','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 11:00:02','0002','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 11:00:03','0003','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 11:00:04','0004','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 11:00:05','0005','G1', null);
+INSERT INTO group_joins VALUES('2020-11-17 12:00:00','0001','G2', null);
+INSERT INTO group_joins VALUES('2020-11-17 12:00:01','0002','G2', 'Frozen Cloud');
+INSERT INTO group_joins VALUES('2020-11-17 12:00:02','0003','G2', 'Doooora');
+INSERT INTO group_joins VALUES('2020-11-18 12:01:00','0004','G3', '7k+');
+INSERT INTO group_joins VALUES('2020-11-18 12:01:01','0005','G3', 'magge');
 
-INSERT INTO groupchat_record VALUES('2020-11-17 12:01:30', '0001','Hello folks!','G1');
-INSERT INTO groupchat_record VALUES('2020-11-17 12:02:00', '0002','Nice to see you guys! This is Karry.','G1');
-INSERT INTO groupchat_record VALUES('2020-11-17 12:03:00', '0003','Hi, I am Dora!','G1');
-INSERT INTO groupchat_record VALUES('2020-11-18 12:01:30', '0004','This is our project group','G2');
-INSERT INTO groupchat_record VALUES('2020-11-18 12:02:00', '0005','Thanks for doing this!','G2');
+INSERT INTO groupchat_record VALUES('2020-11-17 11:01:30', '0000', 'Welcome to CPSC 304. Please create your own project team.', 'G1');
+INSERT INTO groupchat_record VALUES('2020-11-17 12:01:30', '0001', 'Hello folks!', 'G2');
+INSERT INTO groupchat_record VALUES('2020-11-17 12:02:00', '0002', 'Nice to see you guys! This is Karry.', 'G2');
+INSERT INTO groupchat_record VALUES('2020-11-17 12:03:00', '0003', 'Hi, I am Dora!', 'G2');
+INSERT INTO groupchat_record VALUES('2020-11-18 12:01:30', '0004', 'This is our project group', 'G3');
+INSERT INTO groupchat_record VALUES('2020-11-18 12:02:00', '0005', 'Thanks for doing this!', 'G3');
 
--- INSERT INTO meeting_record VALUES('m0001',10,'Welcome ceremony','2020-08-16 12:00:00','2020-08-16 14:00:00','g0001');
--- INSERT INTO meeting_record VALUES('m0002',5,'team discussion','2020-08-19 12:00:00','2020-08-19 13:00:00','g0001');
--- INSERT INTO meeting_record VALUES('m0003',6,'project discussion','2020-09-10 12:00:00','2020-08-16 16:00:00','g0001');
--- INSERT INTO meeting_record VALUES('m0004',7,'Welcome ceremony','2020-08-16 12:00:00','2020-08-16 14:00:00','g0002');
--- INSERT INTO meeting_record VALUES('m0005',4,'random chatting','2020-08-20 17:00:00','2020-08-16 18:00:00','g0002');
---
+INSERT INTO meeting_record VALUES('M1', 6, 'Welcome Ceremony', '2020-11-17 18:00:00', '2020-11-17 19:00:00', 'G1');
+INSERT INTO meeting_record VALUES('M2', 3, 'Team Discussion', '2020-11-17 19:03:00', '2020-11-17 20:00:00', 'G2');
+INSERT INTO meeting_record VALUES('M3', 2, 'Project Meeting', '2020-11-19 12:00:00', '2020-11-19 14:00:00', 'G3');
+
+INSERT INTO meeting_joins VALUES('M1', '0000');
+INSERT INTO meeting_joins VALUES('M1', '0001');
+INSERT INTO meeting_joins VALUES('M1', '0002');
+INSERT INTO meeting_joins VALUES('M1', '0003');
+INSERT INTO meeting_joins VALUES('M1', '0004');
+INSERT INTO meeting_joins VALUES('M1', '0005');
+INSERT INTO meeting_joins VALUES('M2', '0001');
+INSERT INTO meeting_joins VALUES('M2', '0002');
+INSERT INTO meeting_joins VALUES('M2', '0003');
+INSERT INTO meeting_joins VALUES('M3', '0004');
+INSERT INTO meeting_joins VALUES('M3', '0005');
+
 -- INSERT INTO task_status VALUES('2020-08-16 12:00:00'),0);
 -- INSERT INTO task_status VALUES('2020-08-17 14:00:00'),1);
 -- INSERT INTO task_status VALUES('2020-08-18 16:00:00'),1);
@@ -265,6 +294,15 @@ UPDATE user_info
 SET email = 'email@gmail.com' -- email address could be replaced by other email
 WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
 
+UPDATE group_record
+SET group_name = 'Team 1' -- Team 1 could be replaced by other group_name
+WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
+
+UPDATE group_joins
+SET nickname = 'admin' -- admin could be replaced by other nickname
+WHERE group_id = 'G1' -- G1 could be replaced by other group_id
+    AND user_id = '0001'; -- 0001 could be replaced by other user_id
+
 -- Selection
 SELECT *
 FROM time_zone
@@ -283,10 +321,28 @@ SELECT *
 FROM media
 WHERE url = 'https://i.imgur.com/QwEq1g2.jpg'; -- the url link could be replaced
 
+SELECT group_id
+FROM group_joins
+WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
+
+SELECT group_id
+FROM group_admin
+WHERE user_id = '0001' -- 0001 could be replaced by other user_id
+    AND group_id = 'G1'; -- G1 could be replaced by other group_id
+
+SELECT *
+FROM group_joins
+WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
+
+SELECT *
+FROM group_chat
+WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
+
 -- Projection
 SELECT city FROM time_zone;
 select user_id from user_info;
 select user_id, password from user_info;
+SELECT group_id FROM group_record;
 
 -- JOIN
 SELECT *
@@ -304,6 +360,10 @@ WHERE ((sender = '0001' AND receiver = '0002' -- 0001 could be replaced by other
         OR (sender = '0002' AND receiver = '0001')) -- 0002 could be replaced by other user_id
     AND (sender = user_id)
 ORDER BY time;
+
+SELECT *
+FROM group_record, group_creates
+WHERE group_record.group_id = 'G1'; -- G1 could be replaced by other group_id
 
 -- Aggregation with GROUP BY
 

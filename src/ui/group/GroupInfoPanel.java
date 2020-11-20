@@ -58,7 +58,8 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         info.add(entryPanel());
 
         add(info);
-        add(generateButton("Submit"));
+
+        
     }
 
     private JButton backButton() {

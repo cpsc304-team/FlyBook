@@ -2,6 +2,7 @@ package database;
 
 import model.*;
 import model.group.*;
+import model.meeting.MeetingRecord;
 import model.post.Media;
 import model.post.SharePost;
 import model.user.TimeZone;
@@ -55,6 +56,7 @@ public class DatabaseConnection {
 
     // Drop all the tables
     public void dropTables() {
+        dropTable("meeting_joins");
         dropTable("contain_task");
         dropTable("schedule_record");
         dropTable("task_status");
@@ -85,7 +87,8 @@ public class DatabaseConnection {
         groupJoinsSetUp();
         groupCreatesSetUp();
         groupChatSetUp();
-//        meetingRecordSetUp();
+        meetingRecordSetUp();
+        MeetingJoinsSetUp();
 //        taskStatusSetUp();
 //        scheduleRecordSetUp();
 //        containTaskSetUp();
@@ -113,6 +116,8 @@ public class DatabaseConnection {
 
 
         // user_info
+        User admin = new User("0000", "0", "Admin", tz2, "admin@gmail.com");
+        insertUser(admin);
         User u1 = new User("0001", "1", "Gelila Zhang", tz4, "gelilaz@gmail.com");
         insertUser(u1);
         User u2 = new User("0002", "2", "Karry Yang", tz1, "kerryy@gmail.com");
@@ -165,27 +170,43 @@ public class DatabaseConnection {
         insertSharePost(sp5);
 
         // group_record
-        Group group1 = new Group("G1", Timestamp.valueOf("2020-11-17 12:00:00"), "Project Team 1", u1);
-        Group group2 = new Group("G2", Timestamp.valueOf("2020-11-18 12:01:00"), "Project Team 2", u4);
+        Group group1 = new Group("G1", Timestamp.valueOf("2020-11-17 11:00:00"), "CPSC 304", admin);
+        Group group2 = new Group("G2", Timestamp.valueOf("2020-11-17 12:00:00"), "Project Team 1", u1);
+        Group group3 = new Group("G3", Timestamp.valueOf("2020-11-18 12:01:00"), "Project Team 2", u4);
 
         insertGroupRecord(group1);
         insertGroupRecord(group2);
+        insertGroupRecord(group3);
 
         // group_creates
-        insertGroupCreate(group1);
-        insertGroupCreate(group2);
+        insertGroupCreates(group1);
+        insertGroupCreates(group2);
+        insertGroupCreates(group3);
 
         // group_admin
-        insertGroupAdmin(u1, group1);
-        insertGroupAdmin(u4, group2);
+        insertGroupAdmin(admin, group1);
+        insertGroupAdmin(u1, group2);
+        insertGroupAdmin(u4, group3);
 
         // group_joins
-        GroupMember member1 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:00"), u1, group1, null);
-        GroupMember member2 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:01"), u2, group1, "Frozen Cloud");
-        GroupMember member3 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:02"), u3, group1, "Doooora");
-        GroupMember member4 = new GroupMember(Timestamp.valueOf("2020-11-18 12:01:00"), u4, group2, "7k+");
-        GroupMember member5 = new GroupMember(Timestamp.valueOf("2020-11-18 12:01:01"), u5, group2, "magge");
+        GroupMember m0 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:00"), admin, group1, null);
+        GroupMember m1 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:01"), u1, group1, null);
+        GroupMember m2 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:02"), u2, group1, null);
+        GroupMember m3 = new GroupMember(Timestamp.valueOf("2020-11-17 11:00:03"), u3, group1, null);
+        GroupMember m4 = new GroupMember(Timestamp.valueOf("2020-11-18 11:00:04"), u4, group2, null);
+        GroupMember m5 = new GroupMember(Timestamp.valueOf("2020-11-18 11:00:05"), u5, group2, null);
+        GroupMember member1 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:00"), u1, group2, null);
+        GroupMember member2 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:01"), u2, group2, "Frozen Cloud");
+        GroupMember member3 = new GroupMember(Timestamp.valueOf("2020-11-17 12:00:02"), u3, group2, "Doooora");
+        GroupMember member4 = new GroupMember(Timestamp.valueOf("2020-11-18 12:01:00"), u4, group3, "7k+");
+        GroupMember member5 = new GroupMember(Timestamp.valueOf("2020-11-18 12:01:01"), u5, group3, "magge");
 
+        insertGroupJoins(m0);
+        insertGroupJoins(m1);
+        insertGroupJoins(m2);
+        insertGroupJoins(m3);
+        insertGroupJoins(m4);
+        insertGroupJoins(m5);
         insertGroupJoins(member1);
         insertGroupJoins(member2);
         insertGroupJoins(member3);
@@ -193,31 +214,43 @@ public class DatabaseConnection {
         insertGroupJoins(member5);
 
         // group_chat
-        GroupChat groupChat1 = new GroupChat(Timestamp.valueOf("2020-11-17 12:01:30"), member1,"Hello folks!", group1);
-        GroupChat groupChat2 = new GroupChat(Timestamp.valueOf("2020-11-17 12:02:00"), member2,"Nice to see you guys! This is Karry.", group1);
-        GroupChat groupChat3 = new GroupChat(Timestamp.valueOf("2020-11-17 12:03:00"), member3,"Hi, I am Dora!", group1);
-        GroupChat groupChat4 = new GroupChat(Timestamp.valueOf("2020-11-18 12:01:30"), member4,"This is our project group", group2);
-        GroupChat groupChat5 = new GroupChat(Timestamp.valueOf("2020-11-18 12:02:00"), member5,"Thanks for doing this!", group2);
+        GroupChat groupChat0 = new GroupChat(Timestamp.valueOf("2020-11-17 11:01:30"), member1,"Welcome to CPSC 304. Please create your own project team.", group1);
+        GroupChat groupChat1 = new GroupChat(Timestamp.valueOf("2020-11-17 12:01:30"), member1,"Hello folks!", group2);
+        GroupChat groupChat2 = new GroupChat(Timestamp.valueOf("2020-11-17 12:02:00"), member2,"Nice to see you guys! This is Karry.", group2);
+        GroupChat groupChat3 = new GroupChat(Timestamp.valueOf("2020-11-17 12:03:00"), member3,"Hi, I am Dora!", group2);
+        GroupChat groupChat4 = new GroupChat(Timestamp.valueOf("2020-11-18 12:01:30"), member4,"This is our project group", group3);
+        GroupChat groupChat5 = new GroupChat(Timestamp.valueOf("2020-11-18 12:02:00"), member5,"Thanks for doing this!", group3);
 
+        insertGroupChat(groupChat0);
         insertGroupChat(groupChat1);
         insertGroupChat(groupChat2);
         insertGroupChat(groupChat3);
         insertGroupChat(groupChat4);
         insertGroupChat(groupChat5);
 
-//        // meeting_record
-//        MeetingRecord meetingRecord1 = new MeetingRecord("m0001",10,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0001");
-//        MeetingRecord meetingRecord2 = new MeetingRecord("m0002",5,"team discussion",Timestamp.valueOf("2020-08-19 12:00:00"),Timestamp.valueOf("2020-08-19 13:00:00"),"g0001");
-//        MeetingRecord meetingRecord3 = new MeetingRecord("m0003",6,"project discussion",Timestamp.valueOf("2020-09-10 12:00:00"),Timestamp.valueOf("2020-08-16 16:00:00"),"g0001");
-//        MeetingRecord meetingRecord4 = new MeetingRecord("m0004",7,"Welcome ceremony",Timestamp.valueOf("2020-08-16 12:00:00"),Timestamp.valueOf("2020-08-16 14:00:00"),"g0002");
-//        MeetingRecord meetingRecord5 = new MeetingRecord("m0005",4,"random chatting",Timestamp.valueOf("2020-08-20 17:00:00"),Timestamp.valueOf("2020-08-16 18:00:00"),"g0002");
-//
-//        insertMeetingRecord(meetingRecord1);
-//        insertMeetingRecord(meetingRecord2);
-//        insertMeetingRecord(meetingRecord3);
-//        insertMeetingRecord(meetingRecord4);
-//        insertMeetingRecord(meetingRecord5);
-//
+        // meeting_record
+        MeetingRecord meetingRecord1 = new MeetingRecord("M1",6,"Welcome Ceremony", Timestamp.valueOf("2020-11-17 18:00:00"), Timestamp.valueOf("2020-11-17 19:00:00"), group1);
+        MeetingRecord meetingRecord2 = new MeetingRecord("M2",3,"Team Discussion", Timestamp.valueOf("2020-11-17 19:03:00"), Timestamp.valueOf("2020-11-17 20:00:00"), group2);
+        MeetingRecord meetingRecord3 = new MeetingRecord("M3",2,"Project Meeting", Timestamp.valueOf("2020-11-19 12:00:00"), Timestamp.valueOf("2020-11-19 14:00:00"), group3);
+
+        insertMeetingRecord(meetingRecord1);
+        insertMeetingRecord(meetingRecord2);
+        insertMeetingRecord(meetingRecord3);
+
+        // meeting_joins
+        insertMeetingJoins(meetingRecord1, admin);
+        insertMeetingJoins(meetingRecord1, u1);
+        insertMeetingJoins(meetingRecord1, u2);
+        insertMeetingJoins(meetingRecord1, u3);
+        insertMeetingJoins(meetingRecord1, u4);
+        insertMeetingJoins(meetingRecord1, u5);
+        insertMeetingJoins(meetingRecord2, u1);
+        insertMeetingJoins(meetingRecord2, u2);
+        insertMeetingJoins(meetingRecord2, u3);
+        insertMeetingJoins(meetingRecord3, u4);
+        insertMeetingJoins(meetingRecord3, u5);
+
+
 //        // task_status
 //        TaskStatus taskStatus1 = new TaskStatus(Timestamp.valueOf("2020-08-16 12:00:00"),0);
 //        TaskStatus taskStatus2 = new TaskStatus(Timestamp.valueOf("2020-08-17 14:00:00"),1);
@@ -379,7 +412,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the Media table
+    // Set up the Media_table
     private void mediaSetUp() {
         try {
             Statement stmt = connection.createStatement();
@@ -420,7 +453,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the group record table
+    // Set up the group_record table
     // This table also stores the group creation time,
     // each time when a user creates a group,
     // the user will automatically become the administrator (one record for group_admin),
@@ -443,7 +476,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the group creates table
+    // Set up the group_creates table
     private void groupCreatesSetUp() {
         try {
             Statement stmt = connection.createStatement();
@@ -464,7 +497,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the group admin table
+    // Set up the group_admin table
     // This table is used to identify who are the administrators of each group
     // A group could have more than one group administrators
     private void groupAdminSetUp() {
@@ -486,7 +519,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the group joins table
+    // Set up the group_joins table
     // This tables also contains the group member info (nickname)
     // A group admin is also a group member,
     // so a group admin's info is also recorded here
@@ -511,7 +544,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Set up the group chat record table
+    // Set up the group_chat record table
     private void groupChatSetUp() {
         try {
             Statement stmt = connection.createStatement();
@@ -533,28 +566,49 @@ public class DatabaseConnection {
         }
     }
 
-//    // Set up the meeting record table
-//    private void meetingRecordSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE meeting_record" +
-//                    "(mid varchar2(10) PRIMARY KEY," +
-//                    "attendance INTEGER," +
-//                    "topic varchar2(50)," +
-//                    "start_time TIMESTAMP," +
-//                    "end_time TIMESTAMP," +
-//                    "gid varchar2(10) NOT NULL," +
-//                    "FOREIGN KEY (gid) REFERENCES group_record ON DELETE CASCADE)");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: meetingRecordSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-//
+    // Set up the meeting_record table
+    private void meetingRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE meeting_record (" +
+                    "meeting_id varchar2(10)," +
+                    "attendance INTEGER," +
+                    "topic varchar2(50)," +
+                    "start_time TIMESTAMP," +
+                    "end_time TIMESTAMP," +
+                    "group_id varchar2(10) NOT NULL," +
+                    "PRIMARY KEY (meeting_id)," +
+                    "FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: meetingRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up the joint_meeting table
+    private void MeetingJoinsSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE meeting_joins (" +
+                    "meeting_id varchar2(10)," +
+                    "user_id varchar2(10)," +
+                    "PRIMARY KEY (meeting_id, user_id)," +
+                    "FOREIGN KEY (user_id) REFERENCES user_info," +
+                    "FOREIGN KEY (meeting_id) REFERENCES meeting_record ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: joinMeetingSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
 //    // Set up the task status table
 //    private void taskStatusSetUp() {
 //        try {
@@ -614,7 +668,7 @@ public class DatabaseConnection {
 //        }
 //    }
 
-    //    // Set up the mini program table
+//    // Set up the mini program table
 //    private void miniProgramSetUp() {
 //        try {
 //            Statement stmt = connection.createStatement();
@@ -836,8 +890,8 @@ public class DatabaseConnection {
         }
     }
 
-    // Insert GroupCreate
-    public void insertGroupCreate(Group group) {
+    // Insert GroupCreates
+    public void insertGroupCreates(Group group) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_creates VALUES (?,?,?)");
 
@@ -856,7 +910,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Insert groupchat record
+    // Insert GroupChat
     public void insertGroupChat(GroupChat gcr) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_chat VALUES (?,?,?,?)");
@@ -877,30 +931,49 @@ public class DatabaseConnection {
         }
     }
 
+    // Insert MeetingRecord
+    public void insertMeetingRecord(MeetingRecord mr) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO meeting_record VALUES (?,?,?,?,?,?)");
 
-//    // Insert meeting record
-//    public void insertMeetingRecord(MeetingRecord mr) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO meeting_record VALUES (?,?,?,?,?,?)");
-//
-//            ps.setString(1, mr.getMid());
-//            ps.setInt(2,mr.getAttendance());
-//            ps.setString(3, mr.getTopic());
-//            ps.setTimestamp(4, mr.getStartTime());
-//            ps.setTimestamp(5, mr.getEndTime());
-//            ps.setString(6, mr.getGid());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
-//
+            ps.setString(1, mr.getMeetingid());
+            ps.setInt(2,mr.getAttendance());
+            ps.setString(3, mr.getTopic());
+            ps.setTimestamp(4, mr.getStartTime());
+            ps.setTimestamp(5, mr.getEndTime());
+            ps.setString(6, mr.getGroup().getGroupid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: insertMeetingRecord()");
+            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert MeetingJoins
+    public void insertMeetingJoins(MeetingRecord meeting, User user) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO meeting_joins VALUES (?,?)");
+
+            ps.setString(1, meeting.getMeetingid());
+            ps.setString(2, user.getUserid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: insertMeetingJoins()");
+            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
 //    //  Insert task status
 //    public void insertTaskStatus(TaskStatus ts) {
 //        try {
@@ -1399,29 +1472,29 @@ public class DatabaseConnection {
         return null;
     }
 
+    // get all the groups
+    public Group[] getGroups() {
+        ArrayList<Group> result = new ArrayList<>();
 
-
-    // TODO: delete
-    // Testing tables
-    public void print() {
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
+            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_record");
 
             while(rs.next()) {
-                System.out.println(rs.getString("post_id") +
-                        " | " + rs.getString("user_id") +
-                        ": " + rs.getString("content") +
-                        " | " + rs.getString("time"));
+                result.add(getGroupByID(rs.getString("group_id")));
             }
 
             rs.close();
             stmt.close();
         } catch (SQLException e) {
+            System.out.println("Debug: getGroups()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
+
+        return result.toArray(new Group[result.size()]);
     }
 
+    // get all the groups that a user joined
     public Group[] getGroupsByUser(String userid) {
         ArrayList<Group> result = new ArrayList<>();
 
@@ -1444,6 +1517,7 @@ public class DatabaseConnection {
         return result.toArray(new Group[result.size()]);
     }
 
+    // get a group given the group ID
     private Group getGroupByID(String gid) {
         try {
             Statement stmt = connection.createStatement();
@@ -1468,48 +1542,24 @@ public class DatabaseConnection {
         return null;
     }
 
-    public boolean isAdmin(String uid, String gid) {
+    public void updateGroupName(String gid, String name) {
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_admin " +
-                    "WHERE user_id = \'" + uid + "\'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE group_record SET group_name = ? WHERE group_id = ?");
+            ps.setString(1, name);
+            ps.setString(2, gid);
 
-            while(rs.next()) {
-                return true;
-            }
+            ps.executeUpdate();
+            connection.commit();
 
-            rs.close();
-            stmt.close();
-
-            return false;
+            ps.close();
         } catch (SQLException e) {
-            System.out.println("Debug: isAdmin()");
+            System.out.println("Debug: updateGroupName()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            return false;
+            rollbackConnection();
         }
     }
 
-    public Group[] getGroups() {
-        ArrayList<Group> result = new ArrayList<>();
-
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_record");
-
-            while(rs.next()) {
-                result.add(getGroupByID(rs.getString("group_id")));
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("Debug: getGroups()");
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new Group[result.size()]);
-    }
-
+    // get all the group members in the group given the group ID
     public GroupMember[] getGroupMembers(String gid) {
         ArrayList<GroupMember> result = new ArrayList<>();
 
@@ -1538,6 +1588,74 @@ public class DatabaseConnection {
         return result.toArray(new GroupMember[result.size()]);
     }
 
+    // Get a group member from a group given the group ID and the user ID
+    public GroupMember getGroupMemberByID(String uid, String gid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_joins " +
+                    "WHERE group_id = \'" + gid + "\' " +
+                    "AND user_id = \'" + uid + "\'");
+
+            while(rs.next()) {
+                GroupMember member = new GroupMember(
+                        Timestamp.valueOf(rs.getString("join_time")),
+                        getUserByID(rs.getString("user_id")),
+                        getGroupByID(rs.getString("group_id")),
+                        rs.getString("nickname"));
+                return member;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupMemberByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void updateNickname(String gid, String uid, String name) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE group_joins SET nickname = ? WHERE group_id = ? AND user_id = ?");
+            ps.setString(1, name);
+            ps.setString(2, gid);
+            ps.setString(3, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: updateNickname()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // check if a user is the admin of the group
+    public boolean isAdmin(String uid, String gid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT group_id FROM group_admin " +
+                    "WHERE user_id = \'" + uid + "\'" +
+                    "AND group_id = \'" + gid + "\'");
+
+            while(rs.next()) {
+                return true;
+            }
+
+            rs.close();
+            stmt.close();
+
+            return false;
+        } catch (SQLException e) {
+            System.out.println("Debug: isAdmin()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
+
+    // get all the chat records in the group given the group ID
     public GroupChat[] getGroupChatHistory(String gid) {
         ArrayList<GroupChat> result = new ArrayList<>();
 
@@ -1566,63 +1684,28 @@ public class DatabaseConnection {
         return result.toArray(new GroupChat[result.size()]);
     }
 
-    public GroupMember getGroupMemberByID(String uid, String gid) {
+
+
+    // TODO: delete
+    // Testing tables
+    public void print() {
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM group_joins " +
-                    "WHERE group_id = \'" + gid + "\' " +
-                    "AND user_id = \'" + uid + "\'");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
 
             while(rs.next()) {
-                GroupMember member = new GroupMember(
-                        Timestamp.valueOf(rs.getString("join_time")),
-                        getUserByID(rs.getString("user_id")),
-                        getGroupByID(rs.getString("group_id")),
-                        rs.getString("nickname"));
-                return member;
+                System.out.println(rs.getString("post_id") +
+                        " | " + rs.getString("user_id") +
+                        ": " + rs.getString("content") +
+                        " | " + rs.getString("time"));
             }
 
             rs.close();
             stmt.close();
         } catch (SQLException e) {
-            System.out.println("Debug: getGroupMemberByID()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return null;
-    }
-
-    public void updateGroupName(String gid, String name) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE group_record SET group_name = ? WHERE group_id = ?");
-            ps.setString(1, name);
-            ps.setString(2, gid);
-
-            ps.executeUpdate();
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println("Debug: updateGroupName()");
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
         }
     }
 
-    public void updateNickname(String gid, String uid, String name) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE group_joins SET nickname = ? WHERE group_id = ? AND user_id = ?");
-            ps.setString(1, name);
-            ps.setString(2, gid);
-            ps.setString(3, uid);
 
-            ps.executeUpdate();
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println("Debug: updateNickname()");
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
 }

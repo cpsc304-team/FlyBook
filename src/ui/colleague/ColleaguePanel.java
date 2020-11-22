@@ -39,7 +39,7 @@ public class ColleaguePanel extends JPanel implements ActionListener {
 
         JButton back = new JButton("←");
         back.addActionListener(this);
-        ui.setbackButton(back);
+        setbackButton(back);
 
 
         JLabel title = new JLabel("Colleague  ");
@@ -54,7 +54,17 @@ public class ColleaguePanel extends JPanel implements ActionListener {
         pane.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
+    public JButton setbackButton(JButton backbtn) {
+//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
+//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+//        JButton back = new JButton(i2);
 
+        backbtn.setOpaque(false);
+        backbtn.setContentAreaFilled(false);
+        backbtn.setBorderPainted(false);
+        backbtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        return backbtn;
+    }
 
     private JScrollPane userList() {
         JPanel panel = new JPanel();

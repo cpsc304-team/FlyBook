@@ -95,7 +95,7 @@ CREATE TABLE group_chat (
     content varchar2(100),
     group_id varchar2(10),
     PRIMARY KEY (user_id, group_id, time),
-    FOREIGN KEY (user_id) REFERENCES user_info,
+    FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);
 
 CREATE TABLE meeting_record (
@@ -112,7 +112,7 @@ CREATE TABLE meeting_joins (
     meeting_id varchar2(10),
     user_id varchar2(10),
     PRIMARY KEY (meeting_id, user_id),
-    FOREIGN KEY (user_id) REFERENCES user_info),
+    FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE),
     FOREIGN KEY (meeting_id) REFERENCES group_record ON DELETE CASCADE);
 
 CREATE TABLE schedule_record (

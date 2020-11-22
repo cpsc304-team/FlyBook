@@ -1,5 +1,6 @@
 package main;
 
+import database.ExecuteQueries;
 import model.*;
 import database.DatabaseConnection;
 import model.group.Group;
@@ -24,6 +25,7 @@ public class Application {
     private DatabaseConnection dbConnection;
     private UI ui;
     private String currentUser; // user ID of the current user
+    private ExecuteQueries queries;
 
     public Application() {
         dbConnection = new DatabaseConnection();
@@ -32,7 +34,6 @@ public class Application {
     public static void main(String args[]) {
         Application app = new Application();
         app.oracleLogin();
-
         app.start();
     }
 
@@ -40,10 +41,10 @@ public class Application {
         return currentUser;
     }
 
-    // Start the program by opening the application ui frame
+    // Start the program by opening the application UI frame
     private void start() {
-        // TODO: test
-//        currentUser = "0001";
+        // TODO: delete testing statements below
+        currentUser = "0001";
 //        System.out.println("success!");
 
         ui = new UI(this);
@@ -55,23 +56,23 @@ public class Application {
         boolean connect = dbConnection.login();
 
         if (connect) {
-            // drop tables
-            dbConnection.dropTables();
+            // print all the table names if error occurs when dropping tables
+//            dbConnection.printTables();
 
-            // set up database
-            dbConnection.databaseSetUp();
-
-            // load pre-set data
-            dbConnection.loadData();
+            dbConnection.dropTables(); // drop all tables
+            dbConnection.databaseSetUp(); // setup database
+            dbConnection.loadData(); // load pre-set data
+            queries = dbConnection.executeQueries(); // initiate ExecuteQueries
         } else {
             System.out.println("Login failed.");
         }
     }
 
+
     // Check if the user can login
     public void userLogin(String userid, String password) {
-        if (dbConnection.containLoginInfo(userid, password)) {
-            User user = dbConnection.getUserByID(userid);
+        if (queries.containLoginInfo(userid, password)) {
+            User user = queries.getUserByID(userid);
             new SuccessMessage("Welcome, <" + user.getName() + ">!");
             currentUser = userid;
             ui.switchPanel("Main");
@@ -81,10 +82,10 @@ public class Application {
     }
 
     public void userRegister(String userid, String password, String name, String city, String email) {
-        if (dbConnection.userExist(userid)) {
+        if (queries.userExist(userid)) {
             new ErrorMessage("This user ID has been used.");
         } else {
-            TimeZone timezone = dbConnection.getTimeZoneByCity(city);
+            TimeZone timezone = queries.getTimeZoneByCity(city);
             User user = new User(userid, password, name, timezone, email);
             dbConnection.insertUser(user);
             new SuccessMessage("You registered an account successfully!");
@@ -92,28 +93,29 @@ public class Application {
         }
     }
 
-    public User getCurrentUser() { return dbConnection.getUserByID(currentUser); }
+    public User getCurrentUser() { return queries.getUserByID(currentUser); }
 
-    public User getUserByID(String uid) { return dbConnection.getUserByID(uid); }
+    public User getUserByID(String uid) { return queries.getUserByID(uid); }
 
     public User[] getUserList() {
-        return dbConnection.getUser();
+        return queries.getUser();
     }
 
-    public String[] getCities() { return dbConnection.getTimeZoneCities(); }
+    public String[] getCities() { return queries.getTimeZoneCities(); }
 
     public void resetPassword(String password) {
-        dbConnection.updatePassword(currentUser, password);
+        queries.updatePassword(currentUser, password);
         new SuccessMessage("You reset your password successfully!");
     }
 
     public void deleteAccount() {
-        dbConnection.deleteAccount(currentUser);
+        queries.updateGroupCreator(currentUser);
+        queries.deleteAccount(currentUser);
         new SuccessMessage("The account is deleted. You will return back to the log in menu.");
     }
 
     public IndividualChat[] getIndividualChatHistory(String uid1, String uid2) {
-        return dbConnection.getIndividualChatHistory(uid1, uid2);
+        return queries.getIndividualChatHistory(uid1, uid2);
     }
 
     public void addIndividualChat(IndividualChat record) {
@@ -121,27 +123,27 @@ public class Application {
     }
 
     public SharePost[] getIndividualPost(String uid) {
-        return dbConnection.getIndividualPost(uid);
+        return queries.getIndividualPost(uid);
     }
 
     public SharePost[] getPosts() {
-        return dbConnection.getPosts();
+        return queries.getPosts();
     }
 
     public SharePost getPostByID(String pid) {
-        return dbConnection.getPostByID(pid);
+        return queries.getPostByID(pid);
     }
 
     public void deletePost(SharePost post) {
-        dbConnection.deletePost(post);
+        queries.deletePost(post);
     }
 
     public Media[] getMediaList() {
-        return dbConnection.getMedia();
+        return queries.getMedia();
     }
 
     public Media getMediaByUrl(String url) {
-        return dbConnection.getMediaByUrl(url);
+        return queries.getMediaByUrl(url);
     }
 
     public void addPost(SharePost post) {
@@ -152,28 +154,40 @@ public class Application {
         dbConnection.insertMedia(media);
     }
 
+    public void changeCity(String city) {
+        queries.updateUserCity(currentUser, city);
+    }
+
+    public void changeName(String name) {
+        queries.updateUserName(currentUser, name);
+    }
+
+    public void changeEmail(String email) {
+        queries.updateUserEmail(currentUser, email);
+    }
+
     public void updateUser(String name, String city, String email) {
         if (!(name.isEmpty())) {
-            dbConnection.updateUserName(currentUser, name);
+            queries.updateUserName(currentUser, name);
         }
         if (!(city.isEmpty())) {
-            dbConnection.updateUserCity(currentUser, city);
+            queries.updateUserCity(currentUser, city);
         }
         if (!(email.isEmpty())) {
-            dbConnection.updateUserEmail(currentUser, email);
+            queries.updateUserEmail(currentUser, email);
         }
     }
 
     public Group[] getCurrentUsersGroups() {
-        return dbConnection.getGroupsByUser(currentUser);
+        return queries.getGroupsByUser(currentUser);
     }
 
     public boolean isAdmin(String gid) {
-        return dbConnection.isAdmin(currentUser, gid);
+        return queries.isAdmin(currentUser, gid);
     }
 
     public boolean isMember(String gid) {
-        GroupMember[] members = dbConnection.getGroupMembers(gid);
+        GroupMember[] members = queries.getGroupMembers(gid);
         for (int i = 0; i < members.length; i++) {
             if (members[i].getUser().getUserid().equals(currentUser)) {
                 return true;
@@ -183,15 +197,15 @@ public class Application {
     }
 
     public Group[] getGroups() {
-        return dbConnection.getGroups();
+        return queries.getGroups();
     }
 
     public GroupChat[] getGroupChatHistory(String gid) {
-        return dbConnection.getGroupChatHistory(gid);
+        return queries.getGroupChatHistory(gid);
     }
 
     public GroupMember getGroupMemberByID(String userid, String groupid) {
-        return dbConnection.getGroupMemberByID(userid, groupid);
+        return queries.getGroupMemberByID(userid, groupid);
     }
 
     public void addGroupChat(GroupChat record) {
@@ -203,46 +217,46 @@ public class Application {
     }
 
     public void updateGroupName(String gid, String name) {
-        dbConnection.updateGroupName(gid, name);
+        queries.updateGroupName(gid, name);
     }
 
     public void updateNickname(String gid, String name) {
-        dbConnection.updateNickname(gid, currentUser, name);
+        queries.updateNickname(gid, currentUser, name);
     }
 
     public MeetingRecord[] getPastMeetingsByID() {
-        return dbConnection.getPastMeetingsByID(currentUser);
+        return queries.getPastMeetingsByID(currentUser);
     }
 
     public MeetingRecord[] getCurrentMeetingsByID() {
-        return dbConnection.getCurrentMeetingsByID(currentUser);
+        return queries.getCurrentMeetingsByID(currentUser);
     }
 
     public void joinMeeting(MeetingRecord meeting) {
-        if (!(dbConnection.hasJoined(meeting.getMeetingid(), currentUser))) {
+        if (!(queries.hasJoined(meeting.getMeetingid(), currentUser))) {
             dbConnection.insertMeetingJoins(meeting, getCurrentUser());
         }
     }
 
     public void endMeeting(MeetingRecord meeting) {
-        Integer attendance = dbConnection.countAttendance(meeting.getMeetingid());
-        dbConnection.updateMeetingInfo(new Timestamp(System.currentTimeMillis()), attendance, meeting.getMeetingid());
+        Integer attendance = queries.countAttendance(meeting.getMeetingid());
+        queries.updateMeetingInfo(new Timestamp(System.currentTimeMillis()), attendance, meeting.getMeetingid());
     }
 
     public MeetingRecord getMeetingByID(String mid) {
-        return dbConnection.getMeetingByID(mid);
+        return queries.getMeetingByID(mid);
     }
 
     public Group[] getAdminGroups() {
-        return dbConnection.getAdminGroups(currentUser);
+        return queries.getAdminGroups(currentUser);
     }
 
     public int countMeetings() {
-        return dbConnection.countMeetings();
+        return queries.countMeetings();
     }
 
     public Group getGroupByID(String gid) {
-        return dbConnection.getGroupByID(gid);
+        return queries.getGroupByID(gid);
     }
 
     public void addMeeting(MeetingRecord meeting) {
@@ -250,7 +264,7 @@ public class Application {
     }
 
     public ScheduleRecord[] getSchedulesByID() {
-        return dbConnection.getSchedulesByID(currentUser);
+        return queries.getSchedulesByID(currentUser);
     }
 
     public ScheduleRecord[] getSchedulesThisWeek() {
@@ -258,7 +272,7 @@ public class Application {
         String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
         cal.add(Calendar.DATE, 7);
         String after = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
-        return dbConnection.getSchedulesWithinPeriod(Timestamp.valueOf(today), Timestamp.valueOf(after), currentUser);
+        return queries.getSchedulesWithinPeriod(Timestamp.valueOf(today), Timestamp.valueOf(after), currentUser);
     }
 
     public ScheduleRecord[] getSchedulesToday() {
@@ -266,25 +280,25 @@ public class Application {
         String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
         cal.add(Calendar.DATE, 1);
         String tomorrow = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
-        return dbConnection.getSchedulesWithinPeriod(Timestamp.valueOf(today), Timestamp.valueOf(tomorrow), currentUser);
+        return queries.getSchedulesWithinPeriod(Timestamp.valueOf(today), Timestamp.valueOf(tomorrow), currentUser);
     }
 
     public ScheduleRecord[] getSchedulesPassed() {
         Calendar cal = Calendar.getInstance();
         String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
-        return dbConnection.getSchedulesPassed(Timestamp.valueOf(today), currentUser);
+        return queries.getSchedulesPassed(Timestamp.valueOf(today), currentUser);
     }
 
     public Task[] getTasksBySchedule(ScheduleRecord schedule) {
-        return dbConnection.getTasksBySchedule(schedule.getScheduleid());
+        return queries.getTasksBySchedule(schedule.getScheduleid());
     }
 
     public void updateTaskStatus(Task task, int i) {
-        dbConnection.updateTaskStatus(task, i);
+        queries.updateTaskStatus(task, i);
     }
 
     public int countSchedules() {
-        return dbConnection.countSchedules();
+        return queries.countSchedules();
     }
 
     public void addSchedule(ScheduleRecord schedule) {

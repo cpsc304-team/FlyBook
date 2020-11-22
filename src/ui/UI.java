@@ -17,7 +17,6 @@ public class UI extends JFrame {
     Application application;
 
     public UI(Application application) {
-        // TODO: Change the application name
         super("FlyBook");
         this.application = application;
     }
@@ -27,13 +26,11 @@ public class UI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(430, 600));
 
+        // TODO: delete testing statements below
+//        setContentPane(new AccountPanel(this, application.getCurrentUser()));
+
         // Start with the login panel
         JPanel loginPane = new LoginPanel(this);
-
-        // TODO: test
-//        SchedulePanel panel = new SchedulePanel(this);
-//        setContentPane(panel.events());
-
         setContentPane(loginPane);
 
         pack();
@@ -44,49 +41,45 @@ public class UI extends JFrame {
 
     // Switch to different panels according to the keyword
     public void switchPanel(String s) {
-        if (s.equals("Register")) {
-            setContentPane(new RegisterPanel(this));
-        } else if (s.equals("Login")) {
-            setContentPane(new LoginPanel(this));
-        } else if (s.equals("Main")) {
-            setContentPane(new MainPanel(this));
-        } else if (s.equals("Colleague")) {
-            setContentPane(new ColleaguePanel(this));
-        } else if (s.equals("Group")) {
-            setContentPane(new GroupListPanel(this));
-        } else if (s.equals("Post")) {
-            setContentPane(new PostPanel(this));
-        } else if (s.equals("Mini-Program")) {
-
-        } else if (s.equals("Meeting")) {
-            setContentPane(new MeetingListPanel(this));
-        } else if (s.equals("Schedule")) {
-            setContentPane(new SchedulePanel(this));
-        } else if (s.equals("Account")) {
-            setContentPane(new AccountPanel(this, application.getCurrentUser()));
-        } else if (s.equals("Reset Password")) {
-            setContentPane(new PasswordPanel(this));
-        } else if (s.equals("Change Profile")) {
-            setContentPane(new EditProfilePanel(this));
-        } else if (s.equals("New Post")) {
-            setContentPane(new NewPostPanel(this));
+        switch (s) {
+            case "Register":
+                setContentPane(new RegisterPanel(this));
+                break;
+            case "Login":
+                setContentPane(new LoginPanel(this));
+                break;
+            case "Main":
+                setContentPane(new MainPanel(this));
+                break;
+            case "Colleague":
+                setContentPane(new ColleaguePanel(this));
+                break;
+            case "Group":
+                setContentPane(new GroupListPanel(this));
+                break;
+            case "Post":
+                setContentPane(new PostPanel(this));
+                break;
+            case "Meeting":
+                setContentPane(new MeetingListPanel(this));
+                break;
+            case "Schedule":
+                setContentPane(new SchedulePanel(this));
+                break;
+            case "Account":
+                setContentPane(new AccountPanel(this, application.getCurrentUser()));
+                break;
+            case "Reset Password":
+                setContentPane(new PasswordPanel(this));
+                break;
+            case "New Post":
+                setContentPane(new NewPostPanel(this));
+                break;
         }
         revalidate();
     }
 
     public Application getApplication() {
         return application;
-    }
-
-    public JButton setbackButton(JButton backbtn) {
-//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
-//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//        JButton back = new JButton(i2);
-
-        backbtn.setOpaque(false);
-        backbtn.setContentAreaFilled(false);
-        backbtn.setBorderPainted(false);
-        backbtn.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return backbtn;
     }
 }

@@ -87,15 +87,23 @@ public class UI extends JFrame {
         return application;
     }
 
-    // Generate info text
+    // Generate label
     public JLabel generateLabel(String s) {
         JLabel text = new JLabel(s);
         text.setFont(new Font("Avenir", Font.BOLD, 14));
+        text.setForeground(Color.BLACK);
+        return text;
+    }
+
+    // Generate text
+    public JLabel generateText(String s) {
+        JLabel text = new JLabel(s);
+        text.setFont(new Font("Avenir", Font.PLAIN, 14));
         text.setForeground(new Color(15, 85, 130));
         return text;
     }
 
-    // Generate the button used to edit the profile
+    // Generate the icon button
     public JButton generateChangedButton(String buttontype) {
         ImageIcon i1 = new ImageIcon("images" + "/" + buttontype + ".png");
         ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
@@ -108,13 +116,14 @@ public class UI extends JFrame {
         return change;
     }
 
-    // Customizes button
+    // Customize text button
     public JButton generateButton(String s, ActionListener al) {
         JButton button = new JButton(s);
 
         button.setFont(new Font("Avenir", Font.BOLD, 14));
         button.setForeground(Color.DARK_GRAY);
         button.setMinimumSize(new Dimension(170, 35));
+        button.setPreferredSize(new Dimension(170, 35));
         button.setMaximumSize(new Dimension(170, 35));
         button.addActionListener(al);
         button.setActionCommand(s);

@@ -26,6 +26,9 @@ public class Header extends JPanel implements ActionListener {
         add(backButton());
         add(Box.createHorizontalGlue());
         add(title);
+
+        setMaximumSize(new Dimension(430, 40));
+        setMinimumSize(new Dimension(430, 40));
     }
 
     public Header() {
@@ -45,6 +48,12 @@ public class Header extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ui.switchPanel("Main");
+        if (heading.equals("Change Password")) {
+            ui.switchPanel("Account");
+        } else if (heading.equals("Register")) {
+            ui.switchPanel("Login");
+        } else {
+            ui.switchPanel("Main");
+        }
     }
 }

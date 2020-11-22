@@ -21,10 +21,13 @@ public class AccountPanel extends JPanel implements ActionListener {
         this.ui = ui;
         this.user = user;
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // add header
-        add(new Header(ui, "Account"));
+        JPanel header = new Header(ui, "Account");
+        header.setMaximumSize(new Dimension(430, 40));
+        header.setMinimumSize(new Dimension(430, 40));
+        add(header);
         add(Box.createRigidArea(new Dimension(0,20)));
 
         // a sub-panel contains the info
@@ -54,7 +57,7 @@ public class AccountPanel extends JPanel implements ActionListener {
 
 
 
-    // Shows all the labels of the personal profile
+    // Show the labels of the personal profile
     private JPanel labelPanel() {
         JPanel labelPanel = new JPanel();
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
@@ -85,30 +88,30 @@ public class AccountPanel extends JPanel implements ActionListener {
         return labelPanel;
     }
 
-    // Shows all the detailed info of the personal profile
+    // Show the detailed info of the personal profile
     private JPanel infoPanel() {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
 
-        JLabel userid = ui.generateLabel(user.getUserid());
+        JLabel userid = ui.generateText(user.getUserid());
         userid.setAlignmentX(Component.LEFT_ALIGNMENT);
         infoPanel.add(userid);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel name = ui.generateLabel(user.getName());
+        JLabel name = ui.generateText(user.getName());
         infoPanel.add(name);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel city = ui.generateLabel(user.getTimezone().getCity());
+        JLabel city = ui.generateText(user.getTimezone().getCity());
         infoPanel.add(city);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel timeZone = ui.generateLabel(user.getTimezone().getZoneCode());
+        JLabel timeZone = ui.generateText(user.getTimezone().getZoneCode());
         infoPanel.add(timeZone);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel email = ui.generateLabel(user.getEmail());
+        JLabel email = ui.generateText(user.getEmail());
         infoPanel.add(email);
 
         infoPanel.setAlignmentY(TOP_ALIGNMENT);
@@ -186,8 +189,6 @@ public class AccountPanel extends JPanel implements ActionListener {
         return changePanel;
     }
 
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Back")) {
@@ -203,7 +204,7 @@ public class AccountPanel extends JPanel implements ActionListener {
                     "Do you want to delete this account?",
                     "Confirm",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
+                    JOptionPane.PLAIN_MESSAGE,
                     null,
                     options,
                     options[1]);

@@ -9,76 +9,64 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginPanel extends JPanel implements ActionListener {
-    // The main ui frame
     UI ui;
 
-    // Component of the login panel:
     JTextField usernameField;
     JPasswordField passwordField;
+
+    private Integer TEXT_SPACE = 16;
+    private Integer ENTRY_SPACE = 9;
 
     public LoginPanel(UI ui) {
         this.ui = ui;
 
-        JLabel useridLabel = ui.generateLabel("Enter user ID: ");
-        JLabel passwordLabel = ui.generateLabel("Enter password: ");
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        JPanel entry = new JPanel();
+        entry.setLayout(new BoxLayout(entry, BoxLayout.X_AXIS));
+        entry.setOpaque(false);
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+        textPanel.setOpaque(false);
+        JLabel useridLabel = ui.generateLabel("User ID");
+        textPanel.add(useridLabel);
+        useridLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
+        JLabel passwordLabel = ui.generateLabel("Password");
+        textPanel.add(passwordLabel);
+        passwordLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel entryPanel = new JPanel();
+        entryPanel.setLayout(new BoxLayout(entryPanel, BoxLayout.Y_AXIS));
+        entryPanel.setOpaque(false);
         usernameField = new JTextField(10);
+        usernameField.setMaximumSize(new Dimension(100,40));
+        entryPanel.add(usernameField);
+        entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
         passwordField = new JPasswordField(10);
+        passwordField.setMaximumSize(new Dimension(100,40));
         passwordField.setEchoChar('*');
+        entryPanel.add(passwordField);
 
-        JButton loginButton = ui.generateButton("Log In", this);
-        JButton registerButton = ui.generateButton("Register", this);
+        entry.add(textPanel);
+        entry.add(Box.createRigidArea(new Dimension(20,0)));
+        entry.add(entryPanel);
 
-        // layout components using the GridBag layout manager
-        GridBagLayout gb = new GridBagLayout();
-        GridBagConstraints c = new GridBagConstraints();
+        add(Box.createVerticalGlue());
+        add(entry);
+        entry.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(Box.createRigidArea(new Dimension(0,20)));
 
-        setLayout(gb);
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel button = new JPanel();
+        button.setLayout(new BoxLayout(button, BoxLayout.Y_AXIS));
+        button.setOpaque(false);
+        button.add(ui.generateButton("Log In", this));
+        button.add(ui.generateButton("Register", this));
 
-        // place the username label
-        c.gridwidth = GridBagConstraints.RELATIVE;
-        c.insets = new Insets(10, 10, 5, 0);
-        gb.setConstraints(useridLabel, c);
-        add(useridLabel);
-
-        // place the text field for the username
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.insets = new Insets(10, 0, 5, 10);
-        gb.setConstraints(usernameField, c);
-        add(usernameField);
-
-        // place password label
-        c.gridwidth = GridBagConstraints.RELATIVE;
-        c.insets = new Insets(0, 10, 10, 0);
-        gb.setConstraints(passwordLabel, c);
-        add(passwordLabel);
-
-        // place the password field
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.insets = new Insets(0, 0, 10, 10);
-        gb.setConstraints(passwordField, c);
-        add(passwordField);
-
-        // place the login button
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.insets = new Insets(5, 10, 10, 10);
-        c.anchor = GridBagConstraints.CENTER;
-        gb.setConstraints(loginButton, c);
-        add(loginButton);
-
-        // place the register button
-        c.gridwidth = GridBagConstraints.REMAINDER;
-        c.insets = new Insets(5, 10, 10, 10);
-        c.anchor = GridBagConstraints.CENTER;
-        gb.setConstraints(registerButton, c);
-        add(registerButton);
-
-        // register buttons with action event handlers
-        loginButton.setActionCommand("Log In");
-        registerButton.setActionCommand("Register");
-        loginButton.addActionListener(this);
-        registerButton.addActionListener(this);
+        add(button);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(Box.createVerticalGlue());
     }
 
     public void actionPerformed(ActionEvent e) {

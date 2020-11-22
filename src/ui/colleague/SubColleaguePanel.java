@@ -36,18 +36,16 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
 
         JPanel userInfo = new JPanel();
         userInfo.setLayout(new FlowLayout());
-        JLabel name = new JLabel(user.getName());
-//        name.setFont(new Font("Serif", Font.PLAIN, 20));
+        JLabel name = ui.generateLabel(user.getName());
         userInfo.add(name);
         userInfo.add(Box.createRigidArea(new Dimension(5, 0)));
-        JLabel city = new JLabel(user.getTimezone().getCity() + " | " + user.getTimezone().getZoneCode());
-//        name.setFont(new Font("Serif", Font.PLAIN, 14));
+        JLabel city = ui.generateLabel(user.getTimezone().getCity() + " | " + user.getTimezone().getZoneCode());
         userInfo.add(city);
 
         infoPanel.add(userInfo);
         userInfo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel email = new JLabel(user.getEmail());
+        JLabel email = ui.generateLabel(user.getEmail());
         infoPanel.add(email);
         email.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -59,31 +57,20 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
 
         if (!(currentUser.equals(user.getUserid()))) {
-            JButton chat = generateButton("Chat");
+            JButton chat = ui.generateButton("Chat",this);
             buttonPanel.add(chat);
             chat.setAlignmentX(Component.CENTER_ALIGNMENT);
         } else {
-            JLabel me = new JLabel("Me");
+            JLabel me = ui.generateLabel("Me");
             buttonPanel.add(me);
             me.setAlignmentX(Component.CENTER_ALIGNMENT);
         }
 
-        JButton posts = generateButton("Posts");
+        JButton posts = ui.generateButton("Posts",this);
         buttonPanel.add(posts);
         posts.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         return buttonPanel;
-    }
-
-    // TODO
-    // Customize button
-    private JButton generateButton(String s) {
-        JButton button = new JButton(s);
-
-        button.setActionCommand(s);
-        button.addActionListener(this);
-
-        return button;
     }
 
     @Override

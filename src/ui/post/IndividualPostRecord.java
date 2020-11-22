@@ -34,9 +34,9 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
         JPanel info = new JPanel();
         info.setLayout(new BoxLayout(info, BoxLayout.LINE_AXIS));
 
-        JLabel sender = new JLabel(post.getUser().getName());
+        JLabel sender = ui.generateLabel(post.getUser().getName());
         sender.setFont(new Font("Helvetica", Font.BOLD, 15));
-        JLabel time = new JLabel(post.getTime().toString());
+        JLabel time = ui.generateLabel(post.getTime().toString());
         time.setForeground(Color.GRAY);
 //        time.setFont(new Font("Helvetica", Font.ITALIC, 8));
 
@@ -56,7 +56,7 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
 
     private JPanel textPanel() {
         JPanel text = new JPanel();
-        JLabel content = new JLabel(post.getContent());
+        JLabel content = ui.generateLabel(post.getContent());
         text.setLayout(new BoxLayout(text, BoxLayout.PAGE_AXIS));
         text.add(content);
         content.setAlignmentX(LEFT_ALIGNMENT);
@@ -80,7 +80,8 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
                     e.printStackTrace();
                 }
 
-                ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(350, bimg.getHeight()/(bimg.getWidth()/300), Image.SCALE_DEFAULT));
+                ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(350
+                        , bimg.getHeight() / (bimg.getWidth() / 300), Image.SCALE_DEFAULT));
                 JLabel imageLabel = new JLabel(imageIcon);
                 text.add(imageLabel);
                 imageLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -117,28 +118,24 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
         // Show delete button if the sender is the current user
         Application application = ui.getApplication();
         if (post.getUser().getUserid().equals(application.getCurrentUserID())) {
-            text.add(Box.createRigidArea(new Dimension(0, 2)));
-            JButton delete = new JButton("[Delete]");
-            delete.setForeground(Color.GRAY);
-            delete.addActionListener(this);
-            delete.setOpaque(false);
-            delete.setContentAreaFilled(false);
-            delete.setBorderPainted(false);
+            JButton delete = ui.generateChangedButton("delete");
+            delete.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Application application = ui.getApplication();
+                    application.deletePost(post);
+                    if (window != null) {
+                        window.refresh();
+                    }
+                }
+            });
             text.add(delete);
-            delete.setAlignmentX(LEFT_ALIGNMENT);
         }
-
         return text;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Application application = ui.getApplication();
-        application.deletePost(post);
-        if (window != null) {
-            window.refresh();
-        } else {
-            ui.switchPanel("Post");
-        }
+        ui.switchPanel("Post");
     }
 }

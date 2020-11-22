@@ -19,38 +19,12 @@ public class MeetingListPanel extends JPanel implements ActionListener {
         this.ui = ui;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
 
-        Application application = ui.getApplication();
-        JLabel title = new JLabel("Meeting  ");
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(backButton());
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JTabbedPane meetingList = meetingList();
         add(meetingList);
 
-        JButton newMeeting = new JButton("New Meeting");
+        JButton newMeeting = ui.generateButton("New Meeting",this);
         newMeeting.addActionListener(this);
         newMeeting.setActionCommand("New");
         add(newMeeting);

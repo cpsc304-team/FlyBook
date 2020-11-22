@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 
 // This class is used to generate the header for most pages
 public class Header extends JPanel implements ActionListener {
-    UI ui;
-    String heading;
+    protected UI ui;
+    protected String heading;
 
     public Header(UI ui, String heading) {
         this.ui = ui;
@@ -28,11 +28,15 @@ public class Header extends JPanel implements ActionListener {
         add(title);
     }
 
+    public Header() {
+    }
+
     private JButton backButton() {
         JButton back = new JButton("‹");
         back.setFont(new Font("Avenir", Font.PLAIN, 30));
         back.setForeground(Color.white);
         back.addActionListener(this);
+        back.setActionCommand("back");
         back.setPreferredSize(new Dimension(55, 40));
         back.setContentAreaFilled(false);
         back.setBorderPainted(false);

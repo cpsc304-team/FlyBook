@@ -9,8 +9,12 @@ import ui.post.PostPanel;
 import ui.schedule.SchedulePanel;
 import ui.user.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 // This class is used to handle the transition between difference interfaces
 public class UI extends JFrame {
@@ -81,5 +85,49 @@ public class UI extends JFrame {
 
     public Application getApplication() {
         return application;
+    }
+
+    // Generate info text
+    public JLabel generateLabel(String s) {
+        JLabel text = new JLabel(s);
+        text.setFont(new Font("Avenir", Font.BOLD, 14));
+        text.setForeground(new Color(15, 85, 130));
+        return text;
+    }
+
+    // Generate the button used to edit the profile
+    public JButton generateChangedButton(String buttontype) {
+        ImageIcon i1 = new ImageIcon("images" + "/" + buttontype + ".png");
+        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        JButton change = new JButton(i2);
+
+        change.setBorderPainted(false);
+        change.setOpaque(false);
+        change.setContentAreaFilled(false);
+
+        return change;
+    }
+
+    // Customizes button
+    public JButton generateButton(String s, ActionListener al) {
+        JButton button = new JButton(s);
+
+        button.setFont(new Font("Avenir", Font.BOLD, 14));
+        button.setForeground(Color.DARK_GRAY);
+        button.setMinimumSize(new Dimension(170, 35));
+        button.setMaximumSize(new Dimension(170, 35));
+        button.addActionListener(al);
+        button.setActionCommand(s);
+
+        return button;
+    }
+
+    public void generateBackground(Graphics g) {
+        try {
+            Image i = ImageIO.read(new File("images/background.png"));
+            g.drawImage(i, 0, 0, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

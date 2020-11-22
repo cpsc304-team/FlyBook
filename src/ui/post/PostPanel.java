@@ -3,6 +3,7 @@ package ui.post;
 import main.Application;
 import model.post.SharePost;
 import ui.UI;
+import ui.utilities.Header;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,58 +15,17 @@ public class PostPanel extends JPanel implements ActionListener {
 
     public PostPanel(UI ui) {
         this.ui = ui;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
-
-        Application application = ui.getApplication();
-        JLabel title = new JLabel("Post  ");
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(backButton());
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(new Header(ui, "Posts"));
 
         JScrollPane scrPane = postList();
         add(scrPane);
-        scrPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        scrPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JButton newPost = new JButton("Write a post");
-        newPost.addActionListener(this);
+        JButton newPost = ui.generateButton("Write a post",this);
         newPost.setActionCommand("Post");
         add(newPost);
-    }
-
-    private JButton backButton() {
-//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
-//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//        JButton back = new JButton(i2);
-        JButton back = new JButton("←");
-        back.addActionListener(this);
-        back.setActionCommand("Back");
-        back.setOpaque(false);
-        back.setContentAreaFilled(false);
-        back.setBorderPainted(false);
-        back.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return back;
     }
 
     private JScrollPane postList() {
@@ -92,9 +52,9 @@ public class PostPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Back")) {
+        if (e.getActionCommand().equals("back")) {
             ui.switchPanel("Main");
-        } else {
+        } else if (e.getActionCommand().equals("Write a post")) {
             ui.switchPanel("New Post");
         }
     }

@@ -19,15 +19,15 @@ public class LoginPanel extends JPanel implements ActionListener {
     public LoginPanel(UI ui) {
         this.ui = ui;
 
-        JLabel useridLabel = new JLabel("Enter user ID: ");
-        JLabel passwordLabel = new JLabel("Enter password: ");
+        JLabel useridLabel = ui.generateLabel("Enter user ID: ");
+        JLabel passwordLabel = ui.generateLabel("Enter password: ");
 
         usernameField = new JTextField(10);
         passwordField = new JPasswordField(10);
         passwordField.setEchoChar('*');
 
-        JButton loginButton = new JButton("Log In");
-        JButton registerButton = new JButton("Register");
+        JButton loginButton = ui.generateButton("Log In", this);
+        JButton registerButton = ui.generateButton("Register", this);
 
         // layout components using the GridBag layout manager
         GridBagLayout gb = new GridBagLayout();
@@ -91,16 +91,10 @@ public class LoginPanel extends JPanel implements ActionListener {
             ui.switchPanel("Register");
         }
     }
-
-    // TODO: Customize the background
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        try {
-//            Image i = ImageIO.read(new File("images/Background.png"));
-//            g.drawImage(i, 0, 0, null);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ui.generateBackground(g);
+    }
 }

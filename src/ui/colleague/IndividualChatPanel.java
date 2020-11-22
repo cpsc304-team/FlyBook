@@ -4,6 +4,8 @@ import main.Application;
 import model.IndividualChat;
 import model.user.User;
 import ui.UI;
+import ui.utilities.Header;
+import ui.utilities.HeaderNoBack;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,43 +23,17 @@ public class IndividualChatPanel extends JPanel {
         this.uid2 = uid2;
         this.window = window;
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
-
-        Application application = ui.getApplication();
-        User user = application.getUserByID(uid2);
-        JLabel title = new JLabel(user.getName());
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(new HeaderNoBack(ui, ui.getApplication().getUserByID(uid2).getName()));
 
         JScrollPane scrPane = chatHistory();
         add(scrPane);
-        scrPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        scrPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel entry = new IndividualChatEntry(this);
         add(entry);
-        entry.setAlignmentX(LEFT_ALIGNMENT);
+        entry.setAlignmentX(CENTER_ALIGNMENT);
     }
 
     private JScrollPane chatHistory() {

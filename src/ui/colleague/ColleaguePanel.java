@@ -3,6 +3,7 @@ package ui.colleague;
 import main.Application;
 import model.user.User;
 import ui.UI;
+import ui.utilities.Header;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,57 +15,16 @@ public class ColleaguePanel extends JPanel implements ActionListener {
 
     public ColleaguePanel(UI ui) {
         this.ui = ui;
-
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        add(new Header(ui, "Colleague"));
 
         JScrollPane scrPane = userList();
         add(scrPane);
-        scrPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        scrPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
-
-        JButton back = new JButton("←");
-        back.addActionListener(this);
-        setbackButton(back);
-
-
-        JLabel title = new JLabel("Colleague  ");
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(back);
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
-    public JButton setbackButton(JButton backbtn) {
-//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
-//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//        JButton back = new JButton(i2);
 
-        backbtn.setOpaque(false);
-        backbtn.setContentAreaFilled(false);
-        backbtn.setBorderPainted(false);
-        backbtn.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return backbtn;
-    }
 
     private JScrollPane userList() {
         JPanel panel = new JPanel();
@@ -86,5 +46,12 @@ public class ColleaguePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         ui.switchPanel("Main");
+    }
+
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ui.generateBackground(g);
     }
 }

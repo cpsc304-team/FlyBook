@@ -22,28 +22,18 @@ public class SubGroupListPanel extends JPanel implements ActionListener {
 
         setLayout(new FlowLayout());
 
-        JLabel name = new JLabel(group.getName());
+        JLabel name = ui.generateLabel(group.getName());
         add(name);
 
         Application app = ui.getApplication();
         if (app.isMember(group.getGroupid())) {
-            add(generateButton("Open"));
-            add(generateButton("About"));
+            add(ui.generateButton("Open", this));
+            add(ui.generateButton("About", this));
         } else {
-            add(generateButton("Join"));
+            add(ui.generateButton("Join", this));
         }
     }
 
-    // TODO
-    // Customize button
-    private JButton generateButton(String s) {
-        JButton button = new JButton(s);
-
-        button.setActionCommand(s);
-        button.addActionListener(this);
-
-        return button;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

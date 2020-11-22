@@ -5,14 +5,10 @@ import model.user.User;
 import ui.UI;
 import ui.utilities.Header;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 // This page shows all the user info and allows the user to edit the profile
 public class AccountPanel extends JPanel implements ActionListener {
@@ -47,28 +43,16 @@ public class AccountPanel extends JPanel implements ActionListener {
         JPanel button = new JPanel();
         button.setLayout(new BoxLayout(button, BoxLayout.Y_AXIS));
         button.setOpaque(false);
-        button.add(generateButton("Reset Password"));
-        button.add(generateButton("Log Out"));
-        button.add(generateButton("Delete Account"));
+        button.add(ui.generateButton("Reset Password",this));
+        button.add(ui.generateButton("Log Out",this));
+        button.add(ui.generateButton("Delete Account",this));
 
 
         add(button);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
-    // Customizes button
-    private JButton generateButton(String s) {
-        JButton button = new JButton(s);
 
-        button.setFont(new Font("Avenir", Font.BOLD, 14));
-        button.setForeground(Color.DARK_GRAY);
-        button.setMinimumSize(new Dimension(170, 35));
-        button.setMaximumSize(new Dimension(170, 35));
-        button.addActionListener(this);
-        button.setActionCommand(s);
-
-        return button;
-    }
 
     // Shows all the labels of the personal profile
     private JPanel labelPanel() {
@@ -76,24 +60,24 @@ public class AccountPanel extends JPanel implements ActionListener {
         labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
         labelPanel.setOpaque(false);
 
-        JLabel userid = generateTitle("User ID");
+        JLabel userid = ui.generateLabel("User ID");
         labelPanel.add(userid);
         userid.setAlignmentX(Component.LEFT_ALIGNMENT);
         labelPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel name = generateTitle("Name");
+        JLabel name = ui.generateLabel("Name");
         labelPanel.add(name);
         labelPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel city = generateTitle("City");
+        JLabel city = ui.generateLabel("City");
         labelPanel.add(city);
         labelPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel timeZone = generateTitle("Time Zone");
+        JLabel timeZone = ui.generateLabel("Time Zone");
         labelPanel.add(timeZone);
         labelPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel email = generateTitle("Email");
+        JLabel email = ui.generateLabel("Email");
         labelPanel.add(email);
 
         labelPanel.setAlignmentY(TOP_ALIGNMENT);
@@ -107,24 +91,24 @@ public class AccountPanel extends JPanel implements ActionListener {
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
 
-        JLabel userid = generateText(user.getUserid());
+        JLabel userid = ui.generateLabel(user.getUserid());
         userid.setAlignmentX(Component.LEFT_ALIGNMENT);
         infoPanel.add(userid);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel name = generateText(user.getName());
+        JLabel name = ui.generateLabel(user.getName());
         infoPanel.add(name);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel city = generateText(user.getTimezone().getCity());
+        JLabel city = ui.generateLabel(user.getTimezone().getCity());
         infoPanel.add(city);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel timeZone = generateText(user.getTimezone().getZoneCode());
+        JLabel timeZone = ui.generateLabel(user.getTimezone().getZoneCode());
         infoPanel.add(timeZone);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel email = generateText(user.getEmail());
+        JLabel email = ui.generateLabel(user.getEmail());
         infoPanel.add(email);
 
         infoPanel.setAlignmentY(TOP_ALIGNMENT);
@@ -141,7 +125,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         changePanel.setOpaque(false);
 
         changePanel.add(Box.createRigidArea(new Dimension(0,33)));
-        JButton name = changeButton();
+        JButton name = ui.generateChangedButton("edit");
         name.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -160,11 +144,10 @@ public class AccountPanel extends JPanel implements ActionListener {
         changePanel.add(name);
         changePanel.add(Box.createRigidArea(new Dimension(0,5)));
 
-        JButton city = changeButton();
+        JButton city = ui.generateChangedButton("edit");
         city.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 Object[] options = ui.getApplication().getCities();
                 String city = (String)JOptionPane.showInputDialog(ui, "Choose your city:",
                         "Change city",
@@ -179,7 +162,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         changePanel.add(city);
         changePanel.add(Box.createRigidArea(new Dimension(0,44)));
 
-        JButton email = changeButton();
+        JButton email = ui.generateChangedButton("edit");
         email.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -203,33 +186,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         return changePanel;
     }
 
-    // Generate label text
-    private JLabel generateTitle(String s) {
-        JLabel text = new JLabel(s);
-        text.setFont(new Font("Avenir", Font.PLAIN, 14));
-        return text;
-    }
 
-    // Generate info text
-    private JLabel generateText(String s) {
-        JLabel text = new JLabel(s);
-        text.setFont(new Font("Avenir", Font.BOLD, 14));
-        text.setForeground(new Color(15, 85, 130));
-        return text;
-    }
-
-    // Generate the button used to edit the profile
-    private JButton changeButton() {
-        ImageIcon i1 = new ImageIcon("images/Edit.png");
-        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        JButton change = new JButton(i2);
-
-        change.setBorderPainted(false);
-        change.setOpaque(false);
-        change.setContentAreaFilled(false);
-
-        return change;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -262,11 +219,6 @@ public class AccountPanel extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        try {
-            Image i = ImageIO.read(new File("images/Background.png"));
-            g.drawImage(i, 0, 0, null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ui.generateBackground(g);
     }
 }

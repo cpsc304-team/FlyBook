@@ -42,7 +42,7 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         pane.setOpaque(false);
 
         Application application = ui.getApplication();
-        JLabel title = new JLabel(group.getName());
+        JLabel title = ui.generateLabel(group.getName());
         title.setForeground(new Color(53, 120, 139));
         title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
 
@@ -91,24 +91,16 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        JLabel name = generateText("Group Name:");
+        JLabel name = ui.generateLabel("Group Name:");
         name.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textPanel.add(name);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel city = generateText("Your Nickname:");
+        JLabel city = ui.generateLabel("Your Nickname:");
         city.setAlignmentX(Component.RIGHT_ALIGNMENT);
         textPanel.add(city);
 
         return textPanel;
-    }
-
-    // TODO
-    // Customize text font
-    private JLabel generateText(String s) {
-        JLabel text = new JLabel(s);
-//        text.setFont(new Font("Serif", Font.PLAIN, 14));
-        return text;
     }
 
     private JPanel entryPanel() {
@@ -118,7 +110,7 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         entryPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
         JPanel namePanel = new JPanel();
         namePanel.setLayout(new BoxLayout(namePanel, BoxLayout.X_AXIS));
-        JLabel name = generateText(group.getName());
+        JLabel name = ui.generateLabel(group.getName());
         name.setAlignmentX(Component.LEFT_ALIGNMENT);
         namePanel.add(name);
 
@@ -143,7 +135,7 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
 
         JPanel nicknamePanel = new JPanel();
         nicknamePanel.setLayout(new BoxLayout(nicknamePanel, BoxLayout.X_AXIS));
-        JLabel nickname = generateText(app.getGroupMemberByID(app.getCurrentUserID(), group.getGroupid()).getNickname());
+        JLabel nickname = ui.generateLabel(app.getGroupMemberByID(app.getCurrentUserID(), group.getGroupid()).getNickname());
         name.setAlignmentX(Component.LEFT_ALIGNMENT);
         nicknamePanel.add(nickname);
 

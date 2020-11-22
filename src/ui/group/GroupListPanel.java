@@ -4,6 +4,7 @@ import main.Application;
 import model.group.Group;
 import ui.UI;
 import ui.post.IndividualPostRecord;
+import ui.utilities.Header;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,38 +17,13 @@ public class GroupListPanel extends JPanel implements ActionListener {
 
     public GroupListPanel(UI ui) {
         this.ui = ui;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
-
-        Application application = ui.getApplication();
-        JLabel title = new JLabel("Group  ");
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(backButton());
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(new Header(ui, "Group"));
 
         JTabbedPane groupList = groupList();
         add(groupList);
+        groupList.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     private JTabbedPane groupList() {
@@ -107,23 +83,15 @@ public class GroupListPanel extends JPanel implements ActionListener {
         return myGroup;
     }
 
-    private JButton backButton() {
-//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
-//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//        JButton back = new JButton(i2);
-        JButton back = new JButton("←");
-        back.addActionListener(this);
-        back.setActionCommand("Back");
-        back.setOpaque(false);
-        back.setContentAreaFilled(false);
-        back.setBorderPainted(false);
-        back.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return back;
-    }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
         ui.switchPanel("Main");
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ui.generateBackground(g);
     }
 }

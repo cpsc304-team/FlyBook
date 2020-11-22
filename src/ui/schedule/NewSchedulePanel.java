@@ -169,7 +169,7 @@ public class NewSchedulePanel extends JPanel implements ActionListener {
 //    protected void paintComponent(Graphics g) {
 //        super.paintComponent(g);
 //        try {
-//            Image i = ImageIO.read(new File("images/Background.png"));
+//            Image i = ImageIO.read(new File("images/background.png"));
 //            g.drawImage(i, 0, 0, null);
 //        } catch (IOException e) {
 //            e.printStackTrace();

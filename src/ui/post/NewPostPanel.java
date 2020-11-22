@@ -4,6 +4,7 @@ import main.Application;
 import model.post.Media;
 import model.post.SharePost;
 import ui.utilities.ErrorMessage;
+import ui.utilities.HeaderNoBack;
 import ui.utilities.SuccessMessage;
 import ui.UI;
 
@@ -31,33 +32,7 @@ public class NewPostPanel extends JPanel implements ActionListener {
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
-
-        Application application = ui.getApplication();
-        JLabel title = new JLabel("New Post  ");
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(backButton());
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
+        add(new HeaderNoBack(ui, "New Post"));
 
         JLabel content = new JLabel("Share your thoughts...");
         add(content);

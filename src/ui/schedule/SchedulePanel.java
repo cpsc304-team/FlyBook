@@ -1,18 +1,20 @@
 package ui.schedule;
 
 import main.Application;
-import model.meeting.MeetingRecord;
 import model.schedule.ScheduleRecord;
 import ui.UI;
-import ui.meeting.SubMeetingListPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Objects;
 
-public class SchedulePanel extends JPanel implements ActionListener, ItemListener {
+public class SchedulePanel extends JPanel implements ActionListener {
     UI ui;
+
+    final static String TODAY = "Today";
+    final static String WEEK = "Within a week";
+    final static String ALL = "All";
+    final static String PASSED = "Passed";
 
     public SchedulePanel(UI ui) {
         this.ui = ui;
@@ -59,8 +61,7 @@ public class SchedulePanel extends JPanel implements ActionListener, ItemListene
         JTabbedPane tabbedPane = new JTabbedPane();
 //        ImageIcon icon = createImageIcon("images/middle.gif");
 
-        JScrollPane events = events();
-        tabbedPane.addTab("Events", events);
+        tabbedPane.addTab("Events", new ScheduleListPanel(ui));
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 //
 //        JScrollPane tasks = tasks();
@@ -68,64 +69,6 @@ public class SchedulePanel extends JPanel implements ActionListener, ItemListene
 //        tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 
         return tabbedPane;
-    }
-
-    private JScrollPane events() {
-        JPanel panel = new JPanel();
-        JScrollPane events = new JScrollPane(panel);
-
-        panel.setLayout(new CardLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        Application app = ui.getApplication();
-
-//        JPanel comboBoxPane = new JPanel();
-//        JComboBox timeFrame = new JComboBox(new String[]{"Today", "Within a week", "Passed", "All"});
-//        timeFrame.setEditable(false);
-//        timeFrame.addItemListener(this);
-//        comboBoxPane.add(timeFrame);
-//
-//        JPanel cards = new JPanel(new CardLayout());
-//        cards.add(scheduleList("Today"), "Today");
-//        cards.add(scheduleList("Within a week"), "Within a week");
-//        cards.add(scheduleList("Passed"), "Passed");
-//        cards.add(scheduleList("All"), "All");
-//
-//        events.add(comboBoxPane);
-//        events.add(cards);
-
-        events.add(scheduleList("All"));
-
-        return events;
-    }
-
-    public JPanel scheduleList(String type) {
-        JPanel scheduleList = new JPanel();
-        scheduleList.setLayout(new BoxLayout(scheduleList, BoxLayout.PAGE_AXIS));
-
-        Application app = ui.getApplication();
-        ScheduleRecord[] schedules;
-
-        if (type.equals("All")) {
-            schedules = app.getSchedulesByID();
-        } else if (type.equals("Today")) {
-            schedules = app.getSchedulesToday();
-        } else if (type.equals("Passed")) {
-            schedules = app.getSchedulesPassed();
-        } else {
-            schedules = app.getSchedulesThisWeek();
-        }
-
-        for (int i = 0; i < schedules.length; i++) {
-            JPanel schedule = new SubSchedulePanel(ui, schedules[i]);
-            scheduleList.add(schedule);
-            scheduleList.add(Box.createRigidArea(new Dimension(0, 20)));
-
-            schedule.setAlignmentX(LEFT_ALIGNMENT);
-            schedule.setAlignmentY(TOP_ALIGNMENT);
-        }
-
-        return scheduleList;
     }
 
     private JButton backButton() {
@@ -147,12 +90,8 @@ public class SchedulePanel extends JPanel implements ActionListener, ItemListene
         if (e.getActionCommand().equals("Back")) {
             ui.switchPanel("Main");
         } else {
-            // TODO: add new schedule
+            ui.setContentPane(new NewSchedulePanel(ui));
+            ui.validate();
         }
-    }
-
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-
     }
 }

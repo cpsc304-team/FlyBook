@@ -12,11 +12,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SubSchedulePanel extends JPanel implements ActionListener {
+public class ScheduleRecordPanel extends JPanel implements ActionListener {
     UI ui;
     ScheduleRecord schedule;
 
-    public SubSchedulePanel(UI ui, ScheduleRecord schedule) {
+    public ScheduleRecordPanel(UI ui, ScheduleRecord schedule) {
         this.ui = ui;
         this.schedule = schedule;
 

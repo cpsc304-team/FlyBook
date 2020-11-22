@@ -1,5 +1,3 @@
--- Below are the SQL sentences used in DatabaseConnection.java after debugging
-
 /*
  * ==================================================================
  *
@@ -10,23 +8,20 @@
 
 -- CREATE TABLE: set up the database
 
-DROP TABLE Contain_Task;
-DROP TABLE Schedule_Record;
-DROP TABLE Task_Status;
-DROP TABLE Meeting_Record;
-DROP TABLE GroupChat_Record;
-DROP TABLE Group_Creates;
-DROP TABLE Group_Joins;
+DROP TABLE meeting_joins;
+DROP TABLE contain_task;
+DROP TABLE schedule_record;
+DROP TABLE meeting_record;
+DROP TABLE group_chat;
+DROP TABLE group_admin;
+DROP TABLE group_joins;
+DROP TABLE group_creates;
+DROP TABLE share_post;
+DROP TABLE media;
 DROP TABLE group_record;
-DROP TABLE Group_administrator;
-DROP TABLE Group_Member;
-DROP TABLE Mini_Program;
-DROP TABLE MiniProgram_Record;
-DROP TABLE Media;
-DROP TABLE Share_Post;
-DROP TABLE Individual_Chat;
-DROP TABLE Time_Zone;
-DROP TABLE User_info;
+DROP TABLE individual_chat;
+DROP TABLE time_zone;
+DROP TABLE user_info;
 
 CREATE TABLE user_info (
     user_id varchar2(10),
@@ -120,8 +115,6 @@ CREATE TABLE meeting_joins (
     FOREIGN KEY (user_id) REFERENCES user_info),
     FOREIGN KEY (meeting_id) REFERENCES group_record ON DELETE CASCADE);
 
-
-
 CREATE TABLE schedule_record (
     schedule_id varchar2(10),
     schedule_time TIMESTAMP,
@@ -138,19 +131,6 @@ CREATE TABLE contain_task (
     PRIMARY KEY (schedule_id, task_name),
     FOREIGN KEY (schedule_id) REFERENCES schedule_record ON DELETE CASCADE);
 
--- CREATE TABLE mini_program (
---     miniid varchar2(10),
---     mediaid varchar2(20),
---     type varchar2(20),
---     PRIMARY KEY (miniid));
---
--- CREATE TABLE miniprogram_record (
---     u_id varchar2(10),
---     miniid varchar2(20),
---     time TIMESTAMP,
---     PRIMARY KEY (u_id , miniid,time),
---     FOREIGN KEY (u_id) REFERENCES user_info,
---     FOREIGN KEY (miniid) REFERENCES mini_program);
 
 -- INSERT: load pre-set data
 INSERT INTO user_info VALUES ('0000','0','Admin','Toronto', 'admin@gmail.com');
@@ -246,23 +226,6 @@ INSERT INTO contain_task VALUES('Description', 3, 0, 'S2');
 INSERT INTO contain_task VALUES('Finish Milestone 3', 1, 0, 'S3');
 INSERT INTO contain_task VALUES('Prepare', 1, 0, 'S5');
 
--- INSERT INTO contain_task VALUES('Finish Milestone1',1,'s0001');
--- INSERT INTO contain_task VALUES('Finish Milestone2',3,'s0002');
--- INSERT INTO contain_task VALUES('Finish Milestone3',2,'s0003');
--- INSERT INTO contain_task VALUES('Finish Milestone4',4,'s0004');
--- INSERT INTO contain_task VALUES('Finish Milestone5',2,'s0005');
---
--- INSERT INTO mini_program VALUES ('mi0001', 'Payroll Check', 'Work');
--- INSERT INTO mini_program VALUES ('mi0002', 'Monthly Report', 'Work');
--- INSERT INTO mini_program VALUES ('mi0003', 'Announcement', 'Work');
--- INSERT INTO mini_program VALUES ('mi0004', 'Dashboards', 'Work');
--- INSERT INTO mini_program VALUES ('mi0005', 'Expenses', 'Work');
---
--- INSERT INTO miniprogram_record VALUES ('0001','mi0001','2020-01-15 12:00:00');
--- INSERT INTO miniprogram_record VALUES ('0002','mi0002','2020-01-15 12:30:00');
--- INSERT INTO miniprogram_record VALUES ('0003','mi0003','2020-01-16 12:00:00');
--- INSERT INTO miniprogram_record VALUES ('0004','mi0004','2020-01-17 12:00:00');
--- INSERT INTO miniprogram_record VALUES ('0005','mi0005','2020-01-18 12:00:00');
 
 /*
  * ==================================================================
@@ -271,9 +234,11 @@ INSERT INTO contain_task VALUES('Prepare', 1, 0, 'S5');
  *
  * ==================================================================
  * */
+
 -- DELETE Operation
 DELETE FROM user_info WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
 DELETE FROM share_post WHERE post_id = 'P1'; -- P1 could be replaced by other post_id
+
 
 -- UPDATE Operation
 UPDATE user_info
@@ -304,6 +269,7 @@ WHERE group_id = 'G1' -- G1 could be replaced by other group_id
 UPDATE meeting_record
 SET attendance = '3', end_time = '2020-11-17 20:00:00' -- attendance and end_time value could be replaced
 WHERE meeting_id = 'M2';
+
 
 -- Selection
 SELECT *
@@ -360,11 +326,13 @@ FROM meeting_joins
 WHERE user_id = '0001' -- 0001 could be replaced by other user_id
     AND meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
 
+
 -- Projection
 SELECT city FROM time_zone;
 select user_id from user_info;
 select user_id, password from user_info;
 SELECT group_id FROM group_record;
+
 
 -- JOIN
 SELECT *
@@ -399,6 +367,7 @@ WHERE user_id = '0001' -- 0001 could be replaced by other user_id
     AND attendance > 0
     AND meeting_record.meeting_id = meeting_joins.meeting_id;
 
+
 -- Aggregation with GROUP BY
 
 
@@ -409,7 +378,9 @@ FROM group_join, time_zone
 GROUP BY group_id
 HAVING COUNT(*) >= 2;
 
+
 -- Nested Aggregation with GROUP BY
+
 
 -- Division
 

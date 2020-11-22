@@ -43,7 +43,7 @@ public class Application {
     // Start the program by opening the application ui frame
     private void start() {
         // TODO: test
-        currentUser = "0001";
+//        currentUser = "0001";
 //        System.out.println("success!");
 
         ui = new UI(this);
@@ -281,5 +281,13 @@ public class Application {
 
     public void updateTaskStatus(Task task, int i) {
         dbConnection.updateTaskStatus(task, i);
+    }
+
+    public int countSchedules() {
+        return dbConnection.countSchedules();
+    }
+
+    public void addSchedule(ScheduleRecord schedule) {
+        dbConnection.insertScheduleRecord(schedule);
     }
 }

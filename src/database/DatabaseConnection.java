@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class DatabaseConnection {
     private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
-    private static final String WARNING_TAG = "[WARNING]";
 
     private Connection connection = null;
 
@@ -61,7 +60,6 @@ public class DatabaseConnection {
         dropTable("meeting_joins");
         dropTable("contain_task");
         dropTable("schedule_record");
-        dropTable("task_status"); // TODO
         dropTable("meeting_record");
         dropTable("group_chat");
         dropTable("group_admin");
@@ -69,8 +67,6 @@ public class DatabaseConnection {
         dropTable("group_creates");
         dropTable("share_post");
         dropTable("media");
-        dropTable("miniprogram_record");
-        dropTable("mini_program");
         dropTable("group_record");
         dropTable("individual_chat");
         dropTable("time_zone");
@@ -277,32 +273,6 @@ public class DatabaseConnection {
         insertContainTask(task3);
         insertContainTask(task4);
         insertContainTask(task5);
-
-//        // mini_program
-//        MiniProgram miniProgram1 = new MiniProgram("mi0001", "Payroll Check", "Work");
-//        MiniProgram miniProgram2 = new MiniProgram("mi0002", "Monthly Report", "Work");
-//        MiniProgram miniProgram3 = new MiniProgram("mi0003", "Announcement", "Work");
-//        MiniProgram miniProgram4 = new MiniProgram("mi0004", "Dashboards", "Work");
-//        MiniProgram miniProgram5 = new MiniProgram("mi0005", "Expenses", "Work");
-//
-//        insertMiniProgram(miniProgram1);
-//        insertMiniProgram(miniProgram2);
-//        insertMiniProgram(miniProgram3);
-//        insertMiniProgram(miniProgram4);
-//        insertMiniProgram(miniProgram5);
-//
-//        // miniprogram_record
-//        MiniProgramRecord miniProgramRecord1 = new MiniProgramRecord("0001","mi0001",Timestamp.valueOf("2020-01-15 12:00:00"));
-//        MiniProgramRecord miniProgramRecord2 = new MiniProgramRecord("0002","mi0002",Timestamp.valueOf("2020-01-15 12:30:00"));
-//        MiniProgramRecord miniProgramRecord3 = new MiniProgramRecord("0003","mi0003",Timestamp.valueOf("2020-01-16 12:00:00"));
-//        MiniProgramRecord miniProgramRecord4 = new MiniProgramRecord("0004","mi0004",Timestamp.valueOf("2020-01-17 12:00:00"));
-//        MiniProgramRecord miniProgramRecord5 = new MiniProgramRecord("0005","mi0005",Timestamp.valueOf("2020-01-18 12:00:00"));
-//
-//        insertMiniProgramRecord(miniProgramRecord1);
-//        insertMiniProgramRecord(miniProgramRecord2);
-//        insertMiniProgramRecord(miniProgramRecord3);
-//        insertMiniProgramRecord(miniProgramRecord4);
-//        insertMiniProgramRecord(miniProgramRecord5);
     }
 
     // Drop the table if it exists given a table name
@@ -636,46 +606,6 @@ public class DatabaseConnection {
         }
     }
 
-//    // Set up the mini program table
-//    private void miniProgramSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE mini_program (" +
-//                    "miniid varchar2(10), " +
-//                    "mediaid varchar2(20)," +
-//                    "type varchar2(20), " +
-//                    "PRIMARY KEY (miniid))");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: miniProgramSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-//
-//    // Set up the mini program record table
-//    private void miniProgramRecordSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE miniprogram_record (" +
-//                    "u_id varchar2(10), " +
-//                    "miniid varchar2(20)," +
-//                    "time TIMESTAMP," +
-//                    "PRIMARY KEY (u_id , miniid,time)," +
-//                    "FOREIGN KEY (u_id) REFERENCES user_info," +
-//                    "FOREIGN KEY (miniid) REFERENCES mini_program)");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: miniProgramRecordSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-
 
     /*
      * ==================================================================
@@ -982,44 +912,6 @@ public class DatabaseConnection {
             rollbackConnection();
         }
     }
-
-//    // Insert MiniProgram
-//    public void insertMiniProgram(MiniProgram miniProgram) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO mini_program VALUES (?,?,?)");
-//
-//            ps.setString(1, miniProgram.getPid());
-//            ps.setString(2, miniProgram.getPname());
-//            ps.setString(3, miniProgram.getType());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
-//    // Insert MiniProgramRecord
-//    public void insertMiniProgramRecord(MiniProgramRecord miniProgramRecord) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO miniprogram_record VALUES (?,?,?)");
-//
-//            ps.setString(1, miniProgramRecord.getUid());
-//            ps.setString(2, miniProgramRecord.getPid());
-//            ps.setTimestamp(3, miniProgramRecord.getTime());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
 
 
 
@@ -2027,5 +1919,24 @@ public class DatabaseConnection {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
+    }
+
+    public int countSchedules() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS \"number\" FROM schedule_record ");
+
+            while(rs.next()) {
+                return Integer.valueOf(rs.getString("number"));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: countSchedules()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return 0;
     }
 }

@@ -1,11 +1,12 @@
 package database;
 
-import com.sun.tools.corba.se.idl.constExpr.Times;
 import model.*;
 import model.group.*;
 import model.meeting.MeetingRecord;
 import model.post.Media;
 import model.post.SharePost;
+import model.schedule.Task;
+import model.schedule.ScheduleRecord;
 import model.user.TimeZone;
 import model.user.User;
 
@@ -60,7 +61,7 @@ public class DatabaseConnection {
         dropTable("meeting_joins");
         dropTable("contain_task");
         dropTable("schedule_record");
-        dropTable("task_status");
+        dropTable("task_status"); // TODO
         dropTable("meeting_record");
         dropTable("group_chat");
         dropTable("group_admin");
@@ -90,9 +91,8 @@ public class DatabaseConnection {
         groupChatSetUp();
         meetingRecordSetUp();
         MeetingJoinsSetUp();
-//        taskStatusSetUp();
-//        scheduleRecordSetUp();
-//        containTaskSetUp();
+        scheduleRecordSetUp();
+        containTaskSetUp();
 //        miniProgramSetUp();
 //        miniProgramRecordSetUp();
     }
@@ -252,49 +252,32 @@ public class DatabaseConnection {
         insertMeetingJoins(meetingRecord3, u4);
         insertMeetingJoins(meetingRecord3, u5);
 
+        // schedule_record
+        ScheduleRecord scheduleRecord1 = new ScheduleRecord("S1", Timestamp.valueOf("2020-11-17 19:00:00"), "Meeting", u1);
+        ScheduleRecord scheduleRecord2 = new ScheduleRecord("S2", Timestamp.valueOf("2020-11-23 23:59:00"), "Milestone 3", u1);
+        ScheduleRecord scheduleRecord3 = new ScheduleRecord("S3", Timestamp.valueOf("2020-11-23 23:59:00"), "Milestone 3", u2);
+        ScheduleRecord scheduleRecord4 = new ScheduleRecord("S4", Timestamp.valueOf("2020-11-23 23:59:00"), "Milestone 3", u3);
+        ScheduleRecord scheduleRecord5 = new ScheduleRecord("S5", Timestamp.valueOf("2020-12-01 14:40:00"), "Demo", u1);
 
-//        // task_status
-//        TaskStatus taskStatus1 = new TaskStatus(Timestamp.valueOf("2020-08-16 12:00:00"),0);
-//        TaskStatus taskStatus2 = new TaskStatus(Timestamp.valueOf("2020-08-17 14:00:00"),1);
-//        TaskStatus taskStatus3 = new TaskStatus(Timestamp.valueOf("2020-08-18 16:00:00"),1);
-//        TaskStatus taskStatus4 = new TaskStatus(Timestamp.valueOf("2020-08-19 16:00:00"),1);
-//        TaskStatus taskStatus5 = new TaskStatus(Timestamp.valueOf("2020-08-20 17:00:00"),0);
-//
-//        insertTaskStatus(taskStatus1);
-//        insertTaskStatus(taskStatus2);
-//        insertTaskStatus(taskStatus3);
-//        insertTaskStatus(taskStatus4);
-//        insertTaskStatus(taskStatus5);
-//
-//        // schedule_record
-//        ScheduleRecord scheduleRecord1 = new ScheduleRecord("s0001","event1",u1,taskStatus1);
-//        ScheduleRecord scheduleRecord2 = new ScheduleRecord("s0002","event2",u1,taskStatus2);
-//        ScheduleRecord scheduleRecord3 = new ScheduleRecord("s0003","event3",u2,taskStatus3);
-//        ScheduleRecord scheduleRecord4 = new ScheduleRecord("s0004","event4",u2,taskStatus4);
-//        ScheduleRecord scheduleRecord5 = new ScheduleRecord("s0005","event5",u3,taskStatus5);
-//
-//        insertScheduleRecord(scheduleRecord1);
-//        insertScheduleRecord(scheduleRecord2);
-//        insertScheduleRecord(scheduleRecord3);
-//        insertScheduleRecord(scheduleRecord4);
-//        insertScheduleRecord(scheduleRecord5);
-//
-//
-//
-//
-//        // contain_task
-//        ContainTask containTask1 = new ContainTask("Finish Milestone1",1,"s0001");
-//        ContainTask containTask2 = new ContainTask("Finish Milestone2",3,"s0002");
-//        ContainTask containTask3 = new ContainTask("Finish Milestone3",2,"s0003");
-//        ContainTask containTask4 = new ContainTask("Finish Milestone4",4,"s0004");
-//        ContainTask containTask5 = new ContainTask("Finish Milestone5",2,"s0005");
-//
-//        insertContainTask(containTask1);
-//        insertContainTask(containTask2);
-//        insertContainTask(containTask3);
-//        insertContainTask(containTask4);
-//        insertContainTask(containTask5);
-//
+        insertScheduleRecord(scheduleRecord1);
+        insertScheduleRecord(scheduleRecord2);
+        insertScheduleRecord(scheduleRecord3);
+        insertScheduleRecord(scheduleRecord4);
+        insertScheduleRecord(scheduleRecord5);
+
+        // contain_task
+        Task task1 = new Task("Implement UI",1,0, scheduleRecord2);
+        Task task2 = new Task("SQL list",1,1, scheduleRecord2);
+        Task task3 = new Task("Description",3,0, scheduleRecord2);
+        Task task4 = new Task("Finish Milestone 3",1, 0, scheduleRecord3);
+        Task task5 = new Task("Prepare",1, 0, scheduleRecord5);
+
+        insertContainTask(task1);
+        insertContainTask(task2);
+        insertContainTask(task3);
+        insertContainTask(task4);
+        insertContainTask(task5);
+
 //        // mini_program
 //        MiniProgram miniProgram1 = new MiniProgram("mi0001", "Payroll Check", "Work");
 //        MiniProgram miniProgram2 = new MiniProgram("mi0002", "Monthly Report", "Work");
@@ -611,64 +594,47 @@ public class DatabaseConnection {
         }
     }
 
-//    // Set up the task status table
-//    private void taskStatusSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE task_status" +
-//                    "(stime TIMESTAMP," +
-//                    "passed INTEGER," +
-//                    "PRIMARY KEY (stime))");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: taskStatusSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-//
-//    // Set up the schedule record table
-//    private void scheduleRecordSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE schedule_record" +
-//                    "(sid varchar2(10) PRIMARY KEY," +
-//                    "stime TIMESTAMP," +
-//                    "event varchar2(50)," +
-//                    "u_id varchar2(10)," +
-//                    "FOREIGN KEY (u_id) REFERENCES user_info," +
-//                    "FOREIGN KEY (stime) REFERENCES task_status)");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: scheduleRecordSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
-//
-//    // Set up contain_task table
-//    private void containTaskSetUp() {
-//        try {
-//            Statement stmt = connection.createStatement();
-//            stmt.executeUpdate("CREATE TABLE contain_task" +
-//                    "(tname varchar2(50)," +
-//                    "priority_val INTEGER," +
-//                    "sid varchar2(20)," +
-//                    "PRIMARY KEY (sid,tname)," +
-//                    "FOREIGN KEY (sid) REFERENCES schedule_record ON DELETE CASCADE)");
-//
-//            stmt.close();
-//        } catch (SQLException e) {
-//            // TODO: delete
-//            System.out.println("Debug: containTaskSetUp()");
-//
-//            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-//        }
-//    }
+    // Set up the schedule record table
+    private void scheduleRecordSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE schedule_record (" +
+                    "schedule_id varchar2(10)," +
+                    "schedule_time TIMESTAMP," +
+                    "event varchar2(50)," +
+                    "user_id varchar2(10)," +
+                    "PRIMARY KEY (schedule_id)," +
+                    "FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: scheduleRecordSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Set up contain_task table
+    private void containTaskSetUp() {
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate("CREATE TABLE contain_task (" +
+                    "task_name varchar2(50)," +
+                    "priority INTEGER," +
+                    "status INTEGER," +
+                    "schedule_id varchar2(20)," +
+                    "PRIMARY KEY (schedule_id, task_name)," +
+                    "FOREIGN KEY (schedule_id) REFERENCES schedule_record ON DELETE CASCADE)");
+
+            stmt.close();
+        } catch (SQLException e) {
+            // TODO: delete
+            System.out.println("Debug: containTaskSetUp()");
+
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
 
 //    // Set up the mini program table
 //    private void miniProgramSetUp() {
@@ -975,64 +941,48 @@ public class DatabaseConnection {
         }
     }
 
+    // Insert schedule record
+    public void insertScheduleRecord(ScheduleRecord sr) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule_record VALUES (?,?,?,?)");
 
-//    //  Insert task status
-//    public void insertTaskStatus(TaskStatus ts) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO task_status VALUES (?,?)");
-//
-//            ps.setTimestamp(1, ts.getStime());
-//            ps.setInt(2, ts.getPassed());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
-//    // Insert schedule record
-//    public void insertScheduleRecord(ScheduleRecord sr) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule_record VALUES (?,?,?,?)");
-//
-//            ps.setString(1, sr.getSid());
-//            ps.setTimestamp(2, sr.getTaskStatus().getStime());
-//            ps.setString(3, sr.getEvent());
-//            ps.setString(4, sr.getUser().getUserid());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
-//    // Insert contain task
-//    public void insertContainTask(ContainTask ct) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("INSERT INTO contain_task VALUES (?,?,?)");
-//
-//            ps.setString(1, ct.getTname());
-//            ps.setInt(2, ct.getPriorityVal());
-//            ps.setString(3, ct.getSid());
-//
-//            ps.executeUpdate();
-//            connection.commit();
-//
-//            ps.close();
-//        } catch (SQLException e) {
-//            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
-//            rollbackConnection();
-//        }
-//    }
-//
+            ps.setString(1, sr.getScheduleid());
+            ps.setTimestamp(2, sr.getTime());
+            ps.setString(3, sr.getEvent());
+            ps.setString(4, sr.getUser().getUserid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: insertScheduleRecord()");
+            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Insert contain task
+    public void insertContainTask(Task ct) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO contain_task VALUES (?,?,?,?)");
+
+            ps.setString(1, ct.getTaskName());
+            ps.setInt(2, ct.getPriority());
+            ps.setInt(3, ct.getStatus());
+            ps.setString(4, ct.getSchedule().getScheduleid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: insertContainTask()");
+            System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
 //    // Insert MiniProgram
 //    public void insertMiniProgram(MiniProgram miniProgram) {
 //        try {
@@ -1906,6 +1856,176 @@ public class DatabaseConnection {
             stmt.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    public ScheduleRecord[] getSchedulesWithinPeriod(Timestamp today, Timestamp after, String uid) {
+        ArrayList<ScheduleRecord> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM schedule_record " +
+                    "WHERE user_id = ? AND schedule_time >= ? AND schedule_time < ?");
+            ps.setString(1, uid);
+            ps.setTimestamp(2, today);
+            ps.setTimestamp(3, after);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while(rs.next()) {
+                ScheduleRecord schedule = new ScheduleRecord(
+                        rs.getString("schedule_id"),
+                        Timestamp.valueOf(rs.getString("schedule_time")),
+                        rs.getString("event"),
+                        getUserByID(rs.getString("user_id"))
+                );
+                result.add(schedule);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getSchedulesThisWeek()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new ScheduleRecord[result.size()]);
+    }
+
+    public ScheduleRecord[] getSchedulesByID(String uid) {
+        ArrayList<ScheduleRecord> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM schedule_record " +
+                    "WHERE user_id = ?");
+            ps.setString(1, uid);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while(rs.next()) {
+                ScheduleRecord schedule = new ScheduleRecord(
+                        rs.getString("schedule_id"),
+                        Timestamp.valueOf(rs.getString("schedule_time")),
+                        rs.getString("event"),
+                        getUserByID(rs.getString("user_id"))
+                );
+                result.add(schedule);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getSchedulesByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new ScheduleRecord[result.size()]);
+    }
+
+    public ScheduleRecord[] getSchedulesPassed(Timestamp today, String uid) {
+        ArrayList<ScheduleRecord> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM schedule_record " +
+                    "WHERE user_id = ? AND schedule_time < ?");
+            ps.setString(1, uid);
+            ps.setTimestamp(2, today);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while(rs.next()) {
+                ScheduleRecord schedule = new ScheduleRecord(
+                        rs.getString("schedule_id"),
+                        Timestamp.valueOf(rs.getString("schedule_time")),
+                        rs.getString("event"),
+                        getUserByID(rs.getString("user_id"))
+                );
+                result.add(schedule);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getSchedulesPassed()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new ScheduleRecord[result.size()]);
+    }
+
+    public Task[] getTasksBySchedule(String sid) {
+        ArrayList<Task> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM contain_task " +
+                    "WHERE schedule_id = ? ORDER BY priority");
+            ps.setString(1, sid);
+
+            ResultSet rs = ps.executeQuery();
+
+
+            while(rs.next()) {
+                Task task = new Task(
+                        rs.getString("task_name"),
+                        Integer.valueOf(rs.getString("priority")),
+                        Integer.valueOf(rs.getString("status")),
+                        getScheduleByID(rs.getString("schedule_id"))
+                );
+                result.add(task);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getTasksBySchedule()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Task[result.size()]);
+    }
+
+    public ScheduleRecord getScheduleByID(String sid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM schedule_record " +
+                    "WHERE schedule_id = \'" + sid + "\'");
+
+            while(rs.next()) {
+                ScheduleRecord schedule = new ScheduleRecord(
+                        rs.getString("schedule_id"),
+                        Timestamp.valueOf(rs.getString("schedule_time")),
+                        rs.getString("event"),
+                        getUserByID(rs.getString("user_id"))
+                );
+                return schedule;
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getPastMeetingsByID()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void updateTaskStatus(Task task, int i) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE contain_task SET status = ? WHERE schedule_id = ? AND task_name = ?");
+            ps.setInt(1, i);
+            ps.setString(2, task.getSchedule().getScheduleid());
+            ps.setString(2, task.getTaskName());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: updateTaskStatus()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
         }
     }
 }

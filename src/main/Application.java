@@ -8,6 +8,8 @@ import model.group.GroupMember;
 import model.meeting.MeetingRecord;
 import model.post.Media;
 import model.post.SharePost;
+import model.schedule.ScheduleRecord;
+import model.schedule.Task;
 import model.user.TimeZone;
 import model.user.User;
 import ui.utilities.ErrorMessage;
@@ -15,6 +17,8 @@ import ui.utilities.SuccessMessage;
 import ui.UI;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Application {
     private DatabaseConnection dbConnection;
@@ -28,8 +32,6 @@ public class Application {
     public static void main(String args[]) {
         Application app = new Application();
         app.oracleLogin();
-        // TODO: test
-//        System.out.println("success!"); // for database setup
 
         app.start();
     }
@@ -41,6 +43,7 @@ public class Application {
     // Start the program by opening the application ui frame
     private void start() {
         // TODO: test
+        currentUser = "0001";
 //        System.out.println("success!");
 
         ui = new UI(this);
@@ -244,5 +247,39 @@ public class Application {
 
     public void addMeeting(MeetingRecord meeting) {
         dbConnection.insertMeetingRecord(meeting);
+    }
+
+    public ScheduleRecord[] getSchedulesByID() {
+        return dbConnection.getSchedulesByID(currentUser);
+    }
+
+    public ScheduleRecord[] getSchedulesThisWeek() {
+        Calendar cal = Calendar.getInstance();
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        cal.add(Calendar.DATE, 7);
+        String after = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        return dbConnection.getSchedulesWithinPeriod(Timestamp.valueOf(today), Timestamp.valueOf(after), currentUser);
+    }
+
+    public ScheduleRecord[] getSchedulesToday() {
+        Calendar cal = Calendar.getInstance();
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        cal.add(Calendar.DATE, 1);
+        String tomorrow = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        return dbConnection.getSchedulesWithinPeriod(Timestamp.valueOf(today), Timestamp.valueOf(tomorrow), currentUser);
+    }
+
+    public ScheduleRecord[] getSchedulesPassed() {
+        Calendar cal = Calendar.getInstance();
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        return dbConnection.getSchedulesPassed(Timestamp.valueOf(today), currentUser);
+    }
+
+    public Task[] getTasksBySchedule(ScheduleRecord schedule) {
+        return dbConnection.getTasksBySchedule(schedule.getScheduleid());
+    }
+
+    public void updateTaskStatus(Task task, int i) {
+        dbConnection.updateTaskStatus(task, i);
     }
 }

@@ -120,25 +120,23 @@ CREATE TABLE meeting_joins (
     FOREIGN KEY (user_id) REFERENCES user_info),
     FOREIGN KEY (meeting_id) REFERENCES group_record ON DELETE CASCADE);
 
--- CREATE TABLE task_status
---     (stime TIMESTAMP,
---     passed INTEGER,
---     PRIMARY KEY (stime));
---
--- CREATE TABLE schedule_record
---     (sid varchar2(10) PRIMARY KEY,
---     stime TIMESTAMP,
---     event varchar2(50),
---     u_id varchar2(10),
---     FOREIGN KEY (u_id) REFERENCES user_info,
---     FOREIGN KEY (stime) REFERENCES task_status);
---
--- CREATE TABLE contain_task
---     (tname varchar2(50),
---     priority_val INTEGER,
---     sid varchar2(20),
---     PRIMARY KEY (sid,tname),
---     FOREIGN KEY (sid) REFERENCES schedule_record ON DELETE CASCADE);
+
+
+CREATE TABLE schedule_record (
+    schedule_id varchar2(10),
+    schedule_time TIMESTAMP,
+    event varchar2(50),
+    user_id varchar2(10),
+    PRIMARY KEY (schedule_id),
+    FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE);
+
+CREATE TABLE contain_task (
+    task_name varchar2(50),
+    priority INTEGER,
+    status INTEGER,
+    schedule_id varchar2(20),
+    PRIMARY KEY (schedule_id, task_name),
+    FOREIGN KEY (schedule_id) REFERENCES schedule_record ON DELETE CASCADE);
 
 -- CREATE TABLE mini_program (
 --     miniid varchar2(10),
@@ -236,18 +234,18 @@ INSERT INTO meeting_joins VALUES('M2', '0003');
 INSERT INTO meeting_joins VALUES('M3', '0004');
 INSERT INTO meeting_joins VALUES('M3', '0005');
 
--- INSERT INTO task_status VALUES('2020-08-16 12:00:00'),0);
--- INSERT INTO task_status VALUES('2020-08-17 14:00:00'),1);
--- INSERT INTO task_status VALUES('2020-08-18 16:00:00'),1);
--- INSERT INTO task_status VALUES('2020-08-19 16:00:00'),1);
--- INSERT INTO task_status VALUES('2020-08-20 17:00:00'),0);
---
--- INSERT INTO schedule_record VALUES('s0001','event1','0001',0);
--- INSERT INTO schedule_record VALUES('s0002','event2','0001',1);
--- INSERT INTO schedule_record VALUES('s0003','event3','0002',1);
--- INSERT INTO schedule_record VALUES('s0004','event4','0002',1);
--- INSERT INTO schedule_record VALUES('s0005','event5','0003',0);
---
+INSERT INTO schedule_record VALUES('S1', '2020-11-17 19:00:00', 'Meeting', '0001');
+INSERT INTO schedule_record VALUES('S2', '2020-11-23 23:59:00', 'Milestone 3', '0001');
+INSERT INTO schedule_record VALUES('S3', '2020-11-23 23:59:00', 'Milestone 3', '0002');
+INSERT INTO schedule_record VALUES('S4', '2020-11-23 23:59:00', 'Milestone 3', '0003');
+INSERT INTO schedule_record VALUES('S5', '2020-12-01 14:40:00', 'Demo', '0001');
+
+INSERT INTO contain_task VALUES('Implement UI', 1, 0, 'S1');
+INSERT INTO contain_task VALUES('SQL list', 1, 1, 'S2');
+INSERT INTO contain_task VALUES('Description', 3, 0, 'S2');
+INSERT INTO contain_task VALUES('Finish Milestone 3', 1, 0, 'S3');
+INSERT INTO contain_task VALUES('Prepare', 1, 0, 'S5');
+
 -- INSERT INTO contain_task VALUES('Finish Milestone1',1,'s0001');
 -- INSERT INTO contain_task VALUES('Finish Milestone2',3,'s0002');
 -- INSERT INTO contain_task VALUES('Finish Milestone3',2,'s0003');
@@ -342,7 +340,7 @@ SELECT *
 FROM group_chat
 WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
 
-SELECT COUNT(*) AS "number"
+SELECT COUNT(*) AS 'number'
 FROM meeting_record;
 
 SELECT *
@@ -353,7 +351,7 @@ SELECT *
 FROM meeting_record
 WHERE meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
 
-SELECT COUNT(*) AS "number"
+SELECT COUNT(*) AS 'number'
 FROM meeting_joins
 WHERE meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
 

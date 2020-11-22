@@ -2,6 +2,8 @@ package ui;
 
 import main.Application;
 import model.group.Group;
+import model.schedule.ScheduleRecord;
+import model.user.User;
 import ui.colleague.ColleaguePanel;
 import ui.colleague.IndividualChatPanel;
 import ui.colleague.IndividualChatWindow;
@@ -9,10 +11,13 @@ import ui.group.GroupListPanel;
 import ui.meeting.MeetingListPanel;
 import ui.post.NewPostPanel;
 import ui.post.PostPanel;
+import ui.schedule.SchedulePanel;
+import ui.schedule.SubSchedulePanel;
 import ui.user.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Timestamp;
 
 // This class is used to handle the transition between difference interfaces
 public class UI extends JFrame {
@@ -31,6 +36,10 @@ public class UI extends JFrame {
 
         // Start with the login panel
         JPanel loginPane = new LoginPanel(this);
+
+        // TODO: test
+//        SchedulePanel panel = new SchedulePanel(this);
+//        setContentPane(panel.scheduleList("All"));
 
         setContentPane(loginPane);
 
@@ -59,7 +68,7 @@ public class UI extends JFrame {
         } else if (s.equals("Meeting")) {
             setContentPane(new MeetingListPanel(this));
         } else if (s.equals("Schedule")) {
-
+            setContentPane(new SchedulePanel(this));
         } else if (s.equals("Account")) {
             setContentPane(new AccountPanel(this, application.getCurrentUser()));
         } else if (s.equals("Reset Password")) {

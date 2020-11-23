@@ -12,9 +12,11 @@ public class SuccessMessage extends JFrame {
 
         JLabel title = new JLabel("√ Success");
         title.setForeground(new Color(101, 150, 93));
-        title.setFont(new Font("Helvetica", Font.BOLD, 15));
+        title.setFont(new Font("Avenir", Font.BOLD, 15));
         panel.add(title);
-        panel.add(new JLabel(s));
+        JLabel label = new JLabel(s);
+        label.setFont(new Font("Avenir", Font.PLAIN, 13));
+        panel.add(label);
 
         setContentPane(panel);
         pack();

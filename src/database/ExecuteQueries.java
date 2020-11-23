@@ -1024,7 +1024,7 @@ public class ExecuteQueries {
             PreparedStatement ps = connection.prepareStatement("UPDATE contain_task SET status = ? WHERE schedule_id = ? AND task_name = ?");
             ps.setInt(1, i);
             ps.setString(2, task.getSchedule().getScheduleid());
-            ps.setString(2, task.getTaskName());
+            ps.setString(3, task.getTaskName());
 
             ps.executeUpdate();
             connection.commit();
@@ -1040,7 +1040,7 @@ public class ExecuteQueries {
     public int countSchedules() {
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS \"number\" FROM schedule_record ");
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS \"number\" FROM schedule_record");
 
             while(rs.next()) {
                 return Integer.valueOf(rs.getString("number"));
@@ -1067,6 +1067,79 @@ public class ExecuteQueries {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Debug: updateGroupCreator()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void deleteTask(Task task) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM contain_task WHERE schedule_id = ? AND task_name = ?");
+            ps.setString(1, task.getSchedule().getScheduleid());
+            ps.setString(2, task.getTaskName());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: deleteTask()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public String[] getTaskInfoToday(Timestamp today, Timestamp tomorrow) {
+        ArrayList<String> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT user_id, COUNT(*) AS \"number\", MIN(priority) AS \"min\" " +
+                    "FROM schedule_record, contain_task " +
+                    "WHERE schedule_record.schedule_id = contain_task.schedule_id " +
+                    "AND schedule_time >= ? AND schedule_time < ? AND status = ? " +
+                    "GROUP BY user_id");
+            ps.setTimestamp(1, today);
+            ps.setTimestamp(2, tomorrow);
+            ps.setInt(3, 0);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String info;
+                if (rs.getString("number").equals("1")) {
+                    info = getUserByID(rs.getString("user_id")).getName() +
+                            " has " + rs.getString("number") +
+                            " task today with , the most emergent task having a priority value of " +
+                            rs.getString("min") + ".";
+                } else {
+                    info = getUserByID(rs.getString("user_id")).getName() +
+                            " has " + rs.getString("number") +
+                            " tasks today with , the most emergent task having a priority value of " +
+                            rs.getString("min") + ".";
+                }
+                result.add(info);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getTaskInfoToday()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new String[result.size()]);
+    }
+
+    public void deleteSchedule(ScheduleRecord schedule) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM schedule_record WHERE schedule_id = ?");
+            ps.setString(1, schedule.getScheduleid());
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: deleteSchedule()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }

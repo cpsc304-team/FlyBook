@@ -6,12 +6,15 @@ import ui.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class ScheduleListPanel extends JPanel implements ItemListener {
     UI ui;
-    JPanel cards;
 
+    JPanel cards;
     final static String TODAY = "Today";
     final static String WEEK = "Within a week";
     final static String ALL = "All";
@@ -19,16 +22,22 @@ public class ScheduleListPanel extends JPanel implements ItemListener {
 
     public ScheduleListPanel(UI ui) {
         this.ui = ui;
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setOpaque(false);
+
+        // a sub-panel stores the combobox
         JPanel comboBoxPane = new JPanel();
+        comboBoxPane.setOpaque(false);
         String comboBoxItems[] = {TODAY, WEEK, ALL, PASSED};
         JComboBox cb = new JComboBox(comboBoxItems);
         cb.setEditable(false);
         cb.addItemListener(this);
         comboBoxPane.add(cb);
 
+        // a sub-panel for cards
         cards = new JPanel(new CardLayout());
+        cards.setOpaque(false);
         cards.add(card(TODAY), TODAY);
         cards.add(card(WEEK), WEEK);
         cards.add(card(ALL), ALL);
@@ -38,10 +47,15 @@ public class ScheduleListPanel extends JPanel implements ItemListener {
         add(cards, BorderLayout.CENTER);
     }
 
-    private JPanel card(String type) {
+    private JScrollPane card(String type) {
         JPanel card = new JPanel();
-        card.setLayout(new BoxLayout(card, BoxLayout.PAGE_AXIS));
+        JScrollPane scheduleList = new JScrollPane(card);
+        scheduleList.setOpaque(false);
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setOpaque(false);
+        card.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
+        // Get schedules based on different time period selected
         Application app = ui.getApplication();
         ScheduleRecord[] schedules;
 
@@ -55,16 +69,23 @@ public class ScheduleListPanel extends JPanel implements ItemListener {
             schedules = app.getSchedulesPassed();
         }
 
-        for (int i = 0; i < schedules.length; i++) {
-            JPanel schedule = new ScheduleRecordPanel(ui, schedules[i]);
-            card.add(schedule);
-            card.add(Box.createRigidArea(new Dimension(0, 20)));
+        if (schedules.length == 0) {
+            JLabel text = ui.generateLabel("There is no scheduled event in this time period.");
+            card.add(text);
+            text.setAlignmentX(CENTER_ALIGNMENT);
+        } else {
+            // Insert each schedule record
+            for (int i = 0; i < schedules.length; i++) {
+                JPanel schedule = new ScheduleRecordPanel(ui, schedules[i]);
+                card.add(schedule);
+                schedule.add(Box.createRigidArea(new Dimension(0, 20)));
 
-            schedule.setAlignmentX(LEFT_ALIGNMENT);
-            schedule.setAlignmentY(TOP_ALIGNMENT);
+                schedule.setAlignmentX(LEFT_ALIGNMENT);
+                schedule.setAlignmentY(TOP_ALIGNMENT);
+            }
         }
 
-        return card;
+        return scheduleList;
     }
 
     public void itemStateChanged(ItemEvent evt) {

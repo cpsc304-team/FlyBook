@@ -304,4 +304,24 @@ public class Application {
     public void addSchedule(ScheduleRecord schedule) {
         dbConnection.insertScheduleRecord(schedule);
     }
+
+    public void deleteTask(Task task) {
+        queries.deleteTask(task);
+    }
+
+    public void addTask(Task task) {
+        dbConnection.insertContainTask(task);
+    }
+
+    public String[] todoToday() {
+        Calendar cal = Calendar.getInstance();
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        cal.add(Calendar.DATE, 1);
+        String tomorrow = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + " 00:00:00";
+        return queries.getTaskInfoToday(Timestamp.valueOf(today), Timestamp.valueOf(tomorrow));
+    }
+
+    public void deleteSchedule(ScheduleRecord schedule) {
+        queries.deleteSchedule(schedule);
+    }
 }

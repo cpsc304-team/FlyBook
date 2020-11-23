@@ -139,36 +139,32 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-//        if (e.getActionCommand().equals("Register")) {
-            String userid = useridField.getText();
-            String password = String.valueOf(passwordField.getPassword());
-            String reEnter = String.valueOf(reEnterField.getPassword());
-            String name = nameField.getText();
-            String city = (String) Objects.requireNonNull(cityField.getSelectedItem());
-            String email = emailField.getText();
+        String userid = useridField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+        String reEnter = String.valueOf(reEnterField.getPassword());
+        String name = nameField.getText();
+        String city = (String) Objects.requireNonNull(cityField.getSelectedItem());
+        String email = emailField.getText();
 
-            if (userid.isEmpty()) {
-                new ErrorMessage("You must create a user ID.");
-            } else if (password.isEmpty()) {
-                new ErrorMessage("You must create a password.");
-            } else if (reEnter.isEmpty()) {
-                new ErrorMessage("You must re-enter the password.");
-            } else if (!(password.equals(reEnter))) {
-                new ErrorMessage("The two passwords do not match.");
-            } else if (name.isEmpty()) {
-                new ErrorMessage("You must enter your name.");
-            } else if (city.isEmpty()) {
-                new ErrorMessage("You must select your city.");
-            } else if (email.isEmpty()) {
-                new ErrorMessage("You must enter your email.");
-            }
-            else {
-                Application app = ui.getApplication();
-                app.userRegister(userid, password, name, city, email);
-            }
-//        } else {
-//            ui.switchPanel("Login");
-//        }
+        if (userid.isEmpty()) {
+            new ErrorMessage("You must create a user ID.");
+        } else if (password.isEmpty()) {
+            new ErrorMessage("You must create a password.");
+        } else if (reEnter.isEmpty()) {
+            new ErrorMessage("You must re-enter the password.");
+        } else if (!(password.equals(reEnter))) {
+            new ErrorMessage("The two passwords do not match.");
+        } else if (name.isEmpty()) {
+            new ErrorMessage("You must enter your name.");
+        } else if (city.isEmpty()) {
+            new ErrorMessage("You must select your city.");
+        } else if (email.isEmpty()) {
+            new ErrorMessage("You must enter your email.");
+        }
+        else {
+            Application app = ui.getApplication();
+            app.userRegister(userid, password, name, city, email);
+        }
     }
 
     @Override

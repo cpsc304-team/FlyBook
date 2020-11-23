@@ -6,6 +6,7 @@ import ui.group.GroupListPanel;
 import ui.meeting.MeetingListPanel;
 import ui.post.NewPostPanel;
 import ui.post.PostPanel;
+import ui.schedule.NewSchedulePanel;
 import ui.schedule.SchedulePanel;
 import ui.user.*;
 
@@ -31,7 +32,7 @@ public class UI extends JFrame {
         setPreferredSize(new Dimension(430, 600));
 
         // TODO: delete testing statements below
-//        setContentPane(new AccountPanel(this, application.getCurrentUser()));
+//        setContentPane(new SchedulePanel(this));
 
         // Start with the login panel
         JPanel loginPane = new LoginPanel(this);

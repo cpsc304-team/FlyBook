@@ -238,7 +238,8 @@ INSERT INTO contain_task VALUES('Prepare', 1, 0, 'S5');
 -- DELETE Operation
 DELETE FROM user_info WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
 DELETE FROM share_post WHERE post_id = 'P1'; -- P1 could be replaced by other post_id
-
+DELETE FROM schedule_record WHERE schedule_id = 'S1'; -- S1 could be replaced by other schedule_id
+DELETE FROM contain_task WHERE schedule_id = 'S1' AND task_name = 'SQL list'; -- schedule_id and task_name could be replaced
 
 -- UPDATE Operation
 UPDATE user_info
@@ -268,7 +269,11 @@ WHERE group_id = 'G1' -- G1 could be replaced by other group_id
 
 UPDATE meeting_record
 SET attendance = '3', end_time = '2020-11-17 20:00:00' -- attendance and end_time value could be replaced
-WHERE meeting_id = 'M2';
+WHERE meeting_id = 'M2'; -- M2 could be replaced by other meeting_id
+
+UPDATE contain_task
+SET status = 1
+WHERE schedule_id = 'S2' AND task_name = 'SQL list'; -- schedule_id and task_name could be replaced
 
 
 -- Selection
@@ -306,9 +311,6 @@ SELECT *
 FROM group_chat
 WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
 
-SELECT COUNT(*) AS 'number'
-FROM meeting_record;
-
 SELECT *
 FROM group_admin
 WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
@@ -325,6 +327,25 @@ SELECT *
 FROM meeting_joins
 WHERE user_id = '0001' -- 0001 could be replaced by other user_id
     AND meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
+
+SELECT *
+FROM schedule_record
+WHERE schedule_id = 'S1'; -- S1 could be replaced by other schedule_id
+
+SELECT *
+FROM schedule_record
+WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
+
+SELECT *
+FROM contain_task
+WHERE schedule_id = 'S1' -- S1 could be replaced by other schedule_id
+ORDER BY priority;
+
+SELECT *
+FROM schedule_record
+WHERE user_id = '0001'
+    AND schedule_time >= '2020-11-22 00:00:00' -- time could be replaced
+    AND schedule_time < '2020-11-23 00:00:00';
 
 
 -- Projection
@@ -370,19 +391,57 @@ WHERE user_id = '0001' -- 0001 could be replaced by other user_id
 
 -- Aggregation with GROUP BY
 
+-- /*Find the number of unfinished tasks
+--   and the lowest priority level (highest emergency) of those tasks
+--   that each user has today*/
+SELECT user_id, COUNT(*) AS 'number', MIN(priority) AS 'min'
+FROM schedule_record, contain_task
+WHERE schedule_record.schedule_id = contain_task.schedule_id
+    AND schedule_time >= '2020-11-22 00:00:00' -- time could be replaced
+    AND schedule_time < '2020-11-23 00:00:00'
+    AND status = 0
+GROUP BY user_id;
+
 
 -- Aggregation with HAVING
 
-SELECT COUNT(*)
-FROM group_join, time_zone
-GROUP BY group_id
-HAVING COUNT(*) >= 2;
+-- Find the group that each user has joined with most meetings
+SELECT user_id, group_id
+FROM group_joins g, meeting_record m
+WHERE g.group_id = m.group_id
+GROUP BY user_id, group_id
+HAVING COUNT(meeting_id) >= ALL (
+    SELECT COUNT(meeting_id)
+    FROM group_joins g2, meeting_record m2
+    WHERE g2.group_id = m2.group_id
+        AND g2.user_id = g.user_id
+    GROUP BY g2.group_id)
 
 
 -- Nested Aggregation with GROUP BY
-
+-- Find the group with the longest total meeting time
+SELECT group_id
+FROM (
+    SELECT group_id, SUM(end_time - start_time) AS 'total_time'
+    FROM meeting_record
+    GROUP BY group_id) AS 'temp'
+WHERE temp.total_time = (
+    SELECT MAX(temp.total_time)
+    FROM temp)
 
 -- Division
-
--- SELECT ALL THE CHECK THE USER THAT JOINS ALL THE GROUPS?
+-- Find users' names who have joined every group
+SELECT ui.name
+FROM user_info ui
+WHERE NOT EXISTS (
+        (SELECT gc.group_id
+         FROM group_creates gc)
+    EXCEPT (
+        (SELECT gj.group_id
+         FROM group_joins gj
+         WHERE gj.user_id = ui.user_id)
+        UNION
+        (SELECT g.group_id
+         FROM group_creates g
+         WHERE g.user_id = ui.user_id)))
 

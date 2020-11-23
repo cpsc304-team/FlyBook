@@ -52,6 +52,8 @@ public class Header extends JPanel implements ActionListener {
             ui.switchPanel("Account");
         } else if (heading.equals("Register")) {
             ui.switchPanel("Login");
+        } else if (heading.equals("New Task") || heading.equals("New Schedule")) {
+            ui.switchPanel("Schedule");
         } else {
             ui.switchPanel("Main");
         }

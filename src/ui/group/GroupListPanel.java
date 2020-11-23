@@ -98,6 +98,7 @@ public class GroupListPanel extends JPanel implements ActionListener {
 
         if (groups.length == 0) {
             JLabel title = ui.generateLabel("There is no group available.");
+            title.setAlignmentX(CENTER_ALIGNMENT);
             panel.add(title);
         } else {
             for (int i = 0; i < groups.length; i++) {

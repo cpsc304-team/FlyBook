@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ColleaguePanel extends JPanel implements ActionListener {
+public class ColleaguePanel extends JPanel {
     UI ui;
 
     public ColleaguePanel(UI ui) {
@@ -20,16 +20,17 @@ public class ColleaguePanel extends JPanel implements ActionListener {
 
         JScrollPane scrPane = userList();
         add(scrPane);
+        scrPane.setOpaque(false);
         scrPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-
     }
-
-
 
     private JScrollPane userList() {
         JPanel panel = new JPanel();
         JScrollPane userList = new JScrollPane(panel);
-        panel.setLayout(new GridLayout(0,1));
+        panel.setOpaque(false);
+        userList.setOpaque(false);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
 
         Application app = ui.getApplication();
         User[] users = app.getUserList();
@@ -38,16 +39,12 @@ public class ColleaguePanel extends JPanel implements ActionListener {
         for (int i = 0; i < users.length; i++) {
             JPanel user = new SubColleaguePanel(ui, users[i], currentUser);
             panel.add(user);
+            user.setAlignmentX(LEFT_ALIGNMENT);
+            panel.add(Box.createRigidArea(new Dimension(0, 20)));
         }
 
         return userList;
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        ui.switchPanel("Main");
-    }
-
 
     @Override
     protected void paintComponent(Graphics g) {

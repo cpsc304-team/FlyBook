@@ -405,7 +405,7 @@ GROUP BY user_id;
 
 -- Aggregation with HAVING
 
--- Find the group that each user has joined with most meetings
+-- Find the group that each user has joined with the most meetings
 SELECT user_id, g.group_id
 FROM group_joins g, meeting_record m
 WHERE g.group_id = m.group_id

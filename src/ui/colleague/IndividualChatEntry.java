@@ -12,10 +12,12 @@ public class IndividualChatEntry extends JPanel implements ActionListener {
     public IndividualChatEntry(IndividualChatPanel panel) {
         this.panel = panel;
         setLayout(new FlowLayout());
+        setOpaque(false);
 
         add(textEntry);
 
         JButton send = new JButton("Send");
+        send.setFont(new Font("Avenir", Font.BOLD, 12));
         send.addActionListener(this);
         add(send);
     }

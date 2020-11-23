@@ -88,7 +88,7 @@ public class ExecuteQueries {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM user_info, " +
-                    "time_zone WHERE user_info.city = time_zone.city");
+                    "time_zone WHERE user_info.city = time_zone.city ORDER BY user_id");
 
             while(rs.next()) {
                 TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));

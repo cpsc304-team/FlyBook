@@ -58,6 +58,8 @@ public class Header extends JPanel implements ActionListener {
                 heading.equals("Post") || heading.equals("Group") ||
                 heading.equals("Colleague") || heading.equals("Meeting")) {
             ui.switchPanel("Main");
+        } else if (heading.equals("New Post")) {
+            ui.switchPanel("Post");
         } else {
             ui.switchPanel("Group");
         }

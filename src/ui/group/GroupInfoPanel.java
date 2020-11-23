@@ -17,7 +17,6 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
     Application app;
 
     private Integer TEXT_SPACE = 18;
-    private Integer ENTRY_SPACE = 9;
 
     public GroupInfoPanel(UI ui, Group group) {
         this.ui = ui;

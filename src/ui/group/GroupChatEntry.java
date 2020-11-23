@@ -14,6 +14,7 @@ public class GroupChatEntry extends JPanel implements ActionListener {
     public GroupChatEntry(GroupChatPanel panel) {
         this.panel = panel;
         setLayout(new FlowLayout());
+        setOpaque(false);
 
         add(textEntry);
 

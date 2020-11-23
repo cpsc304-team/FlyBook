@@ -32,7 +32,7 @@ public class UI extends JFrame {
         setPreferredSize(new Dimension(430, 600));
 
         // TODO: delete testing statements below
-        setContentPane(new GroupListPanel(this));
+        setContentPane(new ColleaguePanel(this));
 
         // Start with the login panel
 //        JPanel loginPane = new LoginPanel(this);

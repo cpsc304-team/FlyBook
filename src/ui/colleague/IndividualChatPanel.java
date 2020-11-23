@@ -21,12 +21,13 @@ public class IndividualChatPanel extends JPanel {
         this.uid2 = uid2;
         this.window = window;
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         add(new HeaderNoBack(ui, ui.getApplication().getUserByID(uid2).getName()));
 
         JScrollPane scrPane = chatHistory();
         add(scrPane);
+        scrPane.setOpaque(false);
         scrPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPanel entry = new IndividualChatEntry(this);
@@ -37,6 +38,8 @@ public class IndividualChatPanel extends JPanel {
     private JScrollPane chatHistory() {
         JPanel panel = new JPanel();
         JScrollPane chatHistory = new JScrollPane(panel);
+        panel.setOpaque(false);
+        chatHistory.setOpaque(false);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -46,6 +49,7 @@ public class IndividualChatPanel extends JPanel {
         for (int i = 0; i < history.length; i++) {
             JPanel chat = new IndividualChatRecord(history[i], uid1);
             panel.add(chat);
+            chat.setOpaque(false);
 
             chat.setAlignmentX(LEFT_ALIGNMENT);
             chat.setAlignmentY(TOP_ALIGNMENT);

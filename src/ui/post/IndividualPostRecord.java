@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 
 public class IndividualPostRecord extends JPanel implements ActionListener {
     UI ui;
@@ -30,15 +31,17 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
         this.post = post;
 
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setOpaque(false);
 
         JPanel info = new JPanel();
-        info.setLayout(new BoxLayout(info, BoxLayout.LINE_AXIS));
+        info.setLayout(new BoxLayout(info, BoxLayout.X_AXIS));
+        info.setOpaque(false);
 
         JLabel sender = ui.generateLabel(post.getUser().getName());
         sender.setFont(new Font("Helvetica", Font.BOLD, 15));
-        JLabel time = ui.generateLabel(post.getTime().toString());
+        String timestamp = new SimpleDateFormat("yyyy.MM.dd hh:mm").format(post.getTime());
+        JLabel time = new JLabel(timestamp);
         time.setForeground(Color.GRAY);
-//        time.setFont(new Font("Helvetica", Font.ITALIC, 8));
 
         info.add(sender);
         sender.setAlignmentY(BOTTOM_ALIGNMENT);
@@ -47,6 +50,7 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
         time.setAlignmentY(BOTTOM_ALIGNMENT);
 
         JPanel text = textPanel();
+        text.setOpaque(false);
 
         add(info);
         info.setAlignmentX(LEFT_ALIGNMENT);
@@ -58,6 +62,7 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
         JPanel text = new JPanel();
         JLabel content = ui.generateLabel(post.getContent());
         text.setLayout(new BoxLayout(text, BoxLayout.PAGE_AXIS));
+        text.setOpaque(false);
         text.add(content);
         content.setAlignmentX(LEFT_ALIGNMENT);
 

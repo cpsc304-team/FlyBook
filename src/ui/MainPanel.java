@@ -14,7 +14,7 @@ public class MainPanel extends JPanel implements ActionListener {
         setLayout(new GridLayout(0, 2));
         add(generateButton("Colleague"));
         add(generateButton("Group"));
-        add(generateButton("Post"));
+        add(generateButton("Posts"));
         add(generateButton("Meeting"));
         add(generateButton("Schedule"));
         add(generateButton("Account"));

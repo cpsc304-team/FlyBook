@@ -1,5 +1,6 @@
 package ui.meeting;
 
+import model.group.Group;
 import model.meeting.MeetingRecord;
 import ui.UI;
 import ui.utilities.SuccessMessage;
@@ -12,10 +13,12 @@ import java.awt.event.ActionListener;
 public class SubMeetingListPanel extends JPanel implements ActionListener {
     private UI ui;
     private MeetingRecord meeting;
+    private Group mostattendedgroup;
 
-    public SubMeetingListPanel(UI ui, MeetingRecord meeting) {
+    public SubMeetingListPanel(UI ui, MeetingRecord meeting, Group group) {
         this.ui = ui;
         this.meeting = meeting;
+        this.mostattendedgroup = group;
 
         setLayout(new FlowLayout());
 
@@ -25,6 +28,13 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
         JLabel topic = new JLabel(meeting.getTopic());
         info.add(topic);
         topic.setAlignmentX(LEFT_ALIGNMENT);
+
+
+        JLabel groupinfo = getLabelWithStar(mostattendedgroup, meeting);
+        info.add(groupinfo);
+
+        topic.setAlignmentX(LEFT_ALIGNMENT);
+
         if (meeting.getAttendance() != 0) {
             JLabel attendance = new JLabel("Attendance: " + meeting.getAttendance());
             info.add(attendance);
@@ -69,5 +79,14 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
             new SuccessMessage("The meeting is ended.");
             ui.switchPanel("Meeting");
         }
+    }
+
+    private JLabel getLabelWithStar(Group group, MeetingRecord meeting) {
+        String name = meeting.getGroup().getName();
+        JLabel groupname =  new JLabel("Group: " + name);
+        if (mostattendedgroup.getName().equals(name)) {
+            groupname  = new JLabel("Group: " + name + "[*]");
+        }
+        return groupname;
     }
 }

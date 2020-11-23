@@ -50,6 +50,7 @@ CREATE TABLE media (
     url varchar2(1000),
     PRIMARY KEY (url));
 
+
 CREATE TABLE share_post (
     post_id varchar2(10),
     time TIMESTAMP,
@@ -130,6 +131,21 @@ CREATE TABLE contain_task (
     schedule_id varchar2(20),
     PRIMARY KEY (schedule_id, task_name),
     FOREIGN KEY (schedule_id) REFERENCES schedule_record ON DELETE CASCADE);
+
+-- table that we didn't implement
+-- CREATE TABLE Mini_Program
+--     (pid CHAR(10),
+--     pname CHAR(20),
+--     type CHAR(10),
+--     PRIMARY KEY (pid));
+--
+-- CREATE TABLE MiniProgram_Record
+--     (u_id CHAR(10),
+--     pid CHAR(10),
+--     time TIMESTAMP,
+--     PRIMARY KEY (u_id, pid, time),
+--     FOREIGN KEY (u_id) REFERENCES User_info,
+--     FOREIGN KEY (pid) REFERENCES Mini_Program);
 
 
 -- INSERT: load pre-set data
@@ -405,7 +421,7 @@ GROUP BY user_id;
 
 -- Aggregation with HAVING
 
--- Find the group that each user has joined with most meetings
+-- Find the group that each user hasjoined with most meetings
 SELECT user_id, g.group_id
 FROM group_joins g, meeting_record m
 WHERE g.group_id = m.group_id

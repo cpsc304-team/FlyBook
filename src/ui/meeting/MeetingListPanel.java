@@ -5,6 +5,7 @@ import model.group.Group;
 import model.meeting.MeetingRecord;
 import ui.UI;
 import ui.group.SubGroupListPanel;
+import ui.utilities.Header;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,7 @@ public class MeetingListPanel extends JPanel implements ActionListener {
         this.ui = ui;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        add(new Header(ui, "Meeting"));
 
 
         JTabbedPane meetingList = meetingList();
@@ -42,6 +44,7 @@ public class MeetingListPanel extends JPanel implements ActionListener {
         tabbedPane.addTab("Past Meetings", past);
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 
+        // add a new section: Statistics
         return tabbedPane;
     }
 
@@ -56,15 +59,20 @@ public class MeetingListPanel extends JPanel implements ActionListener {
 
         Application app = ui.getApplication();
         MeetingRecord[] meetings = app.getPastMeetingsByID();
+        Group mostgroup = app.getGroupWithMostMeetingByID();
+
 
         for (int i = meetings.length - 1; i >= 0; i--) {
-            JPanel meeting = new SubMeetingListPanel(ui, meetings[i]);
+            JPanel meeting = new SubMeetingListPanel(ui, meetings[i],mostgroup);
             panel.add(meeting);
             meeting.add(Box.createRigidArea(new Dimension(0, 20)));
 
             meeting.setAlignmentX(LEFT_ALIGNMENT);
             meeting.setAlignmentY(TOP_ALIGNMENT);
         }
+
+
+
 
         return pastMeetings;
     }
@@ -77,9 +85,10 @@ public class MeetingListPanel extends JPanel implements ActionListener {
 
         Application app = ui.getApplication();
         MeetingRecord[] meetings = app.getCurrentMeetingsByID();
+        Group mostgroup = app.getGroupWithMostMeetingByID();
 
         for (int i = meetings.length - 1; i >= 0; i--) {
-            JPanel meeting = new SubMeetingListPanel(ui, meetings[i]);
+            JPanel meeting = new SubMeetingListPanel(ui, meetings[i],mostgroup);
             panel.add(meeting);
             meeting.add(Box.createRigidArea(new Dimension(0, 20)));
 
@@ -89,21 +98,6 @@ public class MeetingListPanel extends JPanel implements ActionListener {
 
         return myGroup;
     }
-
-    private JButton backButton() {
-//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
-//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//        JButton back = new JButton(i2);
-        JButton back = new JButton("←");
-        back.addActionListener(this);
-        back.setActionCommand("Back");
-        back.setOpaque(false);
-        back.setContentAreaFilled(false);
-        back.setBorderPainted(false);
-        back.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return back;
-    }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {

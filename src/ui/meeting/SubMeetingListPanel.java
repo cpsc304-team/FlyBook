@@ -30,7 +30,7 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
         topic.setAlignmentX(LEFT_ALIGNMENT);
 
 
-        JLabel groupinfo = getLabelWithStar(mostattendedgroup, meeting);
+        JLabel groupinfo = getLabelWithStar(meeting);
         info.add(groupinfo);
 
         topic.setAlignmentX(LEFT_ALIGNMENT);
@@ -81,7 +81,7 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
         }
     }
 
-    private JLabel getLabelWithStar(Group group, MeetingRecord meeting) {
+    private JLabel getLabelWithStar(MeetingRecord meeting) {
         String name = meeting.getGroup().getName();
         JLabel groupname =  new JLabel("Group: " + name);
         if (mostattendedgroup.getName().equals(name)) {

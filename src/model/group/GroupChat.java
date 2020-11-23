@@ -1,9 +1,5 @@
 package model.group;
 
-
-
-import model.user.User;
-
 import java.sql.Timestamp;
 
 public class GroupChat {

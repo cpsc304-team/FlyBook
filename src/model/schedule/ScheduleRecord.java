@@ -1,6 +1,5 @@
 package model.schedule;
 
-import model.TaskStatus;
 import model.user.User;
 
 import java.sql.Timestamp;

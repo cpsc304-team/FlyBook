@@ -1,13 +1,9 @@
 package ui.colleague;
 
-import main.Application;
-import model.IndividualChat;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Timestamp;
 
 public class IndividualChatEntry extends JPanel implements ActionListener {
     JTextField textEntry = new JTextField(25);

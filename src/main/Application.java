@@ -1,7 +1,6 @@
 package main;
 
 import database.ExecuteQueries;
-import model.*;
 import database.DatabaseConnection;
 import model.group.Group;
 import model.group.GroupChat;
@@ -11,6 +10,7 @@ import model.post.Media;
 import model.post.SharePost;
 import model.schedule.ScheduleRecord;
 import model.schedule.Task;
+import model.user.IndividualChat;
 import model.user.TimeZone;
 import model.user.User;
 import ui.utilities.ErrorMessage;
@@ -45,6 +45,7 @@ public class Application {
     private void start() {
         // TODO: delete testing statements below
         currentUser = "0001";
+
 //        System.out.println("success!");
 
         ui = new UI(this);
@@ -110,6 +111,16 @@ public class Application {
 
     public void deleteAccount() {
         queries.updateGroupCreator(currentUser);
+        Group[] groups = queries.getGroupsByAdmin(currentUser);
+        for (int i = 0; i < groups.length; i++) {
+            joinGroup(new GroupMember(
+                    new Timestamp(System.currentTimeMillis()),
+                    getUserByID("0000"),
+                    groups[i],
+                    null
+            ));
+            queries.updateAdmin("0000", groups[i], currentUser);
+        }
         queries.deleteAccount(currentUser);
         new SuccessMessage("The account is deleted. You will return back to the log in menu.");
     }
@@ -138,10 +149,6 @@ public class Application {
         queries.deletePost(post);
     }
 
-    public Media[] getMediaList() {
-        return queries.getMedia();
-    }
-
     public Media getMediaByUrl(String url) {
         return queries.getMediaByUrl(url);
     }
@@ -164,18 +171,6 @@ public class Application {
 
     public void changeEmail(String email) {
         queries.updateUserEmail(currentUser, email);
-    }
-
-    public void updateUser(String name, String city, String email) {
-        if (!(name.isEmpty())) {
-            queries.updateUserName(currentUser, name);
-        }
-        if (!(city.isEmpty())) {
-            queries.updateUserCity(currentUser, city);
-        }
-        if (!(email.isEmpty())) {
-            queries.updateUserEmail(currentUser, email);
-        }
     }
 
     public Group[] getCurrentUsersGroups() {
@@ -323,5 +318,52 @@ public class Application {
 
     public void deleteSchedule(ScheduleRecord schedule) {
         queries.deleteSchedule(schedule);
+    }
+
+    public int countGroups() {
+        return queries.countGroups();
+    }
+
+    public void addGroup(Group group) {
+        dbConnection.insertGroupRecord(group);
+    }
+
+    public void becomeAdmin(User currentUser, Group group) {
+        dbConnection.insertGroupAdmin(currentUser, group);
+    }
+
+    public GroupMember[] getAdminByGroup(String gid) {
+        return queries.getAdminByGroup(gid);
+    }
+
+    public GroupMember[] getMembersByGroup(String gid) {
+        return queries.getMembersByGroup(gid);
+    }
+
+    public GroupMember[] getActiveMembers(Group group) {
+        return queries.getMostActiveMember(group);
+    }
+
+    public GroupMember[] getHardworkingMembers(Group group) {
+        return queries.getHardworkingMember(group);
+    }
+
+    public void leaveGroup(Group group) {
+        if (isAdmin(group.getGroupid())) {
+            queries.updateGroupCreator(currentUser);
+            queries.updateAdmin("0000", group, currentUser);
+            joinGroup(new GroupMember(
+                    new Timestamp(System.currentTimeMillis()),
+                    getUserByID("0000"),
+                    group,
+                    null
+            ));
+        }
+        queries.deleteGroupChat(currentUser, group.getGroupid());
+        queries.leaveGroup(currentUser, group.getGroupid());
+    }
+
+    public void deleteGroup(Group group) {
+        queries.deleteGroup(group.getGroupid());
     }
 }

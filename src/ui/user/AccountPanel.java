@@ -55,8 +55,6 @@ public class AccountPanel extends JPanel implements ActionListener {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
-
-
     // Show the labels of the personal profile
     private JPanel labelPanel() {
         JPanel labelPanel = new JPanel();

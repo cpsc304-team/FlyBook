@@ -1,6 +1,6 @@
 package database;
 
-import model.IndividualChat;
+import model.user.IndividualChat;
 import model.group.Group;
 import model.group.GroupChat;
 import model.group.GroupMember;
@@ -844,29 +844,7 @@ public class ExecuteQueries {
         return 0;
     }
 
-
-
-    // TODO: delete
-    // Testing tables
-    public void print() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
-
-            while(rs.next()) {
-                System.out.println(rs.getString("post_id") +
-                        " | " + rs.getString("user_id") +
-                        ": " + rs.getString("content") +
-                        " | " + rs.getString("time"));
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
+    // Get a user's schedules within a certain time period
     public ScheduleRecord[] getSchedulesWithinPeriod(Timestamp today, Timestamp after, String uid) {
         ArrayList<ScheduleRecord> result = new ArrayList<>();
 
@@ -900,6 +878,7 @@ public class ExecuteQueries {
         return result.toArray(new ScheduleRecord[result.size()]);
     }
 
+    // Get a user's all schedules
     public ScheduleRecord[] getSchedulesByID(String uid) {
         ArrayList<ScheduleRecord> result = new ArrayList<>();
 
@@ -931,6 +910,7 @@ public class ExecuteQueries {
         return result.toArray(new ScheduleRecord[result.size()]);
     }
 
+    // Get a user's schedules that have passed
     public ScheduleRecord[] getSchedulesPassed(Timestamp today, String uid) {
         ArrayList<ScheduleRecord> result = new ArrayList<>();
 
@@ -963,6 +943,7 @@ public class ExecuteQueries {
         return result.toArray(new ScheduleRecord[result.size()]);
     }
 
+    // Get tasks associated with a schedule
     public Task[] getTasksBySchedule(String sid) {
         ArrayList<Task> result = new ArrayList<>();
 
@@ -994,6 +975,7 @@ public class ExecuteQueries {
         return result.toArray(new Task[result.size()]);
     }
 
+    // Get a schedule record by its ID
     public ScheduleRecord getScheduleByID(String sid) {
         try {
             Statement stmt = connection.createStatement();
@@ -1037,6 +1019,7 @@ public class ExecuteQueries {
         }
     }
 
+    // Count the total number of all schedules
     public int countSchedules() {
         try {
             Statement stmt = connection.createStatement();
@@ -1056,6 +1039,7 @@ public class ExecuteQueries {
         return 0;
     }
 
+    // Change the group creator to admin after the former creator deleting the account
     public void updateGroupCreator(String currentUser) {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE group_creates SET user_id = \'0000\' WHERE user_id = ?");
@@ -1089,6 +1073,7 @@ public class ExecuteQueries {
         }
     }
 
+    // Get the print-out info of everyone's number of unfinished tasks today
     public String[] getTaskInfoToday(Timestamp today, Timestamp tomorrow) {
         ArrayList<String> result = new ArrayList<>();
 
@@ -1140,6 +1125,264 @@ public class ExecuteQueries {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Debug: deleteSchedule()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+
+    // TODO: delete
+    // Testing tables
+    public void print() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
+
+            while(rs.next()) {
+                System.out.println(rs.getString("post_id") +
+                        " | " + rs.getString("user_id") +
+                        ": " + rs.getString("content") +
+                        " | " + rs.getString("time"));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
+    // Count the total number of groups
+    public int countGroups() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS \"number\" FROM group_record");
+
+            while(rs.next()) {
+                return Integer.valueOf(rs.getString("number"));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: countGroups()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return 0;
+    }
+
+    public Group[] getGroupsByAdmin(String uid) {
+        ArrayList<Group> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_admin WHERE user_id = \'" + uid + "\'");
+
+            while(rs.next()) {
+                result.add(getGroupByID(rs.getString("group_id")));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupsByAdmin()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Group[result.size()]);
+    }
+
+    public void updateAdmin(String admin, Group group, String user) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE group_admin SET user_id = ? WHERE group_id = ? AND user_id = ?");
+            ps.setString(1, admin);
+            ps.setString(2, group.getGroupid());
+            ps.setString(3, user);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: updateAdmin()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // Find the group that each user has joined with most meetings
+    public Group getGroupWithMostMeetings(String uid) {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT user_id, g.group_id " +
+                    "FROM group_joins g, meeting_record m " +
+                    "WHERE g.group_id = m.group_id " +
+                    "GROUP BY user_id, g.group_id " +
+                    "HAVING COUNT(meeting_id) >= ALL (" +
+                    "SELECT COUNT(meeting_id) " +
+                    "FROM group_joins g2, meeting_record m2 " +
+                    "WHERE g2.group_id = m2.group_id " +
+                    "AND g2.user_id = g.user_id " +
+                    "GROUP BY g2.group_id)");
+
+            while(rs.next()) {
+                if (rs.getString("user_id").equals(uid)) {
+                    Group group = getGroupByID(rs.getString("group_id"));
+                    return group;
+                }
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getGroupWithMostMeetings()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return null;
+    }
+
+    // Find the most active user (chats the most) in a group
+    public GroupMember[] getMostActiveMember(Group group) {
+        ArrayList<GroupMember> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            String gid = group.getGroupid();
+            String s1 = "WITH temp(user_id, total) AS (SELECT user_id, COUNT(*) AS \"total\" FROM group_chat WHERE group_id = \'"+ gid + "\' GROUP BY user_id) " +
+                    "SELECT user_id FROM temp WHERE total = (SELECT MAX(total) FROM temp)";
+            ResultSet rs = stmt.executeQuery(s1);
+
+            while(rs.next()) {
+                result.add(getGroupMemberByID(rs.getString("user_id"), gid));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: test2()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupMember[result.size()]);
+    }
+
+    // Find group member who has joined every meeting that group had
+    public GroupMember[] getHardworkingMember(Group group) {
+        ArrayList<GroupMember> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            String gid = group.getGroupid();
+            String s1 = "WITH members(user_id) AS (SELECT user_id FROM group_joins WHERE group_id = \'" + gid + "\') ";
+            String s2 = "SELECT members.user_id FROM members WHERE NOT EXISTS(";
+            String s3 = "(SELECT mc.meeting_id FROM meeting_record mc WHERE mc.group_id = \'" + gid + "\') ";
+            String s4 = "MINUS (SELECT mj.meeting_id FROM meeting_joins mj WHERE mj.user_id = members.user_id))";
+            ResultSet rs = stmt.executeQuery(s1+s2+s3+s4);
+
+            while(rs.next()) {
+                result.add(getGroupMemberByID(rs.getString("user_id"), gid));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getHardworkingMember()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupMember[result.size()]);
+    }
+
+    public GroupMember[] getAdminByGroup(String gid) {
+        ArrayList<GroupMember> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_admin WHERE group_id = \'" + gid + "\'");
+
+            while(rs.next()) {
+                result.add(getGroupMemberByID(rs.getString("user_id"), gid));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getAdminByGroup()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupMember[result.size()]);
+    }
+
+    public GroupMember[] getMembersByGroup(String gid) {
+        ArrayList<GroupMember> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM group_joins WHERE group_id = \'" + gid + "\'");
+
+            while(rs.next()) {
+                if (!(isAdmin(rs.getString("user_id"), rs.getString("group_id")))) {
+                    result.add(getGroupMemberByID(rs.getString("user_id"), gid));
+                }
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: getAdminByGroup()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupMember[result.size()]);
+    }
+
+    public void leaveGroup(String uid, String gid) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM group_joins WHERE group_id = ? AND user_id = ?");
+            ps.setString(1, gid);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: leaveGroup()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void deleteGroupChat(String gid, String uid) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM group_chat WHERE group_id = ? AND user_id = ?");
+            ps.setString(1, gid);
+            ps.setString(2, uid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: deleteGroupChat()");
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    public void deleteGroup(String gid) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM group_record WHERE group_id = ?");
+            ps.setString(1, gid);
+
+            ps.executeUpdate();
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Debug: deleteGroup()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }

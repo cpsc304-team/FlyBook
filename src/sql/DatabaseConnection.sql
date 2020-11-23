@@ -391,9 +391,9 @@ WHERE user_id = '0001' -- 0001 could be replaced by other user_id
 
 -- Aggregation with GROUP BY
 
--- /*Find the number of unfinished tasks
---   and the lowest priority level (highest emergency) of those tasks
---   that each user has today*/
+-- Find the number of unfinished tasks
+-- and the lowest priority level (highest emergency) of those tasks
+-- that each user has today
 SELECT user_id, COUNT(*) AS 'number', MIN(priority) AS 'min'
 FROM schedule_record, contain_task
 WHERE schedule_record.schedule_id = contain_task.schedule_id
@@ -406,42 +406,42 @@ GROUP BY user_id;
 -- Aggregation with HAVING
 
 -- Find the group that each user has joined with most meetings
-SELECT user_id, group_id
+SELECT user_id, g.group_id
 FROM group_joins g, meeting_record m
 WHERE g.group_id = m.group_id
-GROUP BY user_id, group_id
+GROUP BY user_id, g.group_id
 HAVING COUNT(meeting_id) >= ALL (
     SELECT COUNT(meeting_id)
     FROM group_joins g2, meeting_record m2
     WHERE g2.group_id = m2.group_id
         AND g2.user_id = g.user_id
-    GROUP BY g2.group_id)
+    GROUP BY g2.group_id);
 
 
 -- Nested Aggregation with GROUP BY
--- Find the group with the longest total meeting time
-SELECT group_id
-FROM (
-    SELECT group_id, SUM(end_time - start_time) AS 'total_time'
-    FROM meeting_record
-    GROUP BY group_id) AS 'temp'
-WHERE temp.total_time = (
-    SELECT MAX(temp.total_time)
-    FROM temp)
+
+-- Find the most active user (chats the most) in a group
+WITH temp(user_id, total) AS
+    (SELECT user_id, COUNT(*) AS 'total'
+     FROM group_chat
+     WHERE group_id = 'G1' -- G1 could be replaced by other group_id
+     GROUP BY user_id)
+SELECT user_id
+FROM temp
+WHERE total = (SELECT MAX(total) FROM temp);
+
 
 -- Division
--- Find users' names who have joined every group
-SELECT ui.name
-FROM user_info ui
-WHERE NOT EXISTS (
-        (SELECT gc.group_id
-         FROM group_creates gc)
-    EXCEPT (
-        (SELECT gj.group_id
-         FROM group_joins gj
-         WHERE gj.user_id = ui.user_id)
-        UNION
-        (SELECT g.group_id
-         FROM group_creates g
-         WHERE g.user_id = ui.user_id)))
 
+-- Find group member who has joined every meeting that group had
+WITH members(user_id) AS
+    (SELECT user_id FROM group_joins WHERE group_id = 'G2')
+SELECT members.user_id
+FROM members
+WHERE NOT EXISTS(
+    (SELECT mc.meeting_id
+     FROM meeting_record mc
+     WHERE mc.group_id = 'G2') -- G2 could be replaced by other group_number
+     EXCEPT (SELECT mj.meeting_id
+             FROM meeting_joins mj
+             WHERE mj.user_id = members.user_id));

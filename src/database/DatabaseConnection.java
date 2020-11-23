@@ -1,17 +1,16 @@
 package database;
 
-import model.*;
 import model.group.*;
 import model.meeting.MeetingRecord;
 import model.post.Media;
 import model.post.SharePost;
 import model.schedule.Task;
 import model.schedule.ScheduleRecord;
+import model.user.IndividualChat;
 import model.user.TimeZone;
 import model.user.User;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class DatabaseConnection {
     private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";

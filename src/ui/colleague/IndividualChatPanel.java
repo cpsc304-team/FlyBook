@@ -1,10 +1,8 @@
 package ui.colleague;
 
 import main.Application;
-import model.IndividualChat;
-import model.user.User;
+import model.user.IndividualChat;
 import ui.UI;
-import ui.utilities.Header;
 import ui.utilities.HeaderNoBack;
 
 import javax.swing.*;

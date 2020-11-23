@@ -46,10 +46,12 @@ public class SchedulePanel extends JPanel implements ActionListener {
         tabbedPane.setOpaque(false);
 
         JPanel schedule = new ScheduleListPanel(ui);
+        schedule.setOpaque(false);
         tabbedPane.addTab("My schedule", schedule);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
         JScrollPane availability = availability();
+        availability.setOpaque(false);
         tabbedPane.addTab("Availabilities", availability);
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
 

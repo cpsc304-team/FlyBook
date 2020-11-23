@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GroupChatEntry extends JPanel implements ActionListener {
-    JTextField textEntry = new JTextField(25);
+    JTextField textEntry = new JTextField(27);
     GroupChatPanel panel;
 
     public GroupChatEntry(GroupChatPanel panel) {
@@ -18,6 +18,7 @@ public class GroupChatEntry extends JPanel implements ActionListener {
         add(textEntry);
 
         JButton send = new JButton("Send");
+        send.setFont(new Font("Avenir", Font.BOLD, 12));
         send.addActionListener(this);
         add(send);
     }

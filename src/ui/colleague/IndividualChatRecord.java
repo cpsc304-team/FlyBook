@@ -1,6 +1,6 @@
 package ui.colleague;
 
-import model.IndividualChat;
+import model.user.IndividualChat;
 
 import javax.swing.*;
 import java.awt.*;

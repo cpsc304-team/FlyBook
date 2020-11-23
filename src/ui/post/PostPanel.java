@@ -17,7 +17,7 @@ public class PostPanel extends JPanel implements ActionListener {
         this.ui = ui;
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        add(new Header(ui, "Posts"));
+        add(new Header(ui, "Post"));
 
         JScrollPane scrPane = postList();
         add(scrPane);

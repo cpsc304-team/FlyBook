@@ -19,5 +19,9 @@ public class HeaderNoBack extends Header {
 
         add(Box.createHorizontalGlue());
         add(title);
+
+        setMaximumSize(new Dimension(430, 40));
+        setPreferredSize(new Dimension(430, 40));
+        setMinimumSize(new Dimension(430, 40));
     }
 }

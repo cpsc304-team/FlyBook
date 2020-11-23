@@ -1,4 +1,4 @@
-package model;
+package model.user;
 
 /*CREATE TABLE individual_chat (
     time TIMESTAMP,

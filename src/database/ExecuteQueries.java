@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class ExecuteQueries {
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
-    private Connection connection;
+    private final Connection connection;
 
     public ExecuteQueries(Connection connection) {
         this.connection = connection;
@@ -69,8 +69,7 @@ public class ExecuteQueries {
             ResultSet rs = stmt.executeQuery("SELECT * FROM time_zone WHERE city = \'" + city + "\'");
 
             while(rs.next()) {
-                TimeZone timezone = new TimeZone(rs.getString("city"), rs.getString("time_zone"));
-                return timezone;
+                return new TimeZone(rs.getString("city"), rs.getString("time_zone"));
             }
 
             rs.close();
@@ -83,7 +82,7 @@ public class ExecuteQueries {
 
     // Get all users' info combined with time_zone info
     public User[] getUser() {
-        ArrayList<User> result = new ArrayList<User>();
+        ArrayList<User> result = new ArrayList<>();
 
         try {
             Statement stmt = connection.createStatement();
@@ -118,12 +117,11 @@ public class ExecuteQueries {
 
             while(rs.next()) {
                 TimeZone timezone = new TimeZone(rs.getString("city"),rs.getString("time_zone"));
-                User user = new User(rs.getString("user_id"),
+                return new User(rs.getString("user_id"),
                         rs.getString("password"),
                         rs.getString("name"),
                         timezone,
                         rs.getString("email"));
-                return user;
             }
 
             rs.close();
@@ -374,7 +372,7 @@ public class ExecuteQueries {
     public void deletePost(SharePost post) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM share_post WHERE post_id = ?");
-            ps.setString(1, post.getPostid());
+            ps.setString(1, post.getPostID());
 
             ps.executeUpdate();
             connection.commit();
@@ -700,7 +698,7 @@ public class ExecuteQueries {
         return result.toArray(new MeetingRecord[result.size()]);
     }
 
-    // Get all the current meentings the user could join
+    // Get all the current meetings the user could join
     public MeetingRecord[] getCurrentMeetingsByID(String uid) {
         ArrayList<MeetingRecord> result = new ArrayList<>();
 
@@ -1005,7 +1003,7 @@ public class ExecuteQueries {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE contain_task SET status = ? WHERE schedule_id = ? AND task_name = ?");
             ps.setInt(1, i);
-            ps.setString(2, task.getSchedule().getScheduleid());
+            ps.setString(2, task.getSchedule().getScheduleID());
             ps.setString(3, task.getTaskName());
 
             ps.executeUpdate();
@@ -1059,7 +1057,7 @@ public class ExecuteQueries {
     public void deleteTask(Task task) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM contain_task WHERE schedule_id = ? AND task_name = ?");
-            ps.setString(1, task.getSchedule().getScheduleid());
+            ps.setString(1, task.getSchedule().getScheduleID());
             ps.setString(2, task.getTaskName());
 
             ps.executeUpdate();
@@ -1117,7 +1115,7 @@ public class ExecuteQueries {
     public void deleteSchedule(ScheduleRecord schedule) {
         try {
             PreparedStatement ps = connection.prepareStatement("DELETE FROM schedule_record WHERE schedule_id = ?");
-            ps.setString(1, schedule.getScheduleid());
+            ps.setString(1, schedule.getScheduleID());
 
             ps.executeUpdate();
             connection.commit();
@@ -1175,7 +1173,7 @@ public class ExecuteQueries {
         try {
             PreparedStatement ps = connection.prepareStatement("UPDATE group_admin SET user_id = ? WHERE group_id = ? AND user_id = ?");
             ps.setString(1, admin);
-            ps.setString(2, group.getGroupid());
+            ps.setString(2, group.getGroupID());
             ps.setString(3, user);
 
             ps.executeUpdate();
@@ -1206,8 +1204,7 @@ public class ExecuteQueries {
 
             while(rs.next()) {
                 if (rs.getString("user_id").equals(uid)) {
-                    Group group = getGroupByID(rs.getString("group_id"));
-                    return group;
+                    return getGroupByID(rs.getString("group_id"));
                 }
             }
 
@@ -1226,7 +1223,7 @@ public class ExecuteQueries {
 
         try {
             Statement stmt = connection.createStatement();
-            String gid = group.getGroupid();
+            String gid = group.getGroupID();
             String s1 = "WITH temp(user_id, total) AS (SELECT user_id, COUNT(*) AS \"total\" FROM group_chat WHERE group_id = \'"+ gid + "\' GROUP BY user_id) " +
                     "SELECT user_id FROM temp WHERE total = (SELECT MAX(total) FROM temp)";
             ResultSet rs = stmt.executeQuery(s1);
@@ -1251,7 +1248,7 @@ public class ExecuteQueries {
 
         try {
             Statement stmt = connection.createStatement();
-            String gid = group.getGroupid();
+            String gid = group.getGroupID();
             String s1 = "WITH members(user_id) AS (SELECT user_id FROM group_joins WHERE group_id = \'" + gid + "\') ";
             String s2 = "SELECT members.user_id FROM members WHERE NOT EXISTS(";
             String s3 = "(SELECT mc.meeting_id FROM meeting_record mc WHERE mc.group_id = \'" + gid + "\') ";
@@ -1363,27 +1360,6 @@ public class ExecuteQueries {
             System.out.println("Debug: deleteGroup()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
-        }
-    }
-
-    // TODO: delete
-    // Testing tables
-    public void print() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
-
-            while(rs.next()) {
-                System.out.println(rs.getString("post_id") +
-                        " | " + rs.getString("user_id") +
-                        ": " + rs.getString("content") +
-                        " | " + rs.getString("time"));
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
 }

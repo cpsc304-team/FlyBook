@@ -6,9 +6,6 @@ import ui.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class ScheduleListPanel extends JPanel implements ItemListener {
@@ -29,7 +26,7 @@ public class ScheduleListPanel extends JPanel implements ItemListener {
         // a sub-panel stores the combobox
         JPanel comboBoxPane = new JPanel();
         comboBoxPane.setOpaque(false);
-        String comboBoxItems[] = {TODAY, WEEK, ALL, PASSED};
+        String[] comboBoxItems = {TODAY, WEEK, ALL, PASSED};
         JComboBox cb = new JComboBox(comboBoxItems);
         cb.setEditable(false);
         cb.addItemListener(this);
@@ -59,14 +56,19 @@ public class ScheduleListPanel extends JPanel implements ItemListener {
         Application app = ui.getApplication();
         ScheduleRecord[] schedules;
 
-        if (type.equals(TODAY)) {
-            schedules = app.getSchedulesToday();
-        } else if (type.equals(WEEK)) {
-            schedules = app.getSchedulesThisWeek();
-        } else if (type.equals(ALL)) {
-            schedules = app.getSchedulesByID();
-        } else {
-            schedules = app.getSchedulesPassed();
+        switch (type) {
+            case TODAY:
+                schedules = app.getSchedulesToday();
+                break;
+            case WEEK:
+                schedules = app.getSchedulesThisWeek();
+                break;
+            case ALL:
+                schedules = app.getSchedulesByID();
+                break;
+            default:
+                schedules = app.getSchedulesPassed();
+                break;
         }
 
         if (schedules.length == 0) {
@@ -75,8 +77,8 @@ public class ScheduleListPanel extends JPanel implements ItemListener {
             text.setAlignmentX(CENTER_ALIGNMENT);
         } else {
             // Insert each schedule record
-            for (int i = 0; i < schedules.length; i++) {
-                JPanel schedule = new ScheduleRecordPanel(ui, schedules[i]);
+            for (ScheduleRecord scheduleRecord : schedules) {
+                JPanel schedule = new ScheduleRecordPanel(ui, scheduleRecord);
                 card.add(schedule);
                 schedule.add(Box.createRigidArea(new Dimension(0, 20)));
 

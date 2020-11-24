@@ -6,8 +6,8 @@ package model.post;
         PRIMARY KEY (url));*/
 
 public class Media {
-    private String mediaType;
-    private String url;
+    private final String mediaType;
+    private final String url;
 
     public Media(String mediaType, String url) {
         this.url = url;

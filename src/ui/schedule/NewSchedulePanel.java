@@ -16,8 +16,8 @@ import java.util.Objects;
 public class NewSchedulePanel extends JPanel implements ActionListener {
     UI ui;
 
-    private Integer TEXT_SPACE = 16;
-    private Integer ENTRY_SPACE = 10;
+    private final int TEXT_SPACE = 16;
+    private final int ENTRY_SPACE = 10;
     int monthVal;
 
     JComboBox yearEntry;
@@ -110,25 +110,22 @@ public class NewSchedulePanel extends JPanel implements ActionListener {
         yearEntry.setMaximumSize(yearEntry.getPreferredSize());
         date.add(yearEntry);
         monthEntry = new JComboBox(new String[]{"1","2","3","4","5","6","7","8","9","10","11","12"});
-        monthEntry.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String s = (String) Objects.requireNonNull(monthEntry.getSelectedItem());
-                monthVal = Integer.valueOf(s);
-                if (monthVal == 2) {
-                    if (((String) Objects.requireNonNull(yearEntry.getSelectedItem())).equals("2020")) {
-                        dateEntry.setModel(date1);
-                    } else {
-                        dateEntry.setModel(date2);
-                    }
-                } else if (monthVal == 1 || monthVal == 3 || monthVal == 5 || monthVal == 7 || monthVal == 8 || monthVal == 10 || monthVal == 12) {
-                    dateEntry.setModel(date3);
+        monthEntry.addActionListener(e -> {
+            String s = (String) Objects.requireNonNull(monthEntry.getSelectedItem());
+            monthVal = Integer.parseInt(s);
+            if (monthVal == 2) {
+                if (Objects.requireNonNull(yearEntry.getSelectedItem()).equals("2020")) {
+                    dateEntry.setModel(date1);
                 } else {
-                    dateEntry.setModel(date4);
+                    dateEntry.setModel(date2);
                 }
-                dateEntry.repaint();
-                dateEntry.revalidate();
+            } else if (monthVal == 1 || monthVal == 3 || monthVal == 5 || monthVal == 7 || monthVal == 8 || monthVal == 10 || monthVal == 12) {
+                dateEntry.setModel(date3);
+            } else {
+                dateEntry.setModel(date4);
             }
+            dateEntry.repaint();
+            dateEntry.revalidate();
         });
         monthEntry.setMaximumSize(monthEntry.getPreferredSize());
         dateEntry = new JComboBox(new String[]{"1","2","3","4","5","6","7","8","9","10",

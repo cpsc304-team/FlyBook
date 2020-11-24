@@ -20,8 +20,8 @@ import java.util.Objects;
 public class NewPostPanel extends JPanel implements ActionListener {
     UI ui;
 
-    private Integer TEXT_SPACE = 18;
-    private Integer ENTRY_SPACE = 9;
+    private final int TEXT_SPACE = 18;
+    private final int ENTRY_SPACE = 9;
 
     JTextArea postEntry = new JTextArea(1,10);
     JTextField mediaEntry = new JTextField(22);

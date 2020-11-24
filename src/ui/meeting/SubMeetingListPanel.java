@@ -12,14 +12,14 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
 public class SubMeetingListPanel extends JPanel implements ActionListener {
-    private UI ui;
-    private MeetingRecord meeting;
-    private Group mostattendedgroup;
+    private final UI ui;
+    private final MeetingRecord meeting;
+    private final Group mostAttendedGroup;
 
     public SubMeetingListPanel(UI ui, MeetingRecord meeting, Group group) {
         this.ui = ui;
         this.meeting = meeting;
-        this.mostattendedgroup = group;
+        this.mostAttendedGroup = group;
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
@@ -33,9 +33,9 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
         info.add(topic);
         topic.setAlignmentX(LEFT_ALIGNMENT);
 
-        JLabel groupinfo = getLabelWithStar(meeting);
-        info.add(groupinfo);
-        groupinfo.setAlignmentX(LEFT_ALIGNMENT);
+        JLabel groupInfo = getLabelWithStar(meeting);
+        info.add(groupInfo);
+        groupInfo.setAlignmentX(LEFT_ALIGNMENT);
 
         if (meeting.getAttendance() != 0) {
             JLabel attendance = generateText("Attendance: " + meeting.getAttendance());
@@ -69,7 +69,7 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
             button.add(join);
             join.setAlignmentY(TOP_ALIGNMENT);
 
-            if (ui.getApplication().isAdmin(meeting.getGroup().getGroupid())) {
+            if (ui.getApplication().isAdmin(meeting.getGroup().getGroupID())) {
                 JButton end = new JButton("End Meeting");
                 resizeButton(end);
                 end.addActionListener(this);
@@ -98,18 +98,17 @@ public class SubMeetingListPanel extends JPanel implements ActionListener {
 
     private JLabel getLabelWithStar(MeetingRecord meeting) {
         String name = meeting.getGroup().getName();
-        JLabel groupname =  ui.generateLabel("Group: " + name);
-        if (mostattendedgroup.getName().equals(name)) {
-            groupname  = new JLabel("Group: " + name + "[*]");
+        JLabel groupName =  ui.generateLabel("Group: " + name);
+        if (mostAttendedGroup.getName().equals(name)) {
+            groupName  = new JLabel("Group: " + name + "[*]");
         }
-        return groupname;
+        return groupName;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Join")) {
             ui.getApplication().joinMeeting(meeting);
-            // TODO: add a fake meeting window if have time
             new SuccessMessage("You just joined the meeting!");
         } else {
             ui.getApplication().endMeeting(meeting);

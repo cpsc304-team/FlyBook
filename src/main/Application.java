@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Application {
-    private DatabaseConnection dbConnection;
+    private final DatabaseConnection dbConnection;
     private UI ui;
     private String currentUser; // user ID of the current user
     private ExecuteQueries queries;
@@ -31,7 +31,7 @@ public class Application {
         dbConnection = new DatabaseConnection();
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Application app = new Application();
         app.oracleLogin();
         app.start();
@@ -43,10 +43,6 @@ public class Application {
 
     // Start the program by opening the application UI frame
     private void start() {
-        // TODO: delete testing statements below
-//        currentUser = "0001";
-//        System.out.println("success!");
-
         ui = new UI(this);
         ui.showFrame();
     }
@@ -56,8 +52,6 @@ public class Application {
         boolean connect = dbConnection.login();
 
         if (connect) {
-            // print all the table names if error occurs when dropping tables
-//            dbConnection.printTables();
             dbConnection.dropTables(); // drop all tables
             dbConnection.databaseSetUp(); // setup database
             dbConnection.loadData(); // load pre-set data
@@ -68,7 +62,10 @@ public class Application {
     }
 
 
-    // Check if the user can login
+    /**
+     * Queries related to Users
+     * */
+
     public void userLogin(String userid, String password) {
         if (queries.containLoginInfo(userid, password)) {
             User user = queries.getUserByID(userid);
@@ -110,17 +107,29 @@ public class Application {
     public void deleteAccount() {
         queries.updateGroupCreator(currentUser);
         Group[] groups = queries.getGroupsByAdmin(currentUser);
-        for (int i = 0; i < groups.length; i++) {
+        for (Group group : groups) {
             joinGroup(new GroupMember(
                     new Timestamp(System.currentTimeMillis()),
                     getUserByID("0000"),
-                    groups[i],
+                    group,
                     null
             ));
-            queries.updateAdmin("0000", groups[i], currentUser);
+            queries.updateAdmin("0000", group, currentUser);
         }
         queries.deleteAccount(currentUser);
         new SuccessMessage("The account is deleted. You will return back to the log in menu.");
+    }
+
+    public void changeCity(String city) {
+        queries.updateUserCity(currentUser, city);
+    }
+
+    public void changeName(String name) {
+        queries.updateUserName(currentUser, name);
+    }
+
+    public void changeEmail(String email) {
+        queries.updateUserEmail(currentUser, email);
     }
 
     public IndividualChat[] getIndividualChatHistory(String uid1, String uid2) {
@@ -130,6 +139,11 @@ public class Application {
     public void addIndividualChat(IndividualChat record) {
         dbConnection.insertIndividualChat(record);
     }
+
+
+    /**
+     * Queries related to Posts and Media
+     * */
 
     public SharePost[] getIndividualPost(String uid) {
         return queries.getIndividualPost(uid);
@@ -159,48 +173,25 @@ public class Application {
         dbConnection.insertMedia(media);
     }
 
-    public void changeCity(String city) {
-        queries.updateUserCity(currentUser, city);
-    }
-
-    public void changeName(String name) {
-        queries.updateUserName(currentUser, name);
-    }
-
-    public void changeEmail(String email) {
-        queries.updateUserEmail(currentUser, email);
-    }
-
-
-
-
 
     /**
-     *   Queries related to Schedules and Tasks
+     * Queries related to Meetings
      * */
 
     public void joinMeeting(MeetingRecord meeting) {
-        if (!(queries.hasJoined(meeting.getMeetingid(), currentUser))) {
+        if (!(queries.hasJoined(meeting.getMeetingID(), currentUser))) {
             dbConnection.insertMeetingJoins(meeting, getCurrentUser());
         }
     }
 
     public void endMeeting(MeetingRecord meeting) {
-        Integer attendance = queries.countAttendance(meeting.getMeetingid());
-        queries.updateMeetingInfo(new Timestamp(System.currentTimeMillis()), attendance, meeting.getMeetingid());
+        int attendance = queries.countAttendance(meeting.getMeetingID());
+        queries.updateMeetingInfo(new Timestamp(System.currentTimeMillis()), attendance, meeting.getMeetingID());
     }
-
-    public MeetingRecord getMeetingByID(String mid) {
-        return queries.getMeetingByID(mid);
-    }
-
-
-
 
     public int countMeetings() {
         return queries.countMeetings();
     }
-
 
     public void addMeeting(MeetingRecord meeting) {
         dbConnection.insertMeetingRecord(meeting);
@@ -216,7 +207,7 @@ public class Application {
 
 
     /**
-     *   Queries related to Schedules and Tasks
+     * Queries related to Schedules and Tasks
      * */
 
     public ScheduleRecord[] getSchedulesByID() {
@@ -246,7 +237,7 @@ public class Application {
     }
 
     public Task[] getTasksBySchedule(ScheduleRecord schedule) {
-        return queries.getTasksBySchedule(schedule.getScheduleid());
+        return queries.getTasksBySchedule(schedule.getScheduleID());
     }
 
     public void updateTaskStatus(Task task, int i) {
@@ -282,10 +273,9 @@ public class Application {
     }
 
 
-
-/**
-*   Queries related to Groups
-* */
+    /**
+     * Queries related to Groups
+     * */
 
     public Group[] getGroups() {
     return queries.getGroups();
@@ -321,8 +311,8 @@ public class Application {
 
     public boolean isMember(String gid) {
         GroupMember[] members = queries.getGroupMembers(gid);
-        for (int i = 0; i < members.length; i++) {
-            if (members[i].getUser().getUserid().equals(currentUser)) {
+        for (GroupMember member : members) {
+            if (member.getUser().getUserID().equals(currentUser)) {
                 return true;
             }
         }
@@ -333,8 +323,8 @@ public class Application {
         return queries.getGroupChatHistory(gid);
     }
 
-    public GroupMember getGroupMemberByID(String userid, String groupid) {
-        return queries.getGroupMemberByID(userid, groupid);
+    public GroupMember getGroupMemberByID(String uid, String gid) {
+        return queries.getGroupMemberByID(uid, gid);
     }
 
     public void addGroupChat(GroupChat record) {
@@ -353,11 +343,9 @@ public class Application {
         return queries.getAdminGroups(currentUser);
     }
 
-
     public GroupMember[] getAdminByGroup(String gid) {
         return queries.getAdminByGroup(gid);
     }
-
 
     public GroupMember[] getMembersByGroup(String gid) {
         return queries.getMembersByGroup(gid);
@@ -376,7 +364,7 @@ public class Application {
     }
 
     public void leaveGroup(Group group) {
-        if (isAdmin(group.getGroupid())) {
+        if (isAdmin(group.getGroupID())) {
             queries.updateGroupCreator(currentUser);
             queries.updateAdmin("0000", group, currentUser);
             joinGroup(new GroupMember(
@@ -386,11 +374,11 @@ public class Application {
                     null
             ));
         }
-        queries.deleteGroupChat(currentUser, group.getGroupid());
-        queries.leaveGroup(currentUser, group.getGroupid());
+        queries.deleteGroupChat(currentUser, group.getGroupID());
+        queries.leaveGroup(currentUser, group.getGroupID());
     }
 
     public void deleteGroup(Group group) {
-        queries.deleteGroup(group.getGroupid());
+        queries.deleteGroup(group.getGroupID());
     }
 }

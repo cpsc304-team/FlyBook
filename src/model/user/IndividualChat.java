@@ -1,5 +1,7 @@
 package model.user;
 
+import java.sql.Timestamp;
+
 /*CREATE TABLE individual_chat (
     time TIMESTAMP,
     sender varchar2(10),
@@ -9,16 +11,11 @@ package model.user;
     FOREIGN KEY (sender) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (receiver) REFERENCES user_info ON DELETE CASCADE);*/
 
-import model.user.User;
-
-import java.sql.Timestamp;
-
 public class IndividualChat {
-    private User sender; //sender
-    private User receiver;
-    private String content;
-
-    private Timestamp time;
+    private final User sender; //sender
+    private final User receiver;
+    private final String content;
+    private final Timestamp time;
 
     public IndividualChat(User sender, User receiver, String content, Timestamp time) {
         this.sender = sender;

@@ -17,7 +17,7 @@ public class IndividualChatRecord extends JPanel {
 
         JLabel sender = new JLabel(chat.getSender().getName());
         sender.setFont(new Font("Helvetica", Font.BOLD, 15));
-        if (currentUser.equals(chat.getSender().getUserid())) {
+        if (currentUser.equals(chat.getSender().getUserID())) {
             sender.setForeground(new Color(15, 85, 130));
         }
         String timestamp = new SimpleDateFormat("yyyy.MM.dd hh:mm").format(chat.getTime());

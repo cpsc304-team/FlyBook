@@ -46,10 +46,10 @@ public class GroupChatPanel extends JPanel {
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         Application app = ui.getApplication();
-        GroupChat[] history = app.getGroupChatHistory(group.getGroupid());
+        GroupChat[] history = app.getGroupChatHistory(group.getGroupID());
 
         for (int i = 0; i < history.length; i++) {
-            JPanel chat = new GroupChatRecord(history[i], app.getCurrentUser().getUserid());
+            JPanel chat = new GroupChatRecord(history[i], app.getCurrentUser().getUserID());
             panel.add(chat);
             chat.setOpaque(false);
 
@@ -67,7 +67,7 @@ public class GroupChatPanel extends JPanel {
 
         GroupChat record = new GroupChat(
                 new Timestamp(System.currentTimeMillis()),
-                application.getGroupMemberByID(application.getCurrentUser().getUserid(), group.getGroupid()),
+                application.getGroupMemberByID(application.getCurrentUser().getUserID(), group.getGroupID()),
                 content,
                 group);
 

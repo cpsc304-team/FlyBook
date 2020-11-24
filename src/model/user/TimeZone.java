@@ -6,8 +6,8 @@ package model.user;
         PRIMARY KEY (city));*/
 
 public class TimeZone {
-    private String city;
-    private String zoneCode;
+    private final String city;
+    private final String zoneCode;
 
     public TimeZone(String city, String zoneCode) {
         this.city = city;

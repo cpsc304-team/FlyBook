@@ -7,8 +7,6 @@ import ui.utilities.Header;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class ColleaguePanel extends JPanel {
     UI ui;
@@ -36,8 +34,8 @@ public class ColleaguePanel extends JPanel {
         User[] users = app.getUserList();
         String currentUser = app.getCurrentUserID();
 
-        for (int i = 0; i < users.length; i++) {
-            JPanel user = new SubColleaguePanel(ui, users[i], currentUser);
+        for (User value : users) {
+            JPanel user = new SubColleaguePanel(ui, value, currentUser);
             panel.add(user);
             user.setAlignmentX(LEFT_ALIGNMENT);
             panel.add(Box.createRigidArea(new Dimension(0, 20)));

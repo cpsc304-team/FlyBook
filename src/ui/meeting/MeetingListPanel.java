@@ -4,7 +4,6 @@ import main.Application;
 import model.group.Group;
 import model.meeting.MeetingRecord;
 import ui.UI;
-import ui.group.SubGroupListPanel;
 import ui.utilities.Header;
 
 import javax.swing.*;

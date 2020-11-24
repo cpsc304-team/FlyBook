@@ -6,7 +6,6 @@ import ui.group.GroupListPanel;
 import ui.meeting.MeetingListPanel;
 import ui.post.NewPostPanel;
 import ui.post.PostPanel;
-import ui.schedule.NewSchedulePanel;
 import ui.schedule.SchedulePanel;
 import ui.user.*;
 
@@ -30,9 +29,6 @@ public class UI extends JFrame {
     public void showFrame() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(430, 600));
-
-        // TODO: delete testing statements below
-//        setContentPane(new MainPanel(this));
 
         // Start with the login panel
         JPanel loginPane = new LoginPanel(this);
@@ -105,8 +101,8 @@ public class UI extends JFrame {
     }
 
     // Generate the icon button
-    public JButton generateChangedButton(String buttontype) {
-        ImageIcon i1 = new ImageIcon("images" + "/" + buttontype + ".png");
+    public JButton generateChangedButton(String buttonType) {
+        ImageIcon i1 = new ImageIcon("images" + "/" + buttonType + ".png");
         ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         JButton change = new JButton(i2);
 

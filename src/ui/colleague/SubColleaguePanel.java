@@ -77,7 +77,7 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
 
-        if (!(currentUser.equals(user.getUserid()))) {
+        if (!(currentUser.equals(user.getUserID()))) {
             JButton chat = ui.generateButton("Chat",this);
             resizeButton(chat);
             buttonPanel.add(chat);
@@ -100,9 +100,9 @@ public class SubColleaguePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Posts")) {
-            new IndividualPostWindow(ui, user.getUserid());
+            new IndividualPostWindow(ui, user.getUserID());
         } else {
-            new IndividualChatWindow(ui, currentUser, user.getUserid());
+            new IndividualChatWindow(ui, currentUser, user.getUserID());
         }
     }
 }

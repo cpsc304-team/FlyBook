@@ -16,7 +16,7 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
     Group group;
     Application app;
 
-    private Integer TEXT_SPACE = 18;
+    private final Integer TEXT_SPACE = 18;
 
     public GroupInfoPanel(UI ui, Group group) {
         this.ui = ui;
@@ -84,7 +84,7 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         JButton leave = ui.generateButton("Leave", this);
         buttons.add(leave);
 
-        if (app.isAdmin(group.getGroupid())) {
+        if (app.isAdmin(group.getGroupID())) {
             JButton dismiss = ui.generateButton("Dismiss", this);
             buttons.add(dismiss);
         }
@@ -110,15 +110,15 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         if (members.length == 0) {
             activeList.add(ui.generateLabel("There is no meeting initiated in this group yet"));
         } else {
-            for (int i = 0; i < members.length; i++) {
+            for (GroupMember member : members) {
                 JPanel panel = new JPanel();
                 panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
                 panel.setOpaque(false);
                 panel.add(ui.generateLabel("▸ "));
-                if (members[i].getNickname() != null) {
-                    panel.add(ui.generateLabel(members[i].getNickname() + " | "));
+                if (member.getNickname() != null) {
+                    panel.add(ui.generateLabel(member.getNickname() + " | "));
                 }
-                JLabel name = new JLabel(members[i].getUser().getName());
+                JLabel name = new JLabel(member.getUser().getName());
                 name.setForeground(Color.GRAY);
                 name.setFont(new Font("Avenir", Font.PLAIN, 12));
                 panel.add(name);
@@ -147,15 +147,15 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         if (members.length == 0) {
             activeList.add(ui.generateLabel("There is no active member in this group"));
         } else {
-            for (int i = 0; i < members.length; i++) {
+            for (GroupMember member : members) {
                 JPanel panel = new JPanel();
                 panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
                 panel.setOpaque(false);
                 panel.add(ui.generateLabel("▸ "));
-                if (members[i].getNickname() != null) {
-                    panel.add(ui.generateLabel(members[i].getNickname() + " | "));
+                if (member.getNickname() != null) {
+                    panel.add(ui.generateLabel(member.getNickname() + " | "));
                 }
-                JLabel name = new JLabel(members[i].getUser().getName());
+                JLabel name = new JLabel(member.getUser().getName());
                 name.setForeground(Color.GRAY);
                 name.setFont(new Font("Avenir", Font.PLAIN, 12));
                 panel.add(name);
@@ -180,23 +180,23 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         title.setAlignmentX(LEFT_ALIGNMENT);
         adminList.add(title);
 
-        GroupMember[] admins = app.getAdminByGroup(group.getGroupid());
-        for (int i = 0; i < admins.length; i++) {
+        GroupMember[] admins = app.getAdminByGroup(group.getGroupID());
+        for (GroupMember admin : admins) {
             JPanel panel = new JPanel();
             panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
             panel.setOpaque(false);
             panel.add(ui.generateLabel("▸ "));
-            if (admins[i].getNickname() != null) {
-                panel.add(ui.generateLabel(admins[i].getNickname() + " | "));
+            if (admin.getNickname() != null) {
+                panel.add(ui.generateLabel(admin.getNickname() + " | "));
             }
-            JLabel name = new JLabel(admins[i].getUser().getName());
+            JLabel name = new JLabel(admin.getUser().getName());
             name.setForeground(Color.GRAY);
             name.setFont(new Font("Avenir", Font.PLAIN, 12));
             panel.add(name);
 
             adminList.add(panel);
             panel.setAlignmentX(LEFT_ALIGNMENT);
-            panel.add(Box.createRigidArea(new Dimension(0,2)));
+            panel.add(Box.createRigidArea(new Dimension(0, 2)));
         }
 
         return adminList;
@@ -213,19 +213,19 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         title.setAlignmentX(LEFT_ALIGNMENT);
         memberList.add(title);
 
-        GroupMember[] members = app.getMembersByGroup(group.getGroupid());
+        GroupMember[] members = app.getMembersByGroup(group.getGroupID());
         if (members.length == 0) {
             memberList.add(ui.generateLabel("There is no other member in this group"));
         } else {
-            for (int i = 0; i < members.length; i++) {
+            for (GroupMember member : members) {
                 JPanel panel = new JPanel();
                 panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
                 panel.setOpaque(false);
                 panel.add(ui.generateLabel("▸ "));
-                if (members[i].getNickname() != null) {
-                    panel.add(ui.generateLabel(members[i].getNickname() + " | "));
+                if (member.getNickname() != null) {
+                    panel.add(ui.generateLabel(member.getNickname() + " | "));
                 }
-                JLabel name = new JLabel(members[i].getUser().getName());
+                JLabel name = new JLabel(member.getUser().getName());
                 name.setForeground(Color.GRAY);
                 name.setFont(new Font("Avenir", Font.PLAIN, 12));
                 panel.add(name);
@@ -270,7 +270,7 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         entryPanel.add(name);
         entryPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel nickname = ui.generateText(app.getGroupMemberByID(app.getCurrentUserID(), group.getGroupid()).getNickname());
+        JLabel nickname = ui.generateText(app.getGroupMemberByID(app.getCurrentUserID(), group.getGroupID()).getNickname());
         name.setAlignmentX(Component.LEFT_ALIGNMENT);
         entryPanel.add(nickname);
 
@@ -286,19 +286,17 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         changePanel.setLayout(new BoxLayout(changePanel, BoxLayout.Y_AXIS));
         changePanel.setOpaque(false);
 
-        if (app.isAdmin(group.getGroupid())) {
+        if (app.isAdmin(group.getGroupID())) {
             JButton changeName = ui.generateChangedButton("edit");
-            changeName.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    String name = (String)JOptionPane.showInputDialog(ui, "Enter a new group name:",
-                            "Change group name",
-                            JOptionPane.PLAIN_MESSAGE,
-                            null, null, null);
-                    app.updateGroupName(group.getGroupid(), name);
-                    group.setName(name);
-                    ui.setContentPane(new GroupInfoPanel(ui, group));
-                    ui.revalidate();
-                }
+            changeName.addActionListener(e -> {
+                String name = (String)JOptionPane.showInputDialog(ui, "Enter a new group name:",
+                        "Change group name",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null, null, null);
+                app.updateGroupName(group.getGroupID(), name);
+                group.setName(name);
+                ui.setContentPane(new GroupInfoPanel(ui, group));
+                ui.revalidate();
             });
             changePanel.add(changeName);
             changeName.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -308,16 +306,14 @@ public class GroupInfoPanel extends JPanel implements ActionListener {
         }
 
         JButton changeNickname = ui.generateChangedButton("edit");
-        changeNickname.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String name = (String)JOptionPane.showInputDialog(ui, "Enter a new nickname:",
-                        "Change nickname",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null, null, null);
-                app.updateNickname(group.getGroupid(), name);
-                ui.setContentPane(new GroupInfoPanel(ui, group));
-                ui.revalidate();
-            }
+        changeNickname.addActionListener(e -> {
+            String name = (String)JOptionPane.showInputDialog(ui, "Enter a new nickname:",
+                    "Change nickname",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, null, null);
+            app.updateNickname(group.getGroupID(), name);
+            ui.setContentPane(new GroupInfoPanel(ui, group));
+            ui.revalidate();
         });
         changePanel.add(changeNickname);
         changeNickname.setAlignmentX(Component.LEFT_ALIGNMENT);

@@ -1,5 +1,9 @@
 package model.group;
 
+import model.user.User;
+
+import java.sql.Timestamp;
+
 /*CREATE TABLE group_record (
     group_id varchar2(10),
     group_name varchar2(30),
@@ -13,18 +17,14 @@ package model.group;
         FOREIGN KEY (user_id) REFERENCES user_info,
         FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);*/
 
-import model.user.User;
-
-import java.sql.Timestamp;
-
 public class Group {
-    private String groupid;
-    private Timestamp creationTime;
+    private final String groupID;
+    private final Timestamp creationTime;
     private String name;
-    private User creator;
+    private final User creator;
 
     public Group(String gid, Timestamp creationTime, String name, User creator) {
-        this.groupid = gid;
+        this.groupID = gid;
         this.creationTime = creationTime;
         this.name = name;
         this.creator = creator;
@@ -34,8 +34,8 @@ public class Group {
         this.name = name;
     }
 
-    public String getGroupid() {
-        return groupid;
+    public String getGroupID() {
+        return groupID;
     }
 
     public Timestamp getCreationTime() { return creationTime; }

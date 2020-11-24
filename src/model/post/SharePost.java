@@ -15,14 +15,14 @@ import java.sql.Timestamp;
         FOREIGN KEY (media_url) REFERENCES media);*/
 
 public class SharePost {
-    private String postid;
-    private Timestamp time;
-    private String content;
-    private User user;
-    private Media media;
+    private final String postID;
+    private final Timestamp time;
+    private final String content;
+    private final User user;
+    private final Media media;
 
-    public SharePost(String postid, Timestamp time, String content, User user, Media media) {
-        this.postid = postid;
+    public SharePost(String postID, Timestamp time, String content, User user, Media media) {
+        this.postID = postID;
         this.time = time;
         this.content = content;
         this.user = user;
@@ -33,8 +33,8 @@ public class SharePost {
         return content;
     }
 
-    public String getPostid() {
-        return postid;
+    public String getPostID() {
+        return postID;
     }
 
     public User getUser() {

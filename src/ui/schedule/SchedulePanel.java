@@ -1,7 +1,5 @@
 package ui.schedule;
 
-import main.Application;
-import model.schedule.ScheduleRecord;
 import ui.UI;
 import ui.utilities.Header;
 
@@ -72,8 +70,8 @@ public class SchedulePanel extends JPanel implements ActionListener {
             JLabel title = ui.generateLabel("Everyone is available today with no task.");
             pane.add(title);
         } else {
-            for (int i = 0; i < todos.length; i++) {
-                ArrayList<String> partsOfLine = splitOnSpace(todos[i]);
+            for (String s : todos) {
+                ArrayList<String> partsOfLine = splitOnSpace(s);
                 JLabel todo = ui.generateLabel(partsOfLine.get(0));
                 todo.setFont(new Font("Avenir", Font.BOLD, 13));
                 pane.add(todo);
@@ -84,7 +82,7 @@ public class SchedulePanel extends JPanel implements ActionListener {
                 pane.add(task);
                 task.setAlignmentX(LEFT_ALIGNMENT);
                 task.setAlignmentY(TOP_ALIGNMENT);
-                pane.add(Box.createRigidArea(new Dimension(0,5)));
+                pane.add(Box.createRigidArea(new Dimension(0, 5)));
             }
             pane.add(Box.createRigidArea(new Dimension(0,10)));
             JLabel title = ui.generateText("Everyone else is available today with no task.");

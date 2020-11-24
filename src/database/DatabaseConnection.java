@@ -54,33 +54,8 @@ public class DatabaseConnection {
         }
     }
 
-    // Prints all the tables to debug
-    public void printTables() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select table_name from user_tables");
-
-            while(rs.next()) {
-                System.out.println(rs.getString(1));
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("Debug: printTables()");
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
     // Drop all the tables
     public void dropTables() {
-        // Unused tables
-        dropTable("group_member");
-        dropTable("miniprogram_record");
-        dropTable("group_administrator");
-        dropTable("groupchat_record");
-        dropTable("task_status");
-
         dropTable("meeting_joins");
         dropTable("contain_task");
         dropTable("schedule_record");
@@ -318,7 +293,7 @@ public class DatabaseConnection {
         }
     }
 
-    // Intiate the ExecuteQueries using the connection
+    // Initiate the ExecuteQueries using the connection
     public ExecuteQueries executeQueries() {
         return new ExecuteQueries(connection);
     }
@@ -347,9 +322,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: userInfoSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -365,9 +338,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: timeZoneSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -387,9 +358,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: individualChatSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -405,9 +374,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: MediaSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -428,9 +395,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: SharePostSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -451,9 +416,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: groupRecordSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -472,9 +435,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: groupCreatesSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -494,9 +455,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: groupAdminSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -519,9 +478,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: groupJoinsSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -541,9 +498,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: groupChatSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -564,9 +519,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: meetingRecordSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -584,9 +537,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: joinMeetingSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -605,9 +556,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: scheduleRecordSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -626,9 +575,7 @@ public class DatabaseConnection {
 
             stmt.close();
         } catch (SQLException e) {
-            // TODO: delete
             System.out.println("Debug: containTaskSetUp()");
-
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
@@ -646,7 +593,7 @@ public class DatabaseConnection {
     public void insertUser(User user) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO user_info VALUES (?,?,?,?,?)");
-            ps.setString(1, user.getUserid());
+            ps.setString(1, user.getUserID());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getName());
             if (user.getTimezone().getCity() == null) {
@@ -694,8 +641,8 @@ public class DatabaseConnection {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO individual_chat VALUES (?,?,?,?)");
 
             ps.setTimestamp(1, chat.getTime());
-            ps.setString(2, chat.getSender().getUserid());
-            ps.setString(3, chat.getReceiver().getUserid());
+            ps.setString(2, chat.getSender().getUserID());
+            ps.setString(3, chat.getReceiver().getUserID());
             ps.setString(4, chat.getContent());
 
             ps.executeUpdate();
@@ -731,9 +678,9 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO share_post VALUES (?,?,?,?,?)");
 
-            ps.setString(1, sharePost.getPostid());
+            ps.setString(1, sharePost.getPostID());
             ps.setTimestamp(2, sharePost.getTime());
-            ps.setString(3, sharePost.getUser().getUserid());
+            ps.setString(3, sharePost.getUser().getUserID());
             ps.setString(4, sharePost.getContent());
             if (sharePost.getMedia() == null) {
                 ps.setNull(5, java.sql.Types.CHAR);
@@ -757,15 +704,15 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_admin VALUES (?,?)");
 
-            ps.setString(1, user.getUserid());
-            ps.setString(2, group.getGroupid());
+            ps.setString(1, user.getUserID());
+            ps.setString(2, group.getGroupID());
 
             ps.executeUpdate();
             connection.commit();
 
             ps.close();
         } catch (SQLException e) {
-            System.out.println("Debug: inserGroupAdmin()");
+            System.out.println("Debug: insertGroupAdmin()");
             System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
             rollbackConnection();
         }
@@ -776,7 +723,7 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_record VALUES (?,?)");
 
-            ps.setString(1, group.getGroupid());
+            ps.setString(1, group.getGroupID());
             ps.setString(2, group.getName());
 
             ps.executeUpdate();
@@ -784,7 +731,7 @@ public class DatabaseConnection {
 
             ps.close();
         } catch (SQLException e) {
-            System.out.println("Debug: inserGroupRecord()");
+            System.out.println("Debug: insertGroupRecord()");
             System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
             rollbackConnection();
         }
@@ -796,8 +743,8 @@ public class DatabaseConnection {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_joins VALUES (?,?,?,?)");
 
             ps.setTimestamp(1, groupMember.getJoinTime());
-            ps.setString(2, groupMember.getUser().getUserid());
-            ps.setString(3, groupMember.getGroup().getGroupid());
+            ps.setString(2, groupMember.getUser().getUserID());
+            ps.setString(3, groupMember.getGroup().getGroupID());
             if (groupMember.getNickname() == null) {
                 ps.setNull(4, java.sql.Types.CHAR);
             } else {
@@ -809,7 +756,7 @@ public class DatabaseConnection {
 
             ps.close();
         } catch (SQLException e) {
-            System.out.println("Debug: inserGroupJoins()");
+            System.out.println("Debug: insertGroupJoins()");
             System.out.println(EXCEPTION_TAG + " " + e.getCause() + " " + e.getMessage());
             rollbackConnection();
         }
@@ -821,8 +768,8 @@ public class DatabaseConnection {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_creates VALUES (?,?,?)");
 
             ps.setTimestamp(1, group.getCreationTime());
-            ps.setString(2, group.getCreator().getUserid());
-            ps.setString(3, group.getGroupid());
+            ps.setString(2, group.getCreator().getUserID());
+            ps.setString(3, group.getGroupID());
 
             ps.executeUpdate();
             connection.commit();
@@ -841,9 +788,9 @@ public class DatabaseConnection {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO group_chat VALUES (?,?,?,?)");
 
             ps.setTimestamp(1, gcr.getTime());
-            ps.setString(2,gcr.getSender().getUser().getUserid());
+            ps.setString(2,gcr.getSender().getUser().getUserID());
             ps.setString(3, gcr.getContent());
-            ps.setString(4, gcr.getGroup().getGroupid());
+            ps.setString(4, gcr.getGroup().getGroupID());
 
             ps.executeUpdate();
             connection.commit();
@@ -861,12 +808,12 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO meeting_record VALUES (?,?,?,?,?,?)");
 
-            ps.setString(1, mr.getMeetingid());
+            ps.setString(1, mr.getMeetingID());
             ps.setInt(2,mr.getAttendance());
             ps.setString(3, mr.getTopic());
             ps.setTimestamp(4, mr.getStartTime());
             ps.setTimestamp(5, mr.getEndTime());
-            ps.setString(6, mr.getGroup().getGroupid());
+            ps.setString(6, mr.getGroup().getGroupID());
 
             ps.executeUpdate();
             connection.commit();
@@ -884,8 +831,8 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO meeting_joins VALUES (?,?)");
 
-            ps.setString(1, meeting.getMeetingid());
-            ps.setString(2, user.getUserid());
+            ps.setString(1, meeting.getMeetingID());
+            ps.setString(2, user.getUserID());
 
             ps.executeUpdate();
             connection.commit();
@@ -903,10 +850,10 @@ public class DatabaseConnection {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO schedule_record VALUES (?,?,?,?)");
 
-            ps.setString(1, sr.getScheduleid());
+            ps.setString(1, sr.getScheduleID());
             ps.setTimestamp(2, sr.getTime());
             ps.setString(3, sr.getEvent());
-            ps.setString(4, sr.getUser().getUserid());
+            ps.setString(4, sr.getUser().getUserID());
 
             ps.executeUpdate();
             connection.commit();
@@ -927,7 +874,7 @@ public class DatabaseConnection {
             ps.setString(1, ct.getTaskName());
             ps.setInt(2, ct.getPriority());
             ps.setInt(3, ct.getStatus());
-            ps.setString(4, ct.getSchedule().getScheduleid());
+            ps.setString(4, ct.getSchedule().getScheduleID());
 
             ps.executeUpdate();
             connection.commit();

@@ -13,25 +13,24 @@ import java.sql.Timestamp;
     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE);*/
 
 public class ScheduleRecord {
-    private String scheduleid;
-    private Timestamp time;
-    private String event;
-    private User user;
+    private final String scheduleID;
+    private final Timestamp time;
+    private final String event;
+    private final User user;
 
-    public ScheduleRecord(String scheduleid, Timestamp time, String event, User user) {
-        this.scheduleid = scheduleid;
+    public ScheduleRecord(String scheduleID, Timestamp time, String event, User user) {
+        this.scheduleID = scheduleID;
         this.time = time;
         this.event = event;
         this.user = user;
     }
 
-
     public String getEvent() {
         return event;
     }
 
-    public String getScheduleid() {
-        return scheduleid;
+    public String getScheduleID() {
+        return scheduleID;
     }
 
     public User getUser() {

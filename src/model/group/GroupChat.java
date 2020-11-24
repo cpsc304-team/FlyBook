@@ -3,10 +3,10 @@ package model.group;
 import java.sql.Timestamp;
 
 public class GroupChat {
-    private Timestamp time;
-    private GroupMember sender;
-    private String content;
-    private Group group;
+    private final Timestamp time;
+    private final GroupMember sender;
+    private final String content;
+    private final Group group;
 
     public GroupChat(Timestamp time, GroupMember sender, String content, Group group) {
         this.time = time;

@@ -14,8 +14,8 @@ import java.util.Objects;
 public class RegisterPanel extends JPanel implements ActionListener {
     UI ui;
 
-    private Integer TEXT_SPACE = 16;
-    private Integer ENTRY_SPACE = 9;
+    private final int TEXT_SPACE = 16;
+    private final int ENTRY_SPACE = 9;
 
     JTextField useridField = new JTextField(10);
     JPasswordField passwordField = new JPasswordField(10);

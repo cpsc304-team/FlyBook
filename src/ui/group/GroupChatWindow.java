@@ -2,7 +2,6 @@ package ui.group;
 
 import model.group.Group;
 import ui.UI;
-import ui.colleague.IndividualChatPanel;
 
 import javax.swing.*;
 import java.awt.*;

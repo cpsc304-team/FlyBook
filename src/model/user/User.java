@@ -9,22 +9,22 @@ package model.user;
         PRIMARY KEY (user_id));*/
 
 public class User {
-    private String userid;
-    private String password;
-    private String name;
-    private TimeZone timezone;
-    private String email;
+    private final String userID;
+    private final String password;
+    private final String name;
+    private final TimeZone timezone;
+    private final String email;
 
-    public User(String userid, String password, String name, TimeZone time_zone,String email) {
-        this.userid = userid;
+    public User(String userID, String password, String name, TimeZone time_zone, String email) {
+        this.userID = userID;
         this.password = password;
         this.name = name;
         this.timezone = time_zone;
         this.email = email;
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserID() {
+        return userID;
     }
 
     public String getPassword() {

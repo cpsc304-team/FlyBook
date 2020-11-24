@@ -15,7 +15,7 @@ public class AccountPanel extends JPanel implements ActionListener {
     UI ui;
     User user;
 
-    private Integer TEXT_SPACE = 18;
+    private final int TEXT_SPACE = 18;
 
     public AccountPanel(UI ui, User user) {
         this.ui = ui;
@@ -92,7 +92,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setOpaque(false);
 
-        JLabel userid = ui.generateText(user.getUserid());
+        JLabel userid = ui.generateText(user.getUserID());
         userid.setAlignmentX(Component.LEFT_ALIGNMENT);
         infoPanel.add(userid);
         infoPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
@@ -127,56 +127,43 @@ public class AccountPanel extends JPanel implements ActionListener {
 
         changePanel.add(Box.createRigidArea(new Dimension(0,33)));
         JButton name = ui.generateChangedButton("edit");
-        name.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Object[] options = ui.getApplication().getCities();
-                String name = (String)JOptionPane.showInputDialog(ui, "Enter your name:",
-                        "Change name",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null, null, null);
-                if (name != null) {
-                    ui.getApplication().changeName(name);
-                    ui.switchPanel("Account");
-                }
+        name.addActionListener(e -> {
+            String name1 = (String)JOptionPane.showInputDialog(ui, "Enter your name:",
+                    "Change name",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, null, null);
+            if (name1 != null) {
+                ui.getApplication().changeName(name1);
+                ui.switchPanel("Account");
             }
         });
         changePanel.add(name);
         changePanel.add(Box.createRigidArea(new Dimension(0,5)));
 
         JButton city = ui.generateChangedButton("edit");
-        city.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Object[] options = ui.getApplication().getCities();
-                String city = (String)JOptionPane.showInputDialog(ui, "Choose your city:",
-                        "Change city",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null, options, ui.getApplication().getCurrentUser().getTimezone().getCity());
-                if (city != null) {
-                    ui.getApplication().changeCity(city);
-                    ui.switchPanel("Account");
-                }
+        city.addActionListener(e -> {
+            Object[] options = ui.getApplication().getCities();
+            String city1 = (String)JOptionPane.showInputDialog(ui, "Choose your city:",
+                    "Change city",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, options, ui.getApplication().getCurrentUser().getTimezone().getCity());
+            if (city1 != null) {
+                ui.getApplication().changeCity(city1);
+                ui.switchPanel("Account");
             }
         });
         changePanel.add(city);
         changePanel.add(Box.createRigidArea(new Dimension(0,44)));
 
         JButton email = ui.generateChangedButton("edit");
-        email.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Object[] options = ui.getApplication().getCities();
-                String email = (String)JOptionPane.showInputDialog(ui, "Enter your email:",
-                        "Change email",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null, null, null);
-                if (email != null) {
-                    ui.getApplication().changeEmail(email);
-                    ui.switchPanel("Account");
-                }
+        email.addActionListener(e -> {
+            String email1 = (String)JOptionPane.showInputDialog(ui, "Enter your email:",
+                    "Change email",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null, null, null);
+            if (email1 != null) {
+                ui.getApplication().changeEmail(email1);
+                ui.switchPanel("Account");
             }
         });
         changePanel.add(email);
@@ -189,28 +176,33 @@ public class AccountPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Back")) {
-            ui.switchPanel("Main");
-        } else if (e.getActionCommand().equals("Reset Password")) {
-            ui.switchPanel("Reset Password");
-        } else if (e.getActionCommand().equals("Log Out")) {
-            ui.switchPanel("Login");
-        } else {
-            Object[] options = {"Yes",
-                    "Cancel"};
-            int n = JOptionPane.showOptionDialog(ui,
-                    "Do you want to delete this account?",
-                    "Confirm",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null,
-                    options,
-                    options[1]);
-            if (n == 0) {
-                Application application = ui.getApplication();
-                application.deleteAccount();
+        switch (e.getActionCommand()) {
+            case "Back":
+                ui.switchPanel("Main");
+                break;
+            case "Reset Password":
+                ui.switchPanel("Reset Password");
+                break;
+            case "Log Out":
                 ui.switchPanel("Login");
-            }
+                break;
+            default:
+                Object[] options = {"Yes",
+                        "Cancel"};
+                int n = JOptionPane.showOptionDialog(ui,
+                        "Do you want to delete this account?",
+                        "Confirm",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                if (n == 0) {
+                    Application application = ui.getApplication();
+                    application.deleteAccount();
+                    ui.switchPanel("Login");
+                }
+                break;
         }
     }
 

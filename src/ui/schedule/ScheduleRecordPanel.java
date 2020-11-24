@@ -47,20 +47,17 @@ public class ScheduleRecordPanel extends JPanel implements ActionListener {
 
         Task[] tasks = ui.getApplication().getTasksBySchedule(schedule);
 
-        for (int i = 0; i < tasks.length; i++) {
-            JPanel task = taskRecord(tasks[i]);
+        for (Task value : tasks) {
+            JPanel task = taskRecord(value);
             tasksPanel.add(task);
             task.setAlignmentX(LEFT_ALIGNMENT);
             task.setAlignmentY(TOP_ALIGNMENT);
         }
 
         JButton newTask = ui.generateChangedButton("newtask");
-        newTask.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ui.setContentPane(new NewTaskPanel(ui, schedule));
-                ui.validate();
-            }
+        newTask.addActionListener(e -> {
+            ui.setContentPane(new NewTaskPanel(ui, schedule));
+            ui.validate();
         });
         tasksPanel.add(newTask);
         newTask.setAlignmentX(LEFT_ALIGNMENT);
@@ -94,12 +91,7 @@ public class ScheduleRecordPanel extends JPanel implements ActionListener {
         time.setAlignmentY(BOTTOM_ALIGNMENT);
 
         JButton delete = ui.generateChangedButton("delete");
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteSchedule();
-            }
-        });
+        delete.addActionListener(e -> deleteSchedule());
         timePanel.add(delete);
         delete.setAlignmentY(BOTTOM_ALIGNMENT);
 
@@ -128,19 +120,9 @@ public class ScheduleRecordPanel extends JPanel implements ActionListener {
         taskPanel.setOpaque(false);
 
         finish = ui.generateChangedButton("check");
-        finish.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeStatus(taskPanel, task,0);
-            }
-        });
+        finish.addActionListener(e -> changeStatus(taskPanel, task,0));
         todo = ui.generateChangedButton("unchecked");
-        todo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                changeStatus(taskPanel, task,1);
-            }
-        });
+        todo.addActionListener(e -> changeStatus(taskPanel, task,1));
 
         if (task.getStatus() == 0) {
             status = todo;
@@ -154,14 +136,11 @@ public class ScheduleRecordPanel extends JPanel implements ActionListener {
         taskPanel.add(name);
 
         JButton delete = ui.generateChangedButton("delete");
-        delete.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ui.getApplication().deleteTask(task);
-                taskPanel.removeAll();
-                taskPanel.revalidate();
-                taskPanel.repaint();
-            }
+        delete.addActionListener(e -> {
+            ui.getApplication().deleteTask(task);
+            taskPanel.removeAll();
+            taskPanel.revalidate();
+            taskPanel.repaint();
         });
         taskPanel.add(delete);
     }

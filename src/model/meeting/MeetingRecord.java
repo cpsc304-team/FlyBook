@@ -1,10 +1,8 @@
 package model.meeting;
 
-
 import model.group.Group;
 
 import java.sql.Timestamp;
-
 
 /*CREATE TABLE meeting_record (
     meeting_id varchar2(10),
@@ -17,15 +15,15 @@ import java.sql.Timestamp;
     FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE);*/
 
 public class MeetingRecord {
-    private String meetingid;
-    private int attendance;
-    private String topic;
-    private Timestamp startTime;
-    private Timestamp endTime;
-    private Group group;
+    private final String meetingID;
+    private final int attendance;
+    private final String topic;
+    private final Timestamp startTime;
+    private final Timestamp endTime;
+    private final Group group;
 
-    public MeetingRecord (String meetingid, int attendance, String topic, Timestamp startTime, Timestamp endTime, Group group) {
-        this.meetingid = meetingid;
+    public MeetingRecord (String meetingID, int attendance, String topic, Timestamp startTime, Timestamp endTime, Group group) {
+        this.meetingID = meetingID;
         this.attendance = attendance;
         this.topic = topic;
         this.startTime = startTime;
@@ -33,8 +31,8 @@ public class MeetingRecord {
         this.group = group;
     }
 
-    public String getMeetingid() {
-        return meetingid;
+    public String getMeetingID() {
+        return meetingID;
     }
 
     public int getAttendance() {

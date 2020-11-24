@@ -9,10 +9,10 @@ package model.schedule;
     FOREIGN KEY (schedule_id) REFERENCES schedule_record ON DELETE CASCADE);*/
 
 public class Task {
-    private String taskName;
-    private int priority;
+    private final String taskName;
+    private final int priority;
     private int status;
-    private ScheduleRecord schedule;
+    private final ScheduleRecord schedule;
 
     public Task(String taskName, int priority, int status, ScheduleRecord schedule) {
         this.taskName = taskName;

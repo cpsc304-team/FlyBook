@@ -14,8 +14,8 @@ public class LoginPanel extends JPanel implements ActionListener {
     JTextField usernameField;
     JPasswordField passwordField;
 
-    private Integer TEXT_SPACE = 16;
-    private Integer ENTRY_SPACE = 9;
+    private final int TEXT_SPACE = 16;
+    private final int ENTRY_SPACE = 9;
 
     public LoginPanel(UI ui) {
         this.ui = ui;

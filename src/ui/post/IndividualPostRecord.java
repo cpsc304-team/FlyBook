@@ -77,16 +77,16 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
                     e.printStackTrace();
                 }
                 Image image = null;
-                BufferedImage bimg = null;
+                BufferedImage img = null;
                 try {
                     image = ImageIO.read(url);
-                    bimg = ImageIO.read(url);
+                    img = ImageIO.read(url);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(350
-                        , bimg.getHeight() / (bimg.getWidth() / 300), Image.SCALE_DEFAULT));
+                ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(350,
+                        img.getHeight() / (img.getWidth() / 300), Image.SCALE_DEFAULT));
                 JLabel imageLabel = new JLabel(imageIcon);
                 text.add(imageLabel);
                 imageLabel.setAlignmentX(LEFT_ALIGNMENT);
@@ -122,16 +122,13 @@ public class IndividualPostRecord extends JPanel implements ActionListener {
 
         // Show delete button if the sender is the current user
         Application application = ui.getApplication();
-        if (post.getUser().getUserid().equals(application.getCurrentUserID())) {
+        if (post.getUser().getUserID().equals(application.getCurrentUserID())) {
             JButton delete = ui.generateChangedButton("delete");
-            delete.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Application application = ui.getApplication();
-                    application.deletePost(post);
-                    if (window != null) {
-                        window.refresh();
-                    }
+            delete.addActionListener(e -> {
+                Application application1 = ui.getApplication();
+                application1.deletePost(post);
+                if (window != null) {
+                    window.refresh();
                 }
             });
             text.add(delete);

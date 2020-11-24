@@ -4,8 +4,6 @@ import main.Application;
 import model.group.Group;
 import model.group.GroupMember;
 import ui.UI;
-import ui.post.IndividualPostRecord;
-import ui.utilities.ErrorMessage;
 import ui.utilities.Header;
 import ui.utilities.SuccessMessage;
 
@@ -73,8 +71,8 @@ public class GroupListPanel extends JPanel implements ActionListener {
             title.setAlignmentX(CENTER_ALIGNMENT);
             panel.add(title);
         } else {
-            for (int i = 0; i < groups.length; i++) {
-                JPanel group = new SubGroupListPanel(ui, groups[i]);
+            for (Group value : groups) {
+                JPanel group = new SubGroupListPanel(ui, value);
                 panel.add(group);
                 group.add(Box.createRigidArea(new Dimension(0, 20)));
 
@@ -101,8 +99,8 @@ public class GroupListPanel extends JPanel implements ActionListener {
             title.setAlignmentX(CENTER_ALIGNMENT);
             panel.add(title);
         } else {
-            for (int i = 0; i < groups.length; i++) {
-                JPanel group = new SubGroupListPanel(ui, groups[i]);
+            for (Group value : groups) {
+                JPanel group = new SubGroupListPanel(ui, value);
                 panel.add(group);
                 group.add(Box.createRigidArea(new Dimension(0, 20)));
 

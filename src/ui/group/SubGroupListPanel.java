@@ -23,13 +23,13 @@ public class SubGroupListPanel extends JPanel implements ActionListener {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setOpaque(false);
 
-        JLabel id = ui.generateLabel(group.getGroupid() + " | ");
+        JLabel id = ui.generateLabel(group.getGroupID() + " | ");
         add(id);
         JLabel name = ui.generateText(group.getName());
         add(name);
 
         Application app = ui.getApplication();
-        if (app.isMember(group.getGroupid())) {
+        if (app.isMember(group.getGroupID())) {
             add(Box.createHorizontalGlue());
             JButton open = ui.generateButton("Open", this);
             add(open);

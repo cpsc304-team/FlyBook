@@ -48,22 +48,34 @@ public class Header extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (heading.equals("Change Password")) {
-            ui.switchPanel("Account");
-        } else if (heading.equals("Register")) {
-            ui.switchPanel("Login");
-        } else if (heading.equals("New Task") || heading.equals("New Schedule")) {
-            ui.switchPanel("Schedule");
-        } else if (heading.equals("Account") || heading.equals("Schedule") ||
-                heading.equals("Post") || heading.equals("Group") ||
-                heading.equals("Colleague") || heading.equals("Meeting")) {
-            ui.switchPanel("Main");
-        } else if (heading.equals("New Post")) {
-            ui.switchPanel("Post");
-        } else if (heading.equals("New Meeting")) {
-            ui.switchPanel("Meeting");
-        } else {
-            ui.switchPanel("Group");
+        switch (heading) {
+            case "Change Password":
+                ui.switchPanel("Account");
+                break;
+            case "Register":
+                ui.switchPanel("Login");
+                break;
+            case "New Task":
+            case "New Schedule":
+                ui.switchPanel("Schedule");
+                break;
+            case "Account":
+            case "Schedule":
+            case "Post":
+            case "Group":
+            case "Colleague":
+            case "Meeting":
+                ui.switchPanel("Main");
+                break;
+            case "New Post":
+                ui.switchPanel("Post");
+                break;
+            case "New Meeting":
+                ui.switchPanel("Meeting");
+                break;
+            default:
+                ui.switchPanel("Group");
+                break;
         }
     }
 }

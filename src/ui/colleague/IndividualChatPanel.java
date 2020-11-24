@@ -46,8 +46,8 @@ public class IndividualChatPanel extends JPanel {
         Application app = ui.getApplication();
         IndividualChat[] history = app.getIndividualChatHistory(uid1, uid2);
 
-        for (int i = 0; i < history.length; i++) {
-            JPanel chat = new IndividualChatRecord(history[i], uid1);
+        for (IndividualChat individualChat : history) {
+            JPanel chat = new IndividualChatRecord(individualChat, uid1);
             panel.add(chat);
             chat.setOpaque(false);
 

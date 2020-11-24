@@ -1,5 +1,9 @@
 package model.group;
 
+import model.user.User;
+
+import java.sql.Timestamp;
+
 /*CREATE TABLE group_joins (
     join_time TIMESTAMP,
     user_id varchar2(10),
@@ -9,15 +13,11 @@ package model.group;
     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
     FOREIGN KEY (group_id) REFERENCES group_record ON DELETE CASCADE)*/
 
-import model.user.User;
-
-import java.sql.Timestamp;
-
 public class GroupMember {
-    private Timestamp joinTime;
-    private User user;
-    private Group group;
-    private String nickname;
+    private final Timestamp joinTime;
+    private final User user;
+    private final Group group;
+    private final String nickname;
 
     public GroupMember(Timestamp joinTime, User user, Group group, String nickname) {
         this.joinTime = joinTime;

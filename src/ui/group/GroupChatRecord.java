@@ -24,7 +24,7 @@ public class GroupChatRecord extends JPanel {
         JLabel sender = new JLabel(name);
         sender.setFont(new Font("Helvetica", Font.BOLD, 16));
         sender.setAlignmentY(BOTTOM_ALIGNMENT);
-        if (currentUser.equals(chat.getSender().getUser().getUserid())) {
+        if (currentUser.equals(chat.getSender().getUser().getUserID())) {
             sender.setForeground(new Color(15, 85, 130));
         }
         String timestamp = new SimpleDateFormat("yyyy.MM.dd hh:mm").format(chat.getTime());

@@ -15,13 +15,12 @@ import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class NewMeetingPanel extends JPanel implements ActionListener {
     UI ui;
 
-    private Integer TEXT_SPACE = 16;
-    private Integer ENTRY_SPACE = 10;
+    private final int TEXT_SPACE = 16;
+    private final int ENTRY_SPACE = 10;
 
     JTextField topicField = new JTextField(10);
     JComboBox groupList;
@@ -97,7 +96,7 @@ public class NewMeetingPanel extends JPanel implements ActionListener {
         Group[] groups = application.getAdminGroups();
         String[] names = new String[groups.length];
         for (int i = 0; i < groups.length; i++) {
-            names[i] = groups[i].getGroupid() + ": " + groups[i].getName();
+            names[i] = groups[i].getGroupID() + ": " + groups[i].getName();
         }
         return new JComboBox(names);
     }

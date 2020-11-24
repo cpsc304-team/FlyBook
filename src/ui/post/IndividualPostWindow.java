@@ -2,17 +2,14 @@ package ui.post;
 
 import main.Application;
 import model.post.SharePost;
-import model.user.User;
 import ui.UI;
 import ui.utilities.HeaderNoBack;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 // This panel shows all the posts posted by a specific user
-public class IndividualPostWindow extends JFrame implements ActionListener {
+public class IndividualPostWindow extends JFrame {
     UI ui;
     String uid;
 
@@ -73,11 +70,6 @@ public class IndividualPostWindow extends JFrame implements ActionListener {
         }
 
         return postList;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 
     public void refresh() {

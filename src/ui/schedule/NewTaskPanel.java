@@ -6,7 +6,6 @@ import model.schedule.Task;
 import ui.UI;
 import ui.utilities.ErrorMessage;
 import ui.utilities.Header;
-import ui.utilities.SuccessMessage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,8 +17,8 @@ public class NewTaskPanel extends JPanel implements ActionListener {
     UI ui;
     ScheduleRecord schedule;
 
-    private Integer TEXT_SPACE = 16;
-    private Integer ENTRY_SPACE = 10;
+    private final int TEXT_SPACE = 16;
+    private final int ENTRY_SPACE = 10;
 
     JTextField nameField = new JTextField(10);
     JComboBox priorityField;
@@ -104,7 +103,7 @@ public class NewTaskPanel extends JPanel implements ActionListener {
         } else if (priorityEntry.isEmpty()) {
             new ErrorMessage("You must select a priority.");
         } else {
-            int priority = Integer.valueOf(priorityEntry);
+            int priority = Integer.parseInt(priorityEntry);
             Application app = ui.getApplication();
             Task task = new Task(taskName, priority, 0, schedule);
             app.addTask(task);

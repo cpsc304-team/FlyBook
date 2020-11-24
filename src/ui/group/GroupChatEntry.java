@@ -1,7 +1,5 @@
 package ui.group;
 
-import ui.colleague.IndividualChatPanel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

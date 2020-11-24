@@ -256,6 +256,10 @@ DELETE FROM user_info WHERE user_id = '0001'; -- 0001 could be replaced by other
 DELETE FROM share_post WHERE post_id = 'P1'; -- P1 could be replaced by other post_id
 DELETE FROM schedule_record WHERE schedule_id = 'S1'; -- S1 could be replaced by other schedule_id
 DELETE FROM contain_task WHERE schedule_id = 'S1' AND task_name = 'SQL list'; -- schedule_id and task_name could be replaced
+DELETE FROM group_record WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
+DELETE FROM group_chat WHERE group_id = 'G1' AND user_id = '0001'; -- group_id and user_id could be replaced
+DELETE FROM group_joins WHERE group_id = 'G1' AND user_id = '0001'; -- group_id and user_id could be replaced
+
 
 -- UPDATE Operation
 UPDATE user_info
@@ -332,6 +336,10 @@ FROM group_admin
 WHERE user_id = '0001'; -- 0001 could be replaced by other user_id
 
 SELECT *
+FROM group_admin
+WHERE group_id = 'G1'; -- G1 could be replaced by other group_id
+
+SELECT *
 FROM meeting_record
 WHERE meeting_id = 'M1'; -- M1 could be replaced by other meeting_id
 
@@ -366,8 +374,8 @@ WHERE user_id = '0001'
 
 -- Projection
 SELECT city FROM time_zone;
-select user_id from user_info;
-select user_id, password from user_info;
+SELECT user_id FROM user_info ORDER BY user_id;
+SELECT user_id, password FROM user_info;
 SELECT group_id FROM group_record;
 
 

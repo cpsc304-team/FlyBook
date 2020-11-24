@@ -66,14 +66,14 @@ public class NewTaskPanel extends JPanel implements ActionListener {
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
 
-        JLabel userid = ui.generateLabel("Task");
-        userid.setAlignmentX(Component.LEFT_ALIGNMENT);
-        textPanel.add(userid);
+        JLabel task = ui.generateLabel("Task");
+        task.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textPanel.add(task);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel password = ui.generateLabel("Priority");
-        password.setAlignmentX(Component.LEFT_ALIGNMENT);
-        textPanel.add(password);
+        JLabel priority = ui.generateLabel("Priority");
+        priority.setAlignmentX(Component.LEFT_ALIGNMENT);
+        textPanel.add(priority);
 
         return textPanel;
     }

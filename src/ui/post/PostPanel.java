@@ -70,4 +70,10 @@ public class PostPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         ui.switchPanel("New Post");
     }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ui.generateBackground(g);
+    }
 }

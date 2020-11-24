@@ -1,4 +1,4 @@
--- Paste the SQL used in DatabaseConnection.java here
+-- Tables in this file corresponds to M2 spec.
 
 -- SQL DDL and Loading Data
 -- CREATE TABLE: set up the database

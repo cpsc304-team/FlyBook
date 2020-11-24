@@ -59,7 +59,6 @@ public class Application {
         if (connect) {
             // print all the table names if error occurs when dropping tables
 //            dbConnection.printTables();
-
             dbConnection.dropTables(); // drop all tables
             dbConnection.databaseSetUp(); // setup database
             dbConnection.loadData(); // load pre-set data
@@ -173,59 +172,13 @@ public class Application {
         queries.updateUserEmail(currentUser, email);
     }
 
-    public Group[] getCurrentUsersGroups() {
-        return queries.getGroupsByUser(currentUser);
-    }
 
-    public boolean isAdmin(String gid) {
-        return queries.isAdmin(currentUser, gid);
-    }
 
-    public boolean isMember(String gid) {
-        GroupMember[] members = queries.getGroupMembers(gid);
-        for (int i = 0; i < members.length; i++) {
-            if (members[i].getUser().getUserid().equals(currentUser)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    public Group[] getGroups() {
-        return queries.getGroups();
-    }
 
-    public GroupChat[] getGroupChatHistory(String gid) {
-        return queries.getGroupChatHistory(gid);
-    }
-
-    public GroupMember getGroupMemberByID(String userid, String groupid) {
-        return queries.getGroupMemberByID(userid, groupid);
-    }
-
-    public void addGroupChat(GroupChat record) {
-        dbConnection.insertGroupChat(record);
-    }
-
-    public void joinGroup(GroupMember member) {
-        dbConnection.insertGroupJoins(member);
-    }
-
-    public void updateGroupName(String gid, String name) {
-        queries.updateGroupName(gid, name);
-    }
-
-    public void updateNickname(String gid, String name) {
-        queries.updateNickname(gid, currentUser, name);
-    }
-
-    public MeetingRecord[] getPastMeetingsByID() {
-        return queries.getPastMeetingsByID(currentUser);
-    }
-
-    public MeetingRecord[] getCurrentMeetingsByID() {
-        return queries.getCurrentMeetingsByID(currentUser);
-    }
+    /**
+     *   Queries related to Schedules and Tasks
+     * */
 
     public void joinMeeting(MeetingRecord meeting) {
         if (!(queries.hasJoined(meeting.getMeetingid(), currentUser))) {
@@ -242,21 +195,30 @@ public class Application {
         return queries.getMeetingByID(mid);
     }
 
-    public Group[] getAdminGroups() {
-        return queries.getAdminGroups(currentUser);
-    }
+
+
 
     public int countMeetings() {
         return queries.countMeetings();
     }
 
-    public Group getGroupByID(String gid) {
-        return queries.getGroupByID(gid);
-    }
 
     public void addMeeting(MeetingRecord meeting) {
         dbConnection.insertMeetingRecord(meeting);
     }
+
+    public MeetingRecord[] getPastMeetingsByID() {
+        return queries.getPastMeetingsByID(currentUser);
+    }
+
+    public MeetingRecord[] getCurrentMeetingsByID() {
+        return queries.getCurrentMeetingsByID(currentUser);
+    }
+
+
+    /**
+     *   Queries related to Schedules and Tasks
+     * */
 
     public ScheduleRecord[] getSchedulesByID() {
         return queries.getSchedulesByID(currentUser);
@@ -320,6 +282,20 @@ public class Application {
         queries.deleteSchedule(schedule);
     }
 
+
+
+/**
+*   Queries related to Groups
+* */
+
+    public Group[] getGroups() {
+    return queries.getGroups();
+}
+
+    public Group getGroupByID(String gid) {
+        return queries.getGroupByID(gid);
+    }
+
     public int countGroups() {
         return queries.countGroups();
     }
@@ -328,13 +304,61 @@ public class Application {
         dbConnection.insertGroupRecord(group);
     }
 
+    public void updateGroupName(String gid, String name) {
+        queries.updateGroupName(gid, name);
+    }
+
+    public void updateNickname(String gid, String name) {
+        queries.updateNickname(gid, currentUser, name);
+    }
+
+    public Group[] getCurrentUsersGroups() {
+        return queries.getGroupsByUser(currentUser);
+    }
+
+    public boolean isAdmin(String gid) {
+        return queries.isAdmin(currentUser, gid);
+    }
+
+    public boolean isMember(String gid) {
+        GroupMember[] members = queries.getGroupMembers(gid);
+        for (int i = 0; i < members.length; i++) {
+            if (members[i].getUser().getUserid().equals(currentUser)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public GroupChat[] getGroupChatHistory(String gid) {
+        return queries.getGroupChatHistory(gid);
+    }
+
+    public GroupMember getGroupMemberByID(String userid, String groupid) {
+        return queries.getGroupMemberByID(userid, groupid);
+    }
+
+    public void addGroupChat(GroupChat record) {
+        dbConnection.insertGroupChat(record);
+    }
+
+    public void joinGroup(GroupMember member) {
+        dbConnection.insertGroupJoins(member);
+    }
+
     public void becomeAdmin(User currentUser, Group group) {
         dbConnection.insertGroupAdmin(currentUser, group);
     }
 
+    public Group[] getAdminGroups() {
+        return queries.getAdminGroups(currentUser);
+    }
+
+
     public GroupMember[] getAdminByGroup(String gid) {
         return queries.getAdminByGroup(gid);
     }
+
 
     public GroupMember[] getMembersByGroup(String gid) {
         return queries.getMembersByGroup(gid);
@@ -346,6 +370,10 @@ public class Application {
 
     public GroupMember[] getHardworkingMembers(Group group) {
         return queries.getHardworkingMember(group);
+    }
+
+    public Group getGroupWithMostMeetingByID() {
+        return queries.getGroupWithMostMeetings(currentUser);
     }
 
     public void leaveGroup(Group group) {

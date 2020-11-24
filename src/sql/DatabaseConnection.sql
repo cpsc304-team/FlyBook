@@ -50,6 +50,7 @@ CREATE TABLE media (
     url varchar2(1000),
     PRIMARY KEY (url));
 
+
 CREATE TABLE share_post (
     post_id varchar2(10),
     time TIMESTAMP,
@@ -130,6 +131,21 @@ CREATE TABLE contain_task (
     schedule_id varchar2(20),
     PRIMARY KEY (schedule_id, task_name),
     FOREIGN KEY (schedule_id) REFERENCES schedule_record ON DELETE CASCADE);
+
+-- table that we didn't implement
+-- CREATE TABLE mini_program
+--     (program_id CHAR(10),
+--     program_name CHAR(20),
+--     type CHAR(10),
+--     PRIMARY KEY (program_id));
+--
+-- CREATE TABLE use_program
+--     (user_id CHAR(10),
+--     program_id CHAR(10),
+--     time TIMESTAMP,
+--     PRIMARY KEY (user_id, program_id, time),
+--     FOREIGN KEY (user_id) REFERENCES user_info ON DELETE CASCADE,
+--     FOREIGN KEY (program_id) REFERENCES mini_program ON DELETE CASCADE);
 
 
 -- INSERT: load pre-set data

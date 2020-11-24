@@ -5,6 +5,7 @@ import model.group.Group;
 import model.meeting.MeetingRecord;
 import ui.UI;
 import ui.utilities.ErrorMessage;
+import ui.utilities.Header;
 import ui.utilities.SuccessMessage;
 
 import javax.swing.*;
@@ -19,8 +20,8 @@ import java.util.Objects;
 public class NewMeetingPanel extends JPanel implements ActionListener {
     UI ui;
 
-    private Integer TEXT_SPACE = 18;
-    private Integer ENTRY_SPACE = 9;
+    private Integer TEXT_SPACE = 16;
+    private Integer ENTRY_SPACE = 10;
 
     JTextField topicField = new JTextField(10);
     JComboBox groupList;
@@ -28,104 +29,64 @@ public class NewMeetingPanel extends JPanel implements ActionListener {
     public NewMeetingPanel(UI ui) {
         this.ui = ui;
 
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        JPanel pane = new JPanel();
-//        JPanel pane = new JPanel() {
-//            @Override
-//            protected void paintComponent(Graphics g) {
-//                super.paintComponent(g);
-//                try {
-//                    Image i = ImageIO.read(new File("images/Background2.png"));
-//                    g.drawImage(i, 0, 0, null);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-        pane.setLayout(new BoxLayout(pane, BoxLayout.LINE_AXIS));
-        pane.setOpaque(false);
+        add(new Header(ui, "New Meeting"));
+        add(Box.createRigidArea(new Dimension(0,20)));
 
-        Application application = ui.getApplication();
-        JLabel title = new JLabel("New Meeting  ");
-        title.setForeground(new Color(53, 120, 139));
-        title.setFont(new Font("Helvetica", Font.BOLD + Font.ITALIC, 20));
-
-        pane.add(backButton());
-        pane.add(Box.createHorizontalGlue());
-        pane.add(title);
-
-        add(pane);
-        pane.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        JPanel info = new JPanel(new FlowLayout());
+        JPanel info = new JPanel();
+        info.setLayout(new BoxLayout(info, BoxLayout.X_AXIS));
+        info.setOpaque(false);
         info.add(textPanel());
+        info.add(Box.createRigidArea(new Dimension(20,0)));
         info.add(entryPanel());
 
-        JPanel button = new JPanel();
-        button.setLayout(new BoxLayout(button, BoxLayout.PAGE_AXIS));
-        button.add(generateButton("Start Meeting"));
-
         add(info);
+        info.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(Box.createVerticalGlue());
+        add(Box.createRigidArea(new Dimension(0,415)));
+
+        JPanel button = new JPanel();
+        button.setLayout(new FlowLayout());
+        button.setBackground(new Color(15, 85, 130));
+        button.setMaximumSize(new Dimension(430, 40));
+        button.setMinimumSize(new Dimension(430, 40));
+        JButton submit = ui.generateChangedButton("submit");
+        submit.addActionListener(this);
+        button.add(submit);
+        button.setAlignmentY(BOTTOM_ALIGNMENT);
+
         add(button);
-    }
-
-    private JButton backButton() {
-//        ImageIcon i1 = new ImageIcon("images/Back Button.png");
-//        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-//        JButton back = new JButton(i2);
-        JButton back = new JButton("←");
-        back.addActionListener(this);
-        back.setActionCommand("Back");
-        back.setOpaque(false);
-        back.setContentAreaFilled(false);
-        back.setBorderPainted(false);
-        back.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return back;
-    }
-
-    // TODO
-    // Customize button
-    private JButton generateButton(String s) {
-        JButton button = new JButton(s);
-
-        button.setActionCommand(s);
-        button.addActionListener(this);
-
-        return button;
     }
 
     private JPanel textPanel() {
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+        textPanel.setOpaque(false);
 
-        JLabel topic = generateText("Topic");
-        topic.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        JLabel topic = ui.generateLabel("Topic");
+        topic.setAlignmentX(Component.LEFT_ALIGNMENT);
         textPanel.add(topic);
         textPanel.add(Box.createRigidArea(new Dimension(0, TEXT_SPACE)));
 
-        JLabel group = generateText("Group");
-        group.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        JLabel group = ui.generateLabel("Group");
+        group.setAlignmentX(Component.LEFT_ALIGNMENT);
         textPanel.add(group);
 
         return textPanel;
     }
 
-    // TODO
-    // Customize text font
-    private JLabel generateText(String s) {
-        JLabel text = new JLabel(s);
-//        text.setFont(new Font("Serif", Font.PLAIN, 14));
-        return text;
-    }
-
     private JPanel entryPanel() {
         JPanel entryPanel = new JPanel();
         entryPanel.setLayout(new BoxLayout(entryPanel, BoxLayout.Y_AXIS));
+        entryPanel.setOpaque(false);
 
         entryPanel.add(topicField);
+        topicField.setMaximumSize(new Dimension(200,40));
         entryPanel.add(Box.createRigidArea(new Dimension(0, ENTRY_SPACE)));
+
         groupList = group();
+        groupList.setMaximumSize(new Dimension(200,40));
         entryPanel.add(groupList);
 
         return entryPanel;
@@ -148,49 +109,39 @@ public class NewMeetingPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Start Meeting")) {
-            String topic = topicField.getText();
-            String group = null;
-            if (groupList.getSelectedItem() != null) {
-                group = (String) groupList.getSelectedItem();
-            }
+        String topic = topicField.getText();
+        String group = null;
+        if (groupList.getSelectedItem() != null) {
+            group = (String) groupList.getSelectedItem();
+        }
 
-            if (topic.isEmpty()) {
-                new ErrorMessage("You must enter a meeting topic.");
-            } else if (group == null) {
-                new ErrorMessage("Only group administrators can initiate a meeting.");
-            } else {
-                ArrayList<String> partsOfLine = splitOnSpace(group);
-                String gid = partsOfLine.get(0);
-                int num = ui.getApplication().countMeetings() + 1;
-                String mid = "M" + num;
-                MeetingRecord meeting = new MeetingRecord(
-                        mid,
-                        0,
-                        topic,
-                        new Timestamp(System.currentTimeMillis()),
-                        null,
-                        ui.getApplication().getGroupByID(gid)
-                );
-                ui.getApplication().addMeeting(meeting);
-                ui.getApplication().joinMeeting(meeting);
-                new SuccessMessage("You just started a new meeting!");
-                ui.switchPanel("Meeting");
-            }
+        if (topic.isEmpty()) {
+            new ErrorMessage("You must enter a meeting topic.");
+        } else if (group == null) {
+            new ErrorMessage("Only group administrators can initiate a meeting.");
         } else {
+            ArrayList<String> partsOfLine = splitOnSpace(group);
+            String gid = partsOfLine.get(0);
+            int num = ui.getApplication().countMeetings() + 1;
+            String mid = "M" + num;
+            MeetingRecord meeting = new MeetingRecord(
+                    mid,
+                    0,
+                    topic,
+                    new Timestamp(System.currentTimeMillis()),
+                    null,
+                    ui.getApplication().getGroupByID(gid)
+            );
+            ui.getApplication().addMeeting(meeting);
+            ui.getApplication().joinMeeting(meeting);
+            new SuccessMessage("You just started a new meeting!");
             ui.switchPanel("Meeting");
         }
     }
 
-    // TODO: Customize the background
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        try {
-//            Image i = ImageIO.read(new File("images/background.png"));
-//            g.drawImage(i, 0, 0, null);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ui.generateBackground(g);
+    }
 }

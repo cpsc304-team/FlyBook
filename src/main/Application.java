@@ -43,10 +43,8 @@ public class Application {
 
     // Start the program by opening the application UI frame
     private void start() {
-        // TODO: delete testing statements below
-        currentUser = "0001";
 
-//        System.out.println("success!");
+        System.out.println("success!");
 
         ui = new UI(this);
         ui.showFrame();

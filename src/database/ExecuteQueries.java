@@ -1130,28 +1130,6 @@ public class ExecuteQueries {
         }
     }
 
-
-    // TODO: delete
-    // Testing tables
-    public void print() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
-
-            while(rs.next()) {
-                System.out.println(rs.getString("post_id") +
-                        " | " + rs.getString("user_id") +
-                        ": " + rs.getString("content") +
-                        " | " + rs.getString("time"));
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
     // Count the total number of groups
     public int countGroups() {
         try {
@@ -1211,7 +1189,7 @@ public class ExecuteQueries {
         }
     }
 
-    //TODO: Find the group that each user has joined with most meetings
+    //Find the group that each user has joined with most meetings
     public Group getGroupWithMostMeetings(String uid) {
         try {
             Statement stmt = connection.createStatement();
@@ -1385,6 +1363,27 @@ public class ExecuteQueries {
             System.out.println("Debug: deleteGroup()");
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
+        }
+    }
+
+    // TODO: delete
+    // Testing tables
+    public void print() {
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM share_post");
+
+            while(rs.next()) {
+                System.out.println(rs.getString("post_id") +
+                        " | " + rs.getString("user_id") +
+                        ": " + rs.getString("content") +
+                        " | " + rs.getString("time"));
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
     }
 }

@@ -20,12 +20,16 @@ public class MainPanel extends JPanel implements ActionListener {
         add(generateButton("Account"));
     }
 
-    // TODO
-    // Customize button
-    private JButton generateButton(String s) {
-        JButton button = new JButton(s);
+    // Generate the icon button
+    public JButton generateButton(String buttonType) {
+        ImageIcon i1 = new ImageIcon("images" + "/" + buttonType + ".png");
+        ImageIcon i2 = new ImageIcon(i1.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+        JButton button = new JButton(i2);
 
-        button.setActionCommand(s);
+        button.setBorderPainted(false);
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setActionCommand(buttonType);
         button.addActionListener(this);
 
         return button;
@@ -36,15 +40,9 @@ public class MainPanel extends JPanel implements ActionListener {
         ui.switchPanel(e.getActionCommand());
     }
 
-    // TODO: Customize the background
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        try {
-//            Image i = ImageIO.read(new File("images/background.png"));
-//            g.drawImage(i, 0, 0, null);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        ui.generateBackground(g);
+    }
 }
